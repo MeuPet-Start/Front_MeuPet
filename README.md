@@ -8,7 +8,7 @@ A cidade de Recife enfrenta uma crescente quantidade de animais em situação de
 - **Transmissão de doenças zoonóticas** entre animais e humanos.
 - **Desafios no manejo de animais**, como alimentação, saúde e abrigo.
 - **Frustração da comunidade** com o aumento de animais abandonados nas ruas.
-- 
+
 ## Features Mínimas:
 - **Login para acesso em área restrita**: Permite que usuários autenticados acessem áreas restritas.
 - **Esqueci minha senha**: Função de recuperação de acesso para usuários que esqueceram suas credenciais.
@@ -28,19 +28,4 @@ A cidade de Recife enfrenta uma crescente quantidade de animais em situação de
 
 ## Tecnologias Utilizadas
 - **Front-end**: React.js
-- **Back-end**: Node.js com Express
-- **Banco de Dados**: MongoDB
-- **Autenticação**: JWT (JSON Web Token)
-- **DevOps**: GitHub Actions
-
-## Estrutura do Projeto
-```bash
-.
-├── src/
-│   ├── components/    # Componentes React
-│   ├── services/      # Serviços de API
-│   ├── utils/         # Funções utilitárias
-├── public/            # Arquivos públicos
-├── README.md          # Documentação do projeto
-├── package.json       # Dependências
-└── .github/           # Workflows de CI/CD
+- **Back-end**: Java
