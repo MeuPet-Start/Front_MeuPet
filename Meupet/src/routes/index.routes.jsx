@@ -1,10 +1,20 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Home } from "../pages/home/Home.jsx";
+import { Castracao } from "../pages/castracao/Castracao.jsx";
+import { AppointmentDetails } from "../pages/atendimento/appointmentDetails.jsx";
 
 export const route = createBrowserRouter([
     {
         path: "/",
         element: <Home />, 
 
+    },
+    {
+        path: "/castracao",
+        element: <Castracao />,
+    },
+    {
+        path: '/appointments/:id',
+        element: <AppointmentDetails />,
     },
 ]); 
