@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { Home } from "../pages/home/Home.jsx";
 import { Castracao } from "../pages/castracao/Castracao.jsx";
 import { AppointmentDetails } from "../pages/atendimento/appointmentDetails.jsx";
+import Login from '../pages/login/login.jsx';
 
 export const route = createBrowserRouter([
     {
@@ -16,5 +17,9 @@ export const route = createBrowserRouter([
     {
         path: '/appointments/:id',
         element: <AppointmentDetails />,
+    },
+    {
+        path: '/login',
+        element: <Login />,
     },
 ]); 
