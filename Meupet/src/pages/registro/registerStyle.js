@@ -20,7 +20,7 @@ export const RegisterContainer = styled.div`
   padding: 1.5rem 1rem;
 `;
 
-export const RegisterCard = styled.div`
+export const RegisterCard = styled.form`
   background-color: white;
   padding: 2rem;
   border-radius: 10px;
