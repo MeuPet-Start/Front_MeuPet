@@ -20,9 +20,14 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
   return (
@@ -34,7 +39,12 @@ const Login = () => {
             <LogoText>Meu PET</LogoText>
           </LogoContainer>
           <Title>LOGIN</Title>
-          <Input type="email" placeholder="E-mail" />
+          <Input
+            type="email"
+            placeholder="E-mail*"
+            value={email}
+            onChange={handleEmailChange}
+          />
           <InputContainer>
             <Input
               type={showPassword ? "text" : "password"}
