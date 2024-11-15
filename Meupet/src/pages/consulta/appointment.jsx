@@ -38,8 +38,8 @@ const Appointment = () => {
                             srcImage={AgendarIcon}
                             altImage='Ícone Castração'
                             style={{
-                                width: '65px',         // Largura máxima de 65px
-                                height: 'auto',        // Mantém a altura proporcional à largura
+                                width: '65px',         
+                                height: 'auto',       
                                 objectFit: 'contain',}}
                         />
                         <button style={{
@@ -57,8 +57,8 @@ const Appointment = () => {
                             srcImage={VacinacaoIcon}
                             altImage='Ícone Vacinação'
                             style={{
-                                width: '65px',         // Largura máxima de 65px
-                                height: 'auto',        // Mantém a altura proporcional à largura
+                                width: '65px',         
+                                height: 'auto',        
                                 objectFit: 'contain',}}
                         />
                         <button style={{
@@ -76,8 +76,8 @@ const Appointment = () => {
                             srcImage={CastracaoIcon}
                             altImage='Ícone Castração'
                             style={{
-                                width: '76px',         // Largura máxima de 65px
-                                height: 'auto',        // Mantém a altura proporcional à largura
+                                width: '76px',        
+                                height: 'auto',      
                                 objectFit: 'contain',}}
                         />
                         <button style={{
@@ -182,19 +182,19 @@ const Appointment = () => {
                             <textarea
                                 placeholder='ex: meu pet está doente a vários dias'
                                 style={{
-                                    width: '700%',                 // Largura ocupando 100% do espaço disponível
-                                    maxWidth: '600px',             // Limita a largura máxima em telas grandes
-                                    height: '80px',               // Aumenta a altura para permitir mais texto
+                                    width: '700%',                 
+                                    maxWidth: '600px',            
+                                    height: '80px',               
                                     padding: '10px',
-                                    fontSize: '16px',              // Tamanho da fonte ajustável
+                                    fontSize: '16px',
                                     borderRadius: '5px',
                                     border: '1px solid #ccc',
-                                    boxSizing: 'border-box',       // Inclui o padding e a borda no cálculo da largura
-                                    margin: '0 auto',              // Centraliza o input no contêiner
-                                    resize: 'vertical',            // Permite redimensionar o campo verticalmente
+                                    boxSizing: 'border-box',       
+                                    margin: '0 auto',    
+                                    resize: 'vertical',            
                                     '@media (max-width: 600px)': {
-                                        fontSize: '14px',            // Diminui o tamanho da fonte em telas menores
-                                        height: '120px',             // Reduz a altura do campo em dispositivos menores
+                                        fontSize: '14px',           
+                                        height: '120px',             
                                     }
                                 }}
                             />
