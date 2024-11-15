@@ -4,7 +4,7 @@ import { Castracao } from "../pages/castracao/Castracao.jsx";
 import { AppointmentDetails } from "../pages/atendimento/appointmentDetails.jsx";
 import Login from '../pages/login/login.jsx';
 import Register from '../pages/registro/register.jsx';
-import ScheduleAS from '../pages/marcarConsulta/scheduleAppointment.jsx';
+import Appointment from "../pages/consulta/appointment.jsx";
 
 export const route = createBrowserRouter([
     {
@@ -30,6 +30,6 @@ export const route = createBrowserRouter([
     },    
     {
         path: '/consulta',
-        element: <ScheduleAS />,
-    }
+        element: <Appointment />,
+    },
 ]); 

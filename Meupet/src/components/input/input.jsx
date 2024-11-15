@@ -1,8 +1,10 @@
-const Input = (type, text) =>{
-    <form>
-    <label htmlFor="">text</label>
-    <input type="text" />
-    </form>
-}
+const Input = ({ text, type ,placeholder}) => {
+    return (
+        <div>
+            <label>{text}</label>
+            <input type={type} placeholder={placeholder}/>
+        </div>
+    );
+};
 
-export default Input
+export default Input;
