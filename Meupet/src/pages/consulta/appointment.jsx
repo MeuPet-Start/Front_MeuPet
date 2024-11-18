@@ -48,13 +48,17 @@ const Appointment = () => {
 
 
       <HeaderSection>
-        <img src={cantinhodafilo} alt="Clínica" />
-        <TextBlock>
-        <h1>Centro Médico Veterinário</h1>
-        <h2>Saúde e cuidado para o seu pet.</h2>
-        <p>Várzea | 3 Serviços inclusos | (81) 3440-0443</p>
-        <p>Atendimento das 8h às 18h</p>
-        </TextBlock>
+        <div>
+          <img src={cantinhodafilo} alt="Clínica" />
+
+          <TextBlock>
+          <h1>Centro Médico Veterinário</h1>
+          <h2>Saúde e cuidado para o seu pet.</h2>
+          <p>Várzea | 3 Serviços inclusos | (81) 3440-0443</p>
+          <p>Atendimento das 8h às 18h</p>
+          </TextBlock>
+          
+        </div>
       </HeaderSection>
 
       <MainForm>
@@ -88,15 +92,28 @@ const Appointment = () => {
             <label>Idade do responsável pelo animal</label>
             <input type="number" placeholder="Idade" />
           </div>
-          <div>
+          <div className="divInputRadio">
             <label>Tipo do Animal</label>
-            <input type="RADIO" name="animalTipo" value="op1"/> Cachorro
-            <input type="RADIO" name="animalTipo" value="op2"/> Gato   
+            <div className="inputRadio">           
+              <label>Cachorro</label>           
+              <input type="RADIO" name="animalGenero" value="op1"/> 
           </div>
-          <div>
+          <div className="inputRadio">           
+              <label>Gato</label>           
+              <input type="RADIO" name="animalGenero" value="op1"/> 
+          </div>
+          </div>
+          <div className="divInputRadio">
             <label>Gênero do Animal</label>
-            <input type="RADIO" name="animalGenero" value="op1"/> Macho
-            <input type="RADIO" name="animalGenero" value="op2"/> Fêmea
+            <div className="inputRadio">
+                <label>Macho</label>           
+                <input type="RADIO" name="animalGenero" value="op1"/> 
+                
+            </div>
+            <div className="inputRadio"> 
+              <label>Fêmea</label>
+              <input type="RADIO" name="animalGenero" value="op2"/> 
+            </div>
           </div>
       
           <div>

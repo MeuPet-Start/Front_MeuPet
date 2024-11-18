@@ -2,9 +2,9 @@ import styled from "styled-components";
 
 export const CarrosselImage = styled.div`
   width: 100%;
-  margin-top: 60px; /* Ajuste esse valor conforme necessário para dar espaço à navbar */
+  margin-top: 60px; 
   position: relative;
-  z-index: -1; /* Isso garante que a imagem fique abaixo da navbar, caso sobreponha */
+  z-index: -1; 
   
   img {
     width: 100%;
@@ -18,11 +18,15 @@ background-color: #00507b;
 color: white;
 text-align: center;
 padding: 20px 0;
-display:flex;
-justify-content:start;
+div{
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 img {
-  margin-right:4%;
-  margin-left:25%;
+  margin-right: 24px;
   min-width: 120px;
   margin-bottom: 10px;
   }
@@ -45,9 +49,10 @@ img {
 `;
 
 export const TextBlock = styled.div`
-display:flex;
-flex-direction:column;
-justify-content:center
+  display:flex;
+  flex-direction:column;
+  justify-content:center
+  margin: 0;
   `;
 
 export const MainForm = styled.div`
@@ -57,6 +62,9 @@ export const MainForm = styled.div`
   background: #f8f8f8;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  h2{
+    margin-bottom: 16px;
+  } 
 `;
 
 export const InputGrid = styled.div`
@@ -84,7 +92,22 @@ export const InputGrid = styled.div`
     resize: none;
     height: 80px;
   }
+
+  .divInputRadio{
+    display: flex;
+	  flex-direction: column; 
+    gap: 8px;
+  }
+
+  .inputRadio {
+	display: flex;
+	flex-direction: row; 
+  label{
+    width: 20px;
+  }
+  }
 `;
+
 
 export const ButtonGroup = styled.div`
   display: flex;
@@ -108,11 +131,10 @@ export const ButtonGroup = styled.div`
      background-color: #82c83a;
      color: white;
    }
-  `;
+`;
+
 export const SlideItem = styled.img`
     width: 100%;
     height:100%;
     object-fit:cover;
 `;
-
-
