@@ -1,109 +1,102 @@
 import styled from "styled-components";
 
-export const Main = styled.main`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
+export const CarrosselImage = styled.div`
+  width: 100%;
+  margin-top: 60px; /* Ajuste esse valor conforme necessário para dar espaço à navbar */
+  position: relative;
+  z-index: -1; /* Isso garante que a imagem fique abaixo da navbar, caso sobreponha */
+  
+  img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+  }
 `;
 
 export const HeaderSection = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-    
-    img {
-        width: 100px;
-        height: auto;
-    }
-    
-    .veterinaryCenter {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
+  background-color: #00507b;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
 
-    h1 {
-        font-size: 24px;
-        color: #2A4F6A;
-    }
+  img {
+    max-width: 120px;
+    margin-bottom: 10px;
+  }
 
-    h2 {
-        font-size: 18px;
-        color: #2A4F6A;
-    }
-`;
-
-export const Section = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    margin: 20px 0;
-`;
-
-export const Contact = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  h1 {
+    font-size: 24px;
     margin: 10px 0;
+  }
 
-    a {
-        color: #2A4F6A;
-        font-size: 16px;
-        text-decoration: none;
-    }
+  h2 {
+    font-size: 18px;
+    color: #82c83a;
+    margin: 5px 0;
+  }
+
+  p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
 `;
 
-export const TextInput = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    width: 100%;
-    max-width: 600px;
-    margin: 20px 0;
+export const MainForm = styled.div`
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #f8f8f8;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
-export const CheckboxInput = styled.div`
-    display: flex;
-    justify-content: space-between;
+export const InputGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+
+  input,
+  textarea {
     width: 100%;
-    max-width: 600px;
-    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #d5d5d5;
+    border-radius: 5px;
+    font-size: 14px;
+  }
 
-    h1 {
-        font-size: 18px;
-        color: #2A4F6A;
-        margin-bottom: 8px;
-    }
-
-    .checkboxDiv {
-        display: flex;
-        flex-direction: row;
-        gap: 10px;
-    }
+  textarea {
+    resize: none;
+    height: 80px;
+  }
 `;
 
-export const Observetion = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 600px;
-    margin: 20px 0;
+export const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 15px;
 
-    button {
-        background-color: #2A4F6A;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 4px;
-        margin-top: 10px;
-        
-        &:hover {
-            background-color: #1F3B4D;
-        }
-    }
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+  }
+
+  .primary {
+    background-color: #82c83a;
+    color: white;
+  }
+
+  .secondary {
+    background-color: #d5d5d5;
+    color: black;
+  }
 `;
