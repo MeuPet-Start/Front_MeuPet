@@ -1,25 +1,60 @@
-import React from "react";
+//  import React from "react";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-import Input from "../../components/input/input";
-import Sections from "../../components/sections/sections";
+// import Input from "../../components/input/input";
+// import Sections from "../../components/sections/sections";
+import {Swiper,SwiperSlide} from 'swiper/react';
 import carrossel1 from "../../assets/carrossel1.png";
+import carrossel2 from "../../assets/carrossel2.png";
+import carrossel3 from "../../assets/carrossel3.png";
 import cantinhodafilo from "../../assets/cantinhodafilo.png";
-import { HeaderSection, MainForm, InputGrid, ButtonGroup, CarrosselImage } from "./appointmentstyle";
+import { HeaderSection, MainForm, InputGrid, ButtonGroup,SlideItem, TextBlock } from "./appointmentstyle";
+import "swiper/css"
+
 
 const Appointment = () => {
+ 
+  const data =[
+    {id:'1', image:carrossel1},
+    {id:'2', image:carrossel2},
+    {id:'3', image:carrossel3}
+  ]
+ 
   return (
     <>
-      <CarrosselImage>
-        <img src={carrossel1} alt="Veterinário com Cachorro" />
-      </CarrosselImage>
+
+      <Header></Header>
+
+      <Swiper
+            spaceBetween={50}
+            slidesPerView={1}
+            pagination={{clickable:true}}
+            navigation
+      >  
+            
+        {data.map((item) =>(
+          <SwiperSlide key={item.id}>
+          <SlideItem
+          src={item.image}
+           alt="Veterinário com Cachorro" 
+           className="slide-item">
+           </SlideItem>
+          
+        </SwiperSlide>
+        )
+       )
+        }
+      </Swiper>
+
 
       <HeaderSection>
         <img src={cantinhodafilo} alt="Clínica" />
+        <TextBlock>
         <h1>Centro Médico Veterinário</h1>
         <h2>Saúde e cuidado para o seu pet.</h2>
         <p>Várzea | 3 Serviços inclusos | (81) 3440-0443</p>
         <p>Atendimento das 8h às 18h</p>
+        </TextBlock>
       </HeaderSection>
 
       <MainForm>
@@ -55,12 +90,15 @@ const Appointment = () => {
           </div>
           <div>
             <label>Tipo do Animal</label>
-            <input type="text" placeholder="ex: Cachorro" />
+            <input type="RADIO" name="animalTipo" value="op1"/> Cachorro
+            <input type="RADIO" name="animalTipo" value="op2"/> Gato   
           </div>
           <div>
             <label>Gênero do Animal</label>
-            <input type="text" placeholder="ex: Macho" />
+            <input type="RADIO" name="animalGenero" value="op1"/> Macho
+            <input type="RADIO" name="animalGenero" value="op2"/> Fêmea
           </div>
+      
           <div>
             <label>Observação</label>
             <textarea placeholder="ex: meu pet está doente há vários dias"></textarea>

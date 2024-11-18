@@ -14,21 +14,24 @@ export const CarrosselImage = styled.div`
 `;
 
 export const HeaderSection = styled.div`
-  background-color: #00507b;
-  color: white;
-  text-align: center;
-  padding: 20px 0;
-
-  img {
-    max-width: 120px;
-    margin-bottom: 10px;
+background-color: #00507b;
+color: white;
+text-align: center;
+padding: 20px 0;
+display:flex;
+justify-content:start;
+img {
+  margin-right:4%;
+  margin-left:25%;
+  min-width: 120px;
+  margin-bottom: 10px;
   }
 
   h1 {
     font-size: 24px;
     margin: 10px 0;
   }
-
+  
   h2 {
     font-size: 18px;
     color: #82c83a;
@@ -40,6 +43,12 @@ export const HeaderSection = styled.div`
     font-size: 14px;
   }
 `;
+
+export const TextBlock = styled.div`
+display:flex;
+flex-direction:column;
+justify-content:center
+  `;
 
 export const MainForm = styled.div`
   max-width: 1000px;
@@ -95,8 +104,15 @@ export const ButtonGroup = styled.div`
     color: white;
   }
 
-  .secondary {
-    background-color: #d5d5d5;
-    color: black;
-  }
+   .secondary {
+     background-color: #82c83a;
+     color: white;
+   }
+  `;
+export const SlideItem = styled.img`
+    width: 100%;
+    height:100%;
+    object-fit:cover;
 `;
+
+
