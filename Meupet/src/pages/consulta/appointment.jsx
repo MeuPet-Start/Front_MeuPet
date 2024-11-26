@@ -1,15 +1,16 @@
-//  import React from "react";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-// import Input from "../../components/input/input";
-// import Sections from "../../components/sections/sections";
 import {Swiper,SwiperSlide} from 'swiper/react';
 import carrossel1 from "../../assets/carrossel1.png";
 import carrossel2 from "../../assets/carrossel2.png";
 import carrossel3 from "../../assets/carrossel3.png";
-import cantinhodafilo from "../../assets/cantinhodafilo.png";
-import { HeaderSection, MainForm, InputGrid, ButtonGroup,SlideItem, TextBlock } from "./appointmentstyle";
+import Cemevet from "../../assets/Cemevet.png";
+import { PiStethoscopeDuotone } from "react-icons/pi";
+import { BsClipboardCheck } from "react-icons/bs";
+import { MdLocalPhone } from "react-icons/md";
+import { HeaderSection, MainForm, InputGrid, ButtonGroup,SlideItem } from "./appointmentstyle";
 import "swiper/css"
+
 
 
 const Appointment = () => {
@@ -25,7 +26,32 @@ const Appointment = () => {
 
       <Header></Header>
 
+      <HeaderSection>
+        <div>
+          <img src={Cemevet} alt="Clínica" />
+
+          <div className="text">
+            <h1>Centro Médico Veterinário</h1>
+            <h2>Sua Clínica Veterinária: Saúde e Cuidado para o seu Pet</h2>
+            <div>
+              <PiStethoscopeDuotone />
+              <p><strong> +4 Serviços Inclusos: </strong> Consultas,Exames e Cirurgias</p>
+            </div> 
+            <div>
+              <BsClipboardCheck />
+              <p><strong>Atendimento: Das 8h às 18h,</strong>todos os dias</p>
+            </div> 
+            <div>
+              <MdLocalPhone />
+              <p>Em caso de urgências, ligue: <strong>(81) 3440-0443</strong></p>
+            </div> 
+          </div>
+          
+        </div>
+      </HeaderSection>
+
       <Swiper
+      
             spaceBetween={50}
             slidesPerView={1}
             pagination={{clickable:true}}
@@ -46,87 +72,67 @@ const Appointment = () => {
         }
       </Swiper>
 
-
-      <HeaderSection>
-        <div>
-          <img src={cantinhodafilo} alt="Clínica" />
-
-          <TextBlock>
-          <h1>Centro Médico Veterinário</h1>
-          <h2>Saúde e cuidado para o seu pet.</h2>
-          <p>Várzea | 3 Serviços inclusos | (81) 3440-0443</p>
-          <p>Atendimento das 8h às 18h</p>
-          </TextBlock>
-          
-        </div>
-      </HeaderSection>
-
       <MainForm>
-        <h2>Serviço de Agendamento</h2>
+        <div>
+           <h1>Serviços de Agendamento</h1>
+           <h2>Preencha Rapidamente as informações de seu Pet e <strong> Agende com Facilidade:</strong></h2>
+        </div>
         <InputGrid>
           <div>
-            <label>CPF</label>
-            <input type="text" placeholder="Insira seu CPF" />
-          </div>
-          <div>
-            <label>Nome Completo</label>
-            <input type="text" placeholder="ex: Maria Clara" />
-          </div>
-          <div>
-            <label>Telefone</label>
-            <input type="text" placeholder="ex: 81 99576-1234" />
-          </div>
-          <div>
-            <label>Selecione o bairro</label>
-            <input type="text" placeholder="ex: Ibura" />
-          </div>
-          <div>
-            <label>E-mail</label>
-            <input type="email" placeholder="ex: maria@gmail.com" />
-          </div>
-          <div>
-            <label>Confirmar E-mail</label>
-            <input type="email" placeholder="ex: maria@gmail.com" />
-          </div>
-          <div>
-            <label>Idade do responsável pelo animal</label>
-            <input type="number" placeholder="Idade" />
-          </div>
-          <div className="divInputRadio">
-            <label>Tipo do Animal</label>
-            <div className="inputRadio">           
-              <label>Cachorro</label>           
-              <input type="RADIO" name="animalGenero" value="op1"/> 
-          </div>
-          <div className="inputRadio">           
-              <label>Gato</label>           
-              <input type="RADIO" name="animalGenero" value="op1"/> 
-          </div>
-          </div>
-          <div className="divInputRadio">
-            <label>Gênero do Animal</label>
-            <div className="inputRadio">
-                <label>Macho</label>           
-                <input type="RADIO" name="animalGenero" value="op1"/> 
-                
-            </div>
-            <div className="inputRadio"> 
-              <label>Fêmea</label>
-              <input type="RADIO" name="animalGenero" value="op2"/> 
+            <h1>Informações do Animal:</h1>
+            <div>
+              <div>
+                <h1>Tipo do animal:</h1>
+                <input type="checkbox" id="cachorro" /> 
+                <label for= "cachorro">Cachorro </label>  
+                <input type="checkbox" id="gato" /> 
+                <label for= "gato">Gato </label>  
+              </div>
+              <div>
+                <h1>Gênero do Pet::</h1>
+                <input type="checkbox" id="femea" /> 
+                <label for= "femea">Fêmea </label>  
+                <input type="checkbox" id="macho" /> 
+                <label for= "macho">Macho</label>  
+              </div>
             </div>
           </div>
-      
           <div>
-            <label>Observação</label>
-            <textarea placeholder="ex: meu pet está doente há vários dias"></textarea>
+            <label>Nome do Pet</label>
+            <input type="text" placeholder="Insira o nome do seu Pet" />
+          </div>
+          <div>
+            <label>Idade</label>
+            <input type="email" placeholder="Exemplo: 3 anos" />
+          </div>
+          <div>
+            <label>Histórico médico relevante (se houver).</label>
+            <input type="email" placeholder="Insira aqui as informações adicionais sobre o seu Pet" />
+          </div>
+          <div>
+            <h1>Detalhes do serviço: </h1>
+            </div>
+            <div>
+                <h1>Tipo do animal:</h1>
+                <input type="checkbox" id="consulta" /> 
+                <label for= "consulta">Consulta </label>  
+                <input type="checkbox" id="exames" /> 
+                <label for= "exames">Exames</label>  
+                <input type="checkbox" id="vacinas" /> 
+                <label for= "vacinas">Vacinas</label>  
+              </div>
+          <div>
+            <label>Data do Serviço</label>
+            <input type="number" placeholder="Data" />
+          </div>
+          <div>
+            <label>Horários</label>
+            <textarea placeholder="Horários"></textarea>
           </div>
         </InputGrid>
 
         <ButtonGroup>
-          <button className="primary">Marcar Consulta</button>
-          <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">
-            <button className="secondary">Ver Como Chegar</button>
-          </a>
+          <button className="primary">Efetuar Marcação</button>
         </ButtonGroup>
       </MainForm>
 

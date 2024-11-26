@@ -17,43 +17,42 @@ export const HeaderSection = styled.div`
 background-color: #00507b;
 color: white;
 text-align: center;
-padding: 20px 0;
+padding: 20px;
+
 div{
   margin: auto;
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 24px;
+
+  .text{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+  }
+
 }
 
 img {
-  margin-right: 24px;
   min-width: 120px;
-  margin-bottom: 10px;
   }
 
   h1 {
     font-size: 24px;
-    margin: 10px 0;
   }
   
   h2 {
     font-size: 18px;
     color: #82c83a;
-    margin: 5px 0;
   }
 
   p {
-    margin: 5px 0;
     font-size: 14px;
   }
 `;
 
-export const TextBlock = styled.div`
-  display:flex;
-  flex-direction:column;
-  justify-content:center
-  margin: 0;
-  `;
 
 export const MainForm = styled.div`
   max-width: 1000px;
