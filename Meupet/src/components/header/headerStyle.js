@@ -1,73 +1,111 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-export const HeaderContainer = styled.header`
+export const Nav = styled.nav`
+  background-color: #fff;
+  margin: 1rem auto;
+  border-radius: 10px;
+  padding: 0.5rem 1.5rem;
+  max-width: 1158px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 2rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 export const LogoContainer = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
 `;
 
-export const LogoImage = styled.img`
-  width: 60px;
-  height: 60px;
-  margin-right: 0.75rem;
+export const Logo = styled.img`
+  width: 70px;
+  height: 70px;
+  margin-right: 0.5rem;
 `;
 
 export const LogoText = styled.h1`
-  color: #00316a;
-  font-size: 2rem;
+  color: #2a4f6a;
+  font-size: 1.5rem;
 `;
 
-export const NavMenu = styled.nav`
+export const Links = styled.div`
   display: flex;
-  gap: 1rem;
-   @media (max-width: 900px) {
-    display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
-    flex-direction: column;
-    position: absolute;
-    top: 60px;
-    right: 20px;
-    background-color: #a4d65e;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
+  gap: 1.5rem;
 `;
 
-export const NavLink = styled.a`
-  color: #00316a;
-  font-size: 2rem;
-  text-decoration: none;
+export const NavLink = styled.button`
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: ${(props) => (props.active ? "#36a92e" : "#2a4f6a")};
+  font-weight: ${(props) => (props.active ? "bold" : "normal")};
+  font-family: "Londrina Solid", sans-serif;
   cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s ease;
 
   &:hover {
-    text-decoration: underline;
-  }
-
-  &.active {
-    border-bottom: 5px solid #00316a;
+    color: #36a92e;
   }
 `;
 
-export const Hamburger = styled.div`
-display: none;
-flex-direction: column;
-cursor: pointer;
-
-span {
-  height: 3px;
-  width: 25px;
-  background: #00316a;
-  margin: 4px 0;
-  transition: 0.3s;
-}
-
-@media (max-width: 900px) {
+export const UserSection = styled.div`
   display: flex;
-}
+  align-items: center;
+  gap: 1rem;
+`;
+
+export const CoinsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const CoinIcon = styled.img`
+  width: 20px;
+  height: 20px;
+`;
+
+export const CoinCount = styled.span`
+  font-size: 1rem;
+  color: #2a4f6a;
+  font-weight: bold;
+`;
+
+export const UserContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const ClinicContainer = styled(UserContainer)``;
+
+export const ProfileImage = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+`;
+
+export const UserName = styled.span`
+  font-size: 1rem;
+  color: #2a4f6a;
+  font-weight: bold;
+`;
+
+export const LogoutButton = styled.button`
+  background: none;
+  border: 1px solid #ff0000;
+  color: #ff0000;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #ff0000;
+    color: white;
+  }
 `;

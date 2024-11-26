@@ -1,10 +1,13 @@
 import styled from "styled-components";
-import background from '../../assets/background_home.png'; 
-import dog from '../../assets/dog.png';
+import background from "../../assets/background_home.png";
+import dog from "../../assets/dog.png";
+import backgroundImage from "../../assets/background_login.png";
+import adotapet from "../../assets/adota_pet.png";
+import capiba from "../../assets/capiba.png";
 
 export const Container = styled.div`
   text-align: center;
-   overflow: hidden
+  overflow: hidden;
 `;
 
 export const SectionHero = styled.section`
@@ -12,13 +15,14 @@ export const SectionHero = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 50vh;
   gap: 2rem;
   background-image: url(${background});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   @media (max-width: 900px) {
-  flex-direction: column;
+    flex-direction: column;
   }
 `;
 
@@ -30,14 +34,15 @@ export const Content = styled.div`
   color: white;
   padding: 0 1rem;
   @media (max-width: 900px) {
-  align-items: center;
+    align-items: center;
   }
 `;
 
 export const Title = styled.h1`
-  font-size: 4rem;  
+  font-size: 4rem;
   color: white;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
+  text-align: left;
 `;
 
 export const Subtitle = styled.p`
@@ -61,7 +66,6 @@ export const Button = styled.button`
   }
 `;
 
-
 export const DogImage = styled.div`
   width: 22rem;
   height: 22rem;
@@ -71,13 +75,15 @@ export const DogImage = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   z-index: 1;
-  bottom: 0;
+  align-self: flex-end;
 `;
 
 /* Estilo da seção de serviços */
 export const ServicesSection = styled.section`
   padding: 4rem 0;
   text-align: center;
+  max-width: 1158px;
+  margin: 0 auto;
 
   & > div {
     display: flex;
@@ -89,108 +95,171 @@ export const ServicesSection = styled.section`
 
 export const ServicesTitle = styled.h2`
   font-size: 4rem;
-  color: #00316a;
+  color: #2a4f6a;
   margin-bottom: 2rem;
+  text-align: left;
+  font-weight: 550;
 `;
 
-export const ServiceCard = styled.div`
-  width: 20rem;
-  background-color: #00316a;
-  border-radius: 10px;
-  padding: 2rem;
+export const ButtonService = styled.button`
+  margin-top: 3rem;
+  background-color: #2a4f6a;
   color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 3rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s;
+
+  &:hover {
+    background-color: #1f3e55;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+`;
+
+export const AdotaPetSection = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+  background-image: url(${backgroundImage});
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 75vh;
+`;
+
+export const AdotaPetContent = styled.div`
+  display: flex;
+  max-width: 1158px;
+  justify-content: space-between;
+`;
+
+export const AdotaPetInfo = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  box-shadow: 0px 1rem 1rem rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s;
-
-  &:hover {
-    transform: translateY(-10px);
-  }
-`;
-
-export const ServiceImage = styled.img`
-  width: 100%;
-  height: 10rem;
-  object-fit: cover;
-  margin-bottom: 1rem;
-`;
-
-export const ServiceName = styled.h3`
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-`;
-
-export const ServiceDescription = styled.p`
-  font-size: 1.5rem;
-  text-align: center;
-`;
-
-/* Estilo da seção de agendamentos */
-
-export const AppointmentsSection = styled.section`
-  padding: 4rem 2rem;
-  background-color: #00316a;
-  color: white;
-  text-align: center;
-`;
-
-export const AppointmentsTitle = styled.h2`
-  font-size: 3rem;
-  margin-bottom: 2rem;
-  font-family: 'Londrina Solid', sans-serif;
-`;
-
-export const AppointmentCard = styled.div`
-  display: flex;
-  background-color: white;
-  color: #00316a;
-  border-radius: 10px;
-  margin: 1rem auto;
-  max-width: 800px;
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-export const AppointmentImage = styled.img`
-  width: 200px;
-  height: 150px;
-  object-fit: cover;
-`;
-
-export const AppointmentContent = styled.div`
-  padding: 1rem;
-  flex: 1;
+  gap: 2rem;
   text-align: left;
+  justify-content: center;
+  max-width: 600px;
+`;
 
-  h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+export const AdotaPetTitle = styled.h2`
+  font-size: 4rem;
+  font-weight: 500;
+  color: #2a4f6a;
+  letter-spacing: 0.25rem;
+
+  span {
+    color: #36a92e; /* Destaque do AdotaPET */
   }
 `;
 
-export const AppointmentInfo = styled.div`
+export const AdotaPetSubtitle = styled.p`
+  font-size: 1.5rem;
+  color: #5a5a5a;
+  line-height: 1.5;
+  font-family: "Poppins", sans-serif;
+  font-weight: thin;
+`;
+
+export const AdotaPetButton = styled.button`
+  padding: 0.75rem 1.5rem;
   font-size: 1rem;
-
-  p {
-    margin: 0.2rem 0;
+  color: white;
+  background-color: #2a4f6a;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  font-family: Poppins, sans-serif;
+  text-align: center;
+  &:hover {
+    background-color: #36a92e;
   }
 `;
 
-export const MoreButton = styled.button`
-  margin-top: 2rem;
-  padding: 0.75rem 2rem;
-  font-size: 1.2rem;
-  color: #00316a;
-  background-color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+export const AdotaPetImage = styled.div`
+  width: 40rem;
+  height: 40rem;
+  background-image: url(${adotapet});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  align-self: flex-end;
+`;
 
+export const CapibaSection = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  height: 60vh;
+`;
+
+export const CapibaContent = styled.div`
+  display: flex;
+  width: 100%;
+  max-width: 1158px;
+  justify-content: space-between;
+  
+`;
+
+export const CapibaInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  text-align: left;
+  justify-content: center;
+  max-width: 600px;
+`;
+
+export const CapibaTitle = styled.h2`
+  font-size: 4rem;
+  font-weight: 500;
+  color: #2a4f6a;
+  letter-spacing: 0.15rem;
+`;
+
+export const CapibaDescription = styled.p`
+  font-size: 1.5rem;
+  color: #5a5a5a;
+  line-height: 1.5;
+  font-family: "Poppins", sans-serif;
+  font-weight: thin;
+`;
+
+export const CapibaButton = styled.button`
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  color: white;
+  background-color: #2a4f6a;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  font-family: Poppins, sans-serif;
+  text-align: center;
   &:hover {
-    background-color: #f1f1f1;
+    background-color: #36a92e;
   }
+`;
+
+export const CapibaImage = styled.div`
+  width: 20rem;
+  height: 20rem;
+  background-image: url(${capiba});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  align-self: flex-end;
 `;

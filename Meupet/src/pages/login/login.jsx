@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
 import {
   LoginContainer,
   LoginCard,
@@ -11,24 +13,58 @@ import {
   Input,
   InputContainer,
   Button,
-  Divider,
   LinkText,
   Background,
+  ErrorText,
+  Label,
+  LabelLink,
+  ButtonContainer,
 } from "./loginStyle";
 import logoImage from "../../assets/logo.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
   const navigate = useNavigate();
+
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email("E-mail inválido")
+        .required("O e-mail é obrigatório"),
+      password: Yup.string()
+        .min(6, "A senha deve ter pelo menos 6 caracteres")
+        .required("A senha é obrigatória"),
+    }),
+    onSubmit: async (values) => {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/auth/login",
+          values
+        );
+
+        if (response.status === 200) {
+          alert("Login bem-sucedido!");
+          navigate("/home");
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          alert("Credenciais inválidas. Tente novamente.");
+        } else {
+          console.error("Erro no login:", error);
+          alert("Ocorreu um erro inesperado. Tente novamente mais tarde.");
+        }
+      }
+    },
+  });
 
   return (
     <Background>
@@ -38,30 +74,49 @@ const Login = () => {
             <LogoImage src={logoImage} alt="Logo Meu PET" />
             <LogoText>Meu PET</LogoText>
           </LogoContainer>
-          <Title>LOGIN</Title>
-          <Input
-            type="email"
-            placeholder="E-mail*"
-            value={email}
-            onChange={handleEmailChange}
-          />
-          <InputContainer>
+          <Title>Login</Title>
+          <form onSubmit={formik.handleSubmit}>
+            <Label htmlFor="email">E-mail:</Label>
             <Input
-              type={showPassword ? "text" : "password"}
-              placeholder="Senha"
+              type="email"
+              name="email"
+              placeholder="E-mail"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
-            <span onClick={togglePasswordVisibility}>
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
-          </InputContainer>
-          <LinkText href="/cadastro">Não tem uma conta? Cadastre-se</LinkText>
-          <Button>Entrar com gov.br</Button>
-          <Button>Entrar com Conecta</Button>
-          <Divider />
-          <Button secondary onClick={() => navigate("/")}>
-            Voltar
-          </Button>
-          <Button>Entrar</Button>
+            {formik.touched.email && formik.errors.email ? (
+              <ErrorText>{formik.errors.email}</ErrorText>
+            ) : null}
+            <Label htmlFor="password">
+              Senha:
+              <LabelLink href="/recuperar-senha">Esqueceu sua senha?</LabelLink>
+            </Label>
+            <InputContainer>
+              <Input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Senha"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              <span onClick={togglePasswordVisibility}>
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </InputContainer>
+            {formik.touched.password && formik.errors.password ? (
+              <ErrorText>{formik.errors.password}</ErrorText>
+            ) : null}
+
+            <LinkText href="/cadastro">Não tem uma conta? Cadastre-se</LinkText>
+            <ButtonContainer>
+              <Button secondary onClick={() => navigate("/")}>
+                Voltar
+              </Button>
+              <Button type="submit">Entrar</Button>
+            </ButtonContainer>
+          </form>
         </LoginCard>
       </LoginContainer>
     </Background>

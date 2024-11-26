@@ -1,34 +1,75 @@
-import React from 'react';
-import { useState } from 'react';
-import { HeaderContainer, NavMenu, NavLink , Hamburger, LogoContainer, LogoImage,   LogoText} from './headerStyle';
-import logoImage from '../../assets/logo.png';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import logoImage from "../../assets/logo.png";
+import userImage from "../../assets/logo.png"; 
+import clinicImage from "../../assets/logo.png"; 
+import {
+  Nav,
+  LogoContainer,
+  Logo,
+  LogoText,
+  Links,
+  NavLink,
+  UserSection,
+  CoinsContainer,
+  CoinIcon,
+  CoinCount,
+  UserContainer,
+  ClinicContainer,
+  ProfileImage,
+  UserName,
+} from "./headerStyle";
 
-const Header = () => {
+const Header = ({ isLoggedIn, userType, userName, userPoints }) => {
+  const navigate = useNavigate();
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
   return (
-  <HeaderContainer>
-    <LogoContainer>
-      <LogoImage src={logoImage} alt="Logo Meu PET" />
-      <LogoText>Meu PET</LogoText>
-    </LogoContainer>
-    <Hamburger onClick={toggleMenu}>
-        <span />
-        <span />
-        <span />
-      </Hamburger>
-    <NavMenu isOpen={isOpen}>
-      <NavLink href="#">Home</NavLink>
-      <NavLink href="#">Adote</NavLink>
-      <NavLink href="/castracao">Castre</NavLink>
-      <NavLink href="#">Serviços</NavLink>
-      <NavLink href="/login">Entrar</NavLink>
-    </NavMenu>
-  </HeaderContainer>
-);
-}
+    <Nav>
+      <LogoContainer onClick={() => navigate("/")}>
+        <Logo src={logoImage} alt="Logo Meu PET" />
+        <LogoText>Meu PET</LogoText>
+      </LogoContainer>
+      <Links>
+        <NavLink onClick={() => navigate("/")}>Home</NavLink>
+        <NavLink
+          as="a"
+          href="https://adotapet.recife.pe.gov.br/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          AdotaPet
+        </NavLink>
+        <NavLink onClick={() => navigate("/servicos")}>Serviços</NavLink>
+        {isLoggedIn && userType === "user" && (
+          <NavLink onClick={() => navigate("/consultas")}>Consultas</NavLink>
+        )}
+      </Links>
+      {isLoggedIn ? (
+        <UserSection>
+          {userType === "user" && (
+            <>
+              <CoinsContainer>
+                <CoinIcon src="/path-to-coin-icon.png" alt="Moedas" />
+                <CoinCount>{userPoints || 0}</CoinCount>
+              </CoinsContainer>
+              <UserContainer>
+                <ProfileImage src={userImage} alt="Usuário" />
+                <UserName>{userName}</UserName>
+              </UserContainer>
+            </>
+          )}
+          {userType === "clinic" && (
+            <ClinicContainer>
+              <ProfileImage src={clinicImage} alt="Clínica" />
+              <UserName>{userName}</UserName>
+            </ClinicContainer>
+          )}
+        </UserSection>
+      ) : (
+        <NavLink onClick={() => navigate("/login")}>Entrar</NavLink>
+      )}
+    </Nav>
+  );
+};
+
 export default Header;
