@@ -48,7 +48,7 @@ const Register = () => {
             .required("O e-mail é obrigatório."),
           phone: Yup.string()
             .min(10, "O telefone deve ter pelo menos 10 dígitos.")
-            .max(15, "O telefone deve ter no máximo 15 dígitos.")
+            .max(20, "O telefone deve ter no máximo 15 dígitos.")
             .required("O telefone é obrigatório."),
         });
       } else if (values.userType === "user") {
@@ -82,7 +82,7 @@ const Register = () => {
             .required("O e-mail é obrigatório."),
           phone: Yup.string()
             .min(10, "O telefone deve ter pelo menos 10 dígitos.")
-            .max(15, "O telefone deve ter no máximo 15 dígitos.")
+            .max(20, "O telefone deve ter no máximo 15 dígitos.")
             .required("O telefone é obrigatório."),
           password: Yup.string()
             .min(6, "A senha deve ter pelo menos 6 caracteres.")
@@ -101,10 +101,12 @@ const Register = () => {
       userType: "",
       cpfCnpj: "",
       name: "",
+      socialName: "",
       email: "",
       phone: "",
       password: "",
       confirmPassword: "",
+      birthDate: ""
     },
     validationSchema: stepValidationSchemas[currentStep],
     onSubmit: async (values) => {
@@ -114,14 +116,38 @@ const Register = () => {
         try {
           const endpoint =
             formik.values.userType === "clinic"
-              ? "http://localhost:8080/api/register-clinic"
-              : "http://localhost:8080/api/register-user";
+              ? "http://localhost:8080/partner"
+              : "http://localhost:8080/user";
 
-          const response = await axios.post(endpoint, values);
+              const requestData =
+          values.userType === "clinic"
+            ? {
+                name: values.name,
+                email: values.email,
+                phoneNumber: values.phone,
+                password: values.password,
+                document: values.cpfCnpj,
+                documentType: values.cpfCnpj.length === 11 ? "CPF" : "CNPJ",
+              }
+            : {
+                name: values.name,
+                socialName: values.socialName,
+                email: values.email,
+                phoneNumber: values.phone,
+                password: values.password,
+                document: values.cpfCnpj,
+                documentType: "CPF",
+                birthDate: values.birthDate,
+              };
 
+              console.log(values.birthDate)
+
+          const response = await axios.post(endpoint, requestData);
+
+          console.log(response.data)
           if (response.status === 200) {
             alert("Cadastro realizado com sucesso!");
-            navigate("/login");
+            //navigate("/login");
           }
         } catch (error) {
           console.error("Erro no cadastro:", error);
@@ -288,7 +314,10 @@ const Register = () => {
                       type="date"
                       name="birthDate"
                       value={formik.values.birthDate || ""}
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        const dateValue = e.target.value;
+                        formik.setFieldValue("birthDate", dateValue); 
+                      }}
                       onBlur={formik.handleBlur}
                     />
                     {formik.touched.birthDate && formik.errors.birthDate && (
