@@ -1,66 +1,101 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const FooterContainer = styled.footer`
-  background-color: #1a1a1a;
-  color: #fff;
+  background-color: #000;
+  color: white;
   text-align: center;
-  padding: 2rem 1rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
 `;
 
 export const FooterNav = styled.nav`
   display: flex;
-  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 1rem;
 `;
 
-export const FooterLinks = styled.a`
-  color: #fff;
-  font-size: 2rem;
-  text-decoration: none;
-  margin: 0 0.5rem;
+export const FooterLinks = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.75rem;
+  cursor: pointer;
+  font-family: "Londrina Solid", cursive;
+
+  transition: color 0.3s ease;
 
   &:hover {
-    color: #ccc;
+    color: #36a92e;
+    text-decoration: none;
   }
 `;
 
 export const Divider = styled.span`
-  color: #fff;
-  margin: 0 1rem;
+  color: white;
 `;
 
 export const FooterIcons = styled.div`
-  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
     color: #ccc;
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
   }
 
   div {
     display: flex;
-    justify-content: center;
-    gap: 1rem;
+    gap: 2rem;
 
     a {
-      color: #fff;
-      font-size: 1.2rem;
-      transition: color 0.3s;
+      color: white;
+      font-size: 1.5rem;
+      transition: color 0.3s ease;
 
       &:hover {
-        color: #ccc;
+        color: #36a92e;
       }
     }
   }
 `;
 
 export const FooterText = styled.p`
-  color: #ccc;
-  font-size: 1.25rem;
-  margin-top: 1rem;
+  font-size: 1rem;
+  color: #e0e0e0;
 `;
+
+export const UserSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const UserDetails = styled.div`
+  text-align: center;
+
+  span {
+    font-size: 1rem;
+    font-family: "Poppins", sans-serif;
+    color: white;
+    font-weight: 500;
+  }
+`;
+
+export const Points = styled.div`
+  font-size: 1rem;
+  color: white;
+  font-weight: bold;
+
+  span {
+    font-weight: 400;
+  }
+`;
+
+export const ClinicDetails = styled(UserDetails)``;
