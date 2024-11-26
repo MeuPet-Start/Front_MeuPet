@@ -32,36 +32,67 @@ const Register = () => {
     Yup.object().shape({
       userType: Yup.string().required("Escolha uma opção."),
     }),
-    Yup.object().shape({
-      cpfCnpj: Yup.string()
-        .required("O CPF ou CNPJ é obrigatório.")
-        .min(11, "O CPF/CNPJ deve ter pelo menos 11 caracteres.")
-        .max(18, "O CPF/CNPJ deve ter no máximo 18 caracteres."),
-      name: Yup.string().required("O nome é obrigatório."),
-      socialName: Yup.string(),
-      birthDate: Yup.string().required("A data de nascimento é obrigatória."),
-      email: Yup.string()
-        .email("Insira um e-mail válido.")
-        .required("O e-mail é obrigatório."),
-      phone: Yup.string()
-        .min(10, "O telefone deve ter pelo menos 10 dígitos.")
-        .max(15, "O telefone deve ter no máximo 15 dígitos.")
-        .required("O telefone é obrigatório."),
+
+    Yup.lazy((values) => {
+      if (values.userType === "clinic") {
+        return Yup.object().shape({
+          cpfCnpj: Yup.string()
+            .required("O CPF ou CNPJ é obrigatório.")
+            .min(11, "O CPF/CNPJ deve ter pelo menos 11 caracteres.")
+            .max(18, "O CPF/CNPJ deve ter no máximo 18 caracteres."),
+          name: Yup.string().required(
+            "O Nome Fantasia ou Pessoal é obrigatório."
+          ),
+          email: Yup.string()
+            .email("Insira um e-mail válido.")
+            .required("O e-mail é obrigatório."),
+          phone: Yup.string()
+            .min(10, "O telefone deve ter pelo menos 10 dígitos.")
+            .max(15, "O telefone deve ter no máximo 15 dígitos.")
+            .required("O telefone é obrigatório."),
+        });
+      } else if (values.userType === "user") {
+        return Yup.object().shape({
+          cpfCnpj: Yup.string()
+            .required("O CPF é obrigatório.")
+            .length(11, "O CPF deve ter exatamente 11 caracteres."),
+          name: Yup.string().required("O Nome Completo é obrigatório."),
+          socialName: Yup.string(), // Opcional
+          birthDate: Yup.string().required(
+            "A Data de Nascimento é obrigatória."
+          ),
+        });
+      }
     }),
-    Yup.object().shape({
-      email: Yup.string()
-        .email("Insira um e-mail válido.")
-        .required("O e-mail é obrigatório."),
-      phone: Yup.string()
-        .min(10, "O telefone deve ter pelo menos 10 dígitos.")
-        .max(15, "O telefone deve ter no máximo 15 dígitos.")
-        .required("O telefone é obrigatório."),
-      password: Yup.string()
-        .min(6, "A senha deve ter pelo menos 6 caracteres")
-        .required("A senha é obrigatória."),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password"), null], "As senhas devem ser iguais")
-        .required("A confirmação da senha é obrigatória."),
+
+    Yup.lazy((values) => {
+      if (values.userType === "clinic") {
+        return Yup.object().shape({
+          password: Yup.string()
+            .min(6, "A senha deve ter pelo menos 6 caracteres.")
+            .required("A senha é obrigatória."),
+          confirmPassword: Yup.string()
+            .oneOf([Yup.ref("password"), null], "As senhas devem ser iguais.")
+            .required("A confirmação da senha é obrigatória."),
+        });
+      } else if (values.userType === "user") {
+        return Yup.object().shape({
+          email: Yup.string()
+            .email("Insira um e-mail válido.")
+            .required("O e-mail é obrigatório."),
+          phone: Yup.string()
+            .min(10, "O telefone deve ter pelo menos 10 dígitos.")
+            .max(15, "O telefone deve ter no máximo 15 dígitos.")
+            .required("O telefone é obrigatório."),
+          password: Yup.string()
+            .min(6, "A senha deve ter pelo menos 6 caracteres.")
+            .required("A senha é obrigatória."),
+          confirmPassword: Yup.string()
+            .oneOf([Yup.ref("password"), null], "As senhas devem ser iguais.")
+            .required("A confirmação da senha é obrigatória."),
+        });
+      }
+      return Yup.object();
     }),
   ];
 
