@@ -9,7 +9,7 @@ import { PiStethoscopeDuotone } from "react-icons/pi";
 import { BsClipboardCheck } from "react-icons/bs";
 import { MdLocalPhone } from "react-icons/md";
 import { useNavigate } from "react-router"; 
-import { HeaderSection, MainForm, InputGrid, ButtonGroup, SlideItem } from "./appointmentstyle";
+import { HeaderSection, MainForm, InputGrid, ButtonGroup, SlideItem } from "./consultastyle";
 import "swiper/css"
 
 const Appointment = () => {
