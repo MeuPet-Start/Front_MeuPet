@@ -116,8 +116,8 @@ const Register = () => {
         try {
           const endpoint =
             formik.values.userType === "clinic"
-              ? "http://localhost:8080/partner"
-              : "http://localhost:8080/user";
+              ? "http://localhost:8080/api/v1/partner"
+              : "http://localhost:8080/api/v1/user";
 
               const requestData =
           values.userType === "clinic"

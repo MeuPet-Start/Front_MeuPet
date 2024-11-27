@@ -20,8 +20,13 @@ import {
   UserName,
 } from "./headerStyle";
 
-const Header = ({ isLoggedIn, userType, userName, userPoints }) => {
+import {useUserType} from "../../hooks/useUserType";
+
+
+
+const Header = ({ isLoggedIn, userName, userPoints }) => {
   const navigate = useNavigate();
+  const userType = useUserType();
 
   return (
     <Nav>
