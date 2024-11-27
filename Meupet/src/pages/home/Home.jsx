@@ -50,7 +50,7 @@ export function Home() {
       <ServicesSection>
         <ServicesTitle>NOSSAS ESPECIALIDADES</ServicesTitle>
         <Carrossel />
-        <ButtonService onClick={() => navigate("/services")}>
+        <ButtonService onClick={() => navigate("/especialidades")}>
           Ver todos as Especialidades
         </ButtonService>
       </ServicesSection>
