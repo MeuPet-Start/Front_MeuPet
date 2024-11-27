@@ -113,8 +113,16 @@ export const InputGrid = styled.div`
       h1{
       font-family: "Poppins";
       font-size: 16px;
+      
     }
 
+      .textgreen{
+      background-color: #8BC500;  
+      color: #FFFFFF;
+      font-weight: normal;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
   .checkboxArea{
     font-family: "Poppins";
     display: flex;

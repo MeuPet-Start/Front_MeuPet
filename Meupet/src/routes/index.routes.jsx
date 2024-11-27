@@ -5,6 +5,7 @@ import { AppointmentDetails } from "../pages/atendimento/appointmentDetails.jsx"
 import Login from '../pages/login/login.jsx';
 import Register from '../pages/registro/register.jsx';
 import Appointment from "../pages/consulta/appointment.jsx";
+import Confirmacao from "../pages/confirmacao/confirmacao.jsx";
 
 export const route = createBrowserRouter([
     {
@@ -19,6 +20,10 @@ export const route = createBrowserRouter([
     {
         path: '/appointments/:id',
         element: <AppointmentDetails />,
+    },
+    {
+        path: '/confirmacao',
+        element: <Confirmacao />,
     },
     {
         path: '/login',
