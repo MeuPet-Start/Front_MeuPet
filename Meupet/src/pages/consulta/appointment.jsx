@@ -77,7 +77,7 @@ const Appointment = () => {
         
         <InputGrid>
           <div>
-            <h1 id="textgreen">Informações do Animal:</h1>
+            <h1 className="textgreen">Informações do Animal:</h1>
             <div className="checkboxArea">
               <h1>Tipo do animal:</h1>
               <input type="checkbox" id="cachorro" />
@@ -110,7 +110,7 @@ const Appointment = () => {
           </div>
 
           <div>
-            <h1 id="textgreen">Detalhes do serviço: </h1>
+            <h1 className="textgreen detalhes">Detalhes do serviço: </h1>
           </div>
           
           <div className="checkboxArea">

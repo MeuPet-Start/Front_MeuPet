@@ -108,7 +108,7 @@ export const InputGrid = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 
       h1{
       font-family: "Poppins";
@@ -117,12 +117,20 @@ export const InputGrid = styled.div`
     }
 
       .textgreen{
+      margin: 0 0 16px 0;
       background-color: #8BC500;  
       color: #FFFFFF;
       font-weight: normal;
       padding: 4px 8px;
       border-radius: 8px;
+      width:210px;
     }
+
+    .detalhes{
+    margin: 0;
+      width:180px;
+    }
+
   .checkboxArea{
     font-family: "Poppins";
     display: flex;
@@ -140,21 +148,28 @@ export const InputGrid = styled.div`
 
   }
 
-  .divContain{
-  display:flex;
+  .divContain {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; 
 
-    .divForm{
+    .divForm {
       margin: 0 16px 0 0;
 
-      input, textarea{
-        padding:16px;
-        width: 428px;
+      input, textarea {
+        padding: 16px;
+        width: 400px;
         height: 50px;
-        border: 1px solid #2A4F6A;
+        border: 1px solid #2a4f6a;
         border-radius: 12px;
+      }
+
+      textarea {
+        resize: none;
       }
       
       label{
+      margin: 0 0 4px 0;
       display: block;
       font-size:20px;
       }
@@ -167,6 +182,7 @@ export const InputGrid = styled.div`
 export const ButtonGroup = styled.div`
     display: flex;
     justify-content: center;
+    margin: 24px 0;
     button {
       font-size: 20px;
       background-color: #2A4F6A;
