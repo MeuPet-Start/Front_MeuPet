@@ -52,8 +52,9 @@ const Login = () => {
         );
 
         if (response.status === 200) {
+          localStorage.setItem("jwtToken", response.data.token);
           alert("Login bem-sucedido!");
-          navigate("/home");
+          navigate("/");
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {

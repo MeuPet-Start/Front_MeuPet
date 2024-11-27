@@ -11,7 +11,7 @@ export const useUserType = () => {
       try {
         const decodedToken = jwtDecode(token);
 
-        setUserType(decodedToken.roles); 
+        setUserType(decodedToken.roles[0]); 
       } catch (error) {
         console.error("Erro ao decodificar o token", error);
       }
