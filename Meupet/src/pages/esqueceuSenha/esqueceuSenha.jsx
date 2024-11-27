@@ -36,7 +36,7 @@ const ForgotPassword = () => {
     }),
     onSubmit: async (values) => {
       try {
-        await axios.post("http://localhost:8080/api/forgot-password", {
+        await axios.post("http://localhost:8080/api/v1/password-recovery/request", {
           email: values.email,
         });
         setIsSubmitted(true);
