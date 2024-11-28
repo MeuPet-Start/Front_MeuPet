@@ -8,6 +8,7 @@ import EsqueceuSenha from "../pages/esqueceuSenha/esqueceuSenha.jsx";
 import ResetSenha from "../pages/resetSenha/resetSenha.jsx"
 import Especialidades  from "../pages/especialidades/especialidades.jsx";
 import Servicos from "../pages/servicos/servicos.jsx";
+import PerfilClinica from "../pages/perfil/clinica/perfilClinica.jsx";
 
 export const route = createBrowserRouter([
   {
@@ -45,5 +46,10 @@ export const route = createBrowserRouter([
   {
     path: "/servicos",
     element: <Servicos />,
-  }
+  },
+  {
+    path: "/perfil-clinica",
+    element: <PerfilClinica />,
+  },
+
 ]);

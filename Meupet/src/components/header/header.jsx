@@ -73,7 +73,7 @@ const Header = () => {
           {userType === "clinic" && (
             <ClinicContainer>
               <ProfileImage src={clinicImage} alt="Clínica" />
-              <UserName onClick={() => navigate("/perfil-clinica")}>ALora</UserName>
+              <UserName onClick={() => navigate("/perfil-clinica")}>{userName}</UserName>
             </ClinicContainer>
           )}
         </UserSection>
