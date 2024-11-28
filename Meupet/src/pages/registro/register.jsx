@@ -145,9 +145,9 @@ const Register = () => {
           const response = await axios.post(endpoint, requestData);
 
           console.log(response.data)
-          if (response.status === 200) {
+          if (response.status === 201) {
             alert("Cadastro realizado com sucesso!");
-            //navigate("/login");
+            navigate("/login");
           }
         } catch (error) {
           console.error("Erro no cadastro:", error);

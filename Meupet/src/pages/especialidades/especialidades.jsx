@@ -19,7 +19,7 @@ import {
   CardContainer,
 } from "./especialidadesStyle";
 
-export function Especialidades() {
+const Especialidades = () => {
   const navigate = useNavigate();
 
   return (
@@ -80,3 +80,5 @@ export function Especialidades() {
     </Container>
   );
 }
+
+export default Especialidades;
