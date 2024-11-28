@@ -29,7 +29,8 @@ import {useUserData} from "../../hooks/useUserData";
 const Header = () => {
   const navigate = useNavigate();
   const {userType, userEmail} = useUserType();
-  const { userPoints, userName } = useUserData(userEmail);
+  const {userName, userPoints} = useUserData(userEmail);
+  
 
   return (
     <Nav>
@@ -65,14 +66,14 @@ const Header = () => {
               </CoinsContainer>
               <UserContainer>
                 <ProfileImage src={userImage} alt="Usuário" />
-                <UserName>{userName}</UserName>
+                <UserName onClick={() => navigate("/perfil-user")}>{userName}</UserName>
               </UserContainer>
             </>
           )}
           {userType === "clinic" && (
             <ClinicContainer>
               <ProfileImage src={clinicImage} alt="Clínica" />
-              <UserName onClick={() => navigate("/perfil")}>{userName}</UserName>
+              <UserName onClick={() => navigate("/perfil-clinica")}>ALora</UserName>
             </ClinicContainer>
           )}
         </UserSection>
