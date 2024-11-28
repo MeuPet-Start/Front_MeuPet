@@ -47,13 +47,14 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         const response = await axios.post(
-          "http://localhost:8080/auth/login",
+          "http://localhost:8080/api/v1/auth/login",
           values
         );
 
         if (response.status === 200) {
+          localStorage.setItem("jwtToken", response.data.token);
           alert("Login bem-sucedido!");
-          navigate("/home");
+          navigate("/");
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {

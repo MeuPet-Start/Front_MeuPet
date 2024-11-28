@@ -64,12 +64,14 @@ export const CoinsContainer = styled.div`
 `;
 
 export const CoinIcon = styled.img`
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
+  width: 40px;
+  height: 40px;
 `;
 
 export const CoinCount = styled.span`
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #2a4f6a;
   font-weight: bold;
 `;
@@ -83,15 +85,25 @@ export const UserContainer = styled.div`
 export const ClinicContainer = styled(UserContainer)``;
 
 export const ProfileImage = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
 `;
 
-export const UserName = styled.span`
-  font-size: 1rem;
-  color: #2a4f6a;
-  font-weight: bold;
+export const UserName = styled.button`
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: ${(props) => (props.active ? "#36a92e" : "#2a4f6a")};
+  font-weight: ${(props) => (props.active ? "bold" : "normal")};
+  font-family: "Londrina Solid", sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #36a92e;
+  }
 `;
 
 export const LogoutButton = styled.button`

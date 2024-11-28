@@ -44,8 +44,8 @@ const ResetPassword = () => {
     onSubmit: async (values) => {
       try {
         const token = new URLSearchParams(window.location.search).get("token");
-        await axios.post(
-          `http://localhost:8080/api/reset-password?token=${token}`,
+        await axios.patch(
+          `http://localhost:8080/api/v1/password-recovery/reset?token=${token}`,
           {
             password: values.password,
           }
