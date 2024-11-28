@@ -37,4 +37,3 @@ export const useUserData = (userEmail) => {
 
   return userData;
 };
-

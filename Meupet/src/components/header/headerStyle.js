@@ -66,10 +66,12 @@ export const CoinsContainer = styled.div`
 export const CoinIcon = styled.img`
   width: 40px;
   height: 40px;
+  width: 40px;
+  height: 40px;
 `;
 
 export const CoinCount = styled.span`
-  font-size: 1,25rem;
+  font-size: 1.25rem;
   color: #2a4f6a;
   font-weight: bold;
 `;
