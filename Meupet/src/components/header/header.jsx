@@ -28,8 +28,9 @@ import {useUserData} from "../../hooks/useUserData";
 
 const Header = () => {
   const navigate = useNavigate();
-  const {userType, userEmail} = useUserType();
+  const { userType, userEmail } = useUserType();
   const { userPoints, userName } = useUserData(userEmail);
+  
 
   return (
     <Nav>

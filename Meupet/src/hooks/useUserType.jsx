@@ -12,14 +12,26 @@ export const useUserType = () => {
       try {
         const decodedToken = jwtDecode(token);
 
-        setUserType(decodedToken.roles[0]); 
-        setUserEmail(decodedToken.sub);
+        const currentTime = Date.now() / 1000; 
+        if (decodedToken.exp < currentTime) {
+
+          localStorage.removeItem("jwtToken");
+
+          setUserType(null);
+          setUserEmail(null); 
+        } else {
+          setUserType(decodedToken.roles[0]); 
+          setUserEmail(decodedToken.sub); 
+        }
       } catch (error) {
         console.error("Erro ao decodificar o token", error);
+
+        localStorage.removeItem("jwtToken");
       }
+    } else {
+      console.log("Nenhum token encontrado.");
     }
   }, []);
 
-  return userType, userEmail;
+  return {userType, userEmail};
 };
-

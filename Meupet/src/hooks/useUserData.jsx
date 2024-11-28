@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios"; 
 
-const useUserData = (userEmail) => {
+export const useUserData = (userEmail) => {
   const [userData, setUserData] = useState({
     userPoints: 0,
     userName: "",
@@ -37,5 +37,3 @@ const useUserData = (userEmail) => {
 
   return userData;
 };
-
-export default useUserData;
