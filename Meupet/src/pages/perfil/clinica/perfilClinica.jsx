@@ -26,7 +26,7 @@ import {
 
 import { useUserType } from "../../../hooks/useUserType";
 import { useUserData } from "../../../hooks/useUserData";
-
+import {jwtDecode} from "jwt-decode";
 
 const PerfilClinica = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const PerfilClinica = () => {
     workingHours: "",
   });
   const [image, setImage] = useState(UserImage);
-  const [selectedTab, setSelectedTab] = useState("geral"); // Estado para controlar a aba selecionada
+  const [selectedTab, setSelectedTab] = useState("geral"); 
 
   useEffect(() => {
     const clinicInfo = JSON.parse(localStorage.getItem("clinicProfile")) || {
@@ -52,10 +52,9 @@ const PerfilClinica = () => {
     setClinicData(clinicInfo);
   }, []);
 
-  const {userType, userEmail} = useUserType();
-  const {userName, userPoints} = useUserData(userEmail);
+  const {userEmail} = useUserType();
+  const { userName} = useUserData(userEmail);
 
-  // Atualiza os dados conforme o usuário preenche os campos
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setClinicData((prevState) => ({
@@ -64,13 +63,11 @@ const PerfilClinica = () => {
     }));
   };
 
-  // Função para salvar os dados
   const handleSave = () => {
     localStorage.setItem("clinicProfile", JSON.stringify(clinicData));
     alert("Dados salvos com sucesso!");
   };
 
-  // Função para alterar a imagem do perfil
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -82,9 +79,43 @@ const PerfilClinica = () => {
     }
   };
 
-  // Função para alternar entre as abas
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
+  };
+
+  const handleLogoff = () => {
+    
+    localStorage.removeItem("jwtToken"); 
+    alert("Você foi desconectado com sucesso!");
+    navigate("/login");  
+  };
+  
+  const handleDeleteAccount = () => {
+    const confirmDelete = window.confirm(
+      "Tem certeza de que deseja deletar sua conta? Esta ação é irreversível."
+    );
+  
+    if (confirmDelete) {
+      axios
+        .delete("/api/deleteAccount", {
+          data: {
+            userId: clinicData.id,
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            localStorage.removeItem("clinicProfile"); 
+            alert("Conta deletada com sucesso.");
+            navigate("/"); 
+          } else {
+            alert("Erro ao deletar conta. Tente novamente.");
+          }
+        })
+        .catch((error) => {
+          console.error("Erro ao deletar a conta:", error);
+          alert("Houve um erro ao tentar deletar a conta. Tente novamente mais tarde.");
+        });
+    }
   };
 
   return (
@@ -104,7 +135,7 @@ const PerfilClinica = () => {
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              style={{ display: "none" }} // Esconde o input de file
+              style={{ display: "none" }} 
             />
           </ProfileImageContainer>
           <SidebarUsarnameTitle>{userName}</SidebarUsarnameTitle>
@@ -127,11 +158,23 @@ const PerfilClinica = () => {
           >
             Horários de Funcionamento
           </SidebarItem>
+
+          <SidebarItem
+            isSelected={selectedTab === "sair"}
+            onClick={handleLogoff}
+          >
+            Sair
+          </SidebarItem>
+          <SidebarItem
+            isSelected={selectedTab === "deletarConta"}
+            onClick={handleDeleteAccount}
+          >
+            Deletar Conta
+          </SidebarItem>
         </ProfileSidebar>
 
-
         <ProfileTabContent>
-        <ProfileTitle>Meu Perfil - Clínica</ProfileTitle>
+          <ProfileTitle>Meu Perfil - Clínica</ProfileTitle>
           {selectedTab === "geral" && (
             <ProfileForm>
               <FormGroup>
