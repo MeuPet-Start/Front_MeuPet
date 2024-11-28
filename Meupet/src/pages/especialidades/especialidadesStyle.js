@@ -53,8 +53,8 @@ export const HeroTitle = styled.h1`
 
   @media (max-width: 600px) {
     font-size: 2.5rem;
-    max-width: 90%;  /* Aumenta o max-width para telas menores */
-    text-align: center;  /* Centraliza o título em telas pequenas */
+    max-width: 90%; 
+    text-align: center;
   }
 `;
 
@@ -90,7 +90,7 @@ export const SearchBarSection = styled.section`
 export const SearchBarContainer = styled.div`
   display: flex;
   align-items: center;
-  background-color: #2a4f6a; /* Alterado para o fundo azul similar ao primeiro botão */
+  background-color: #2a4f6a;
   width: 800px;
   height: 71px;
   border-radius: 8px;
@@ -156,36 +156,35 @@ export const SearchIconRight = styled.div`
   margin-left: 15px;
   margin-right: 10px;
   z-index: 1;
-  cursor: pointer;  /* Aqui o cursor já está configurado para se tornar 'pointer' */
+  cursor: pointer; 
   transition: transform 0.2s ease, background-color 0.3s ease;
 
   &:hover {
-    background-color: #d1e7f1; /* Cor de fundo ao passar o mouse */
-    transform: scale(1.1); /* Aumenta o ícone ao passar o mouse */
+    background-color: #d1e7f1; 
+    transform: scale(1.1); 
   }
 
   &:active {
-    transform: scale(0.95); /* Diminui o ícone ao clicar */
-    background-color: #a8c9e6; /* Cor de fundo ao clicar */
-    animation: clickAnimation 0.1s ease; /* Animação de clique */
+    transform: scale(0.95); 
+    background-color: #a8c9e6;
+    animation: clickAnimation 0.1s ease; 
   }
 
   svg {
     width: 18px;
     height: auto;
     color: #6c757d;
-    transition: color 0.3s ease; /* Transição suave na cor do ícone */
+    transition: color 0.3s ease; 
   }
 
   &:hover svg {
-    color: #0056b3; /* Altera a cor do ícone ao passar o mouse */
+    color: #0056b3; 
   }
 
   &:active svg {
-    color: #003366; /* Cor mais escura do ícone ao clicar */
+    color: #003366;
   }
 
-  /* Definindo a animação de clique */
   @keyframes clickAnimation {
     0% {
       transform: scale(1.05) rotate(0deg);
@@ -202,97 +201,17 @@ export const SearchIconRight = styled.div`
 
 export const CardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 colunas */
+  grid-template-columns: repeat(3, 1fr);
   gap: 30px;
   padding: 20px;
   max-width: 1158px;
   margin: 0 auto;
 
   @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr); /* 2 colunas em telas menores */
+    grid-template-columns: repeat(2, 1fr); 
   }
 
   @media (max-width: 600px) {
-    grid-template-columns: 1fr; /* 1 coluna em telas muito pequenas */
-  }
-`;
-
-export const Card = styled.div`
-  padding: 1
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  text-align: left;
-  border: 1px solid #e0e0e0;
-  overflow: hidden;
-  max-width: 315px;
-  font-family: poppins, sans-serif;
-`;
-
-export const CardIcon = styled.div`
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #8BC500; /* Cor de fundo */
-  border-radius: 20%; /* Deixa o fundo redondo */
-  margin: 1rem 1.1rem 0rem;
-
-  svg {
-    width: 50%;
-    height: 50%;
-    color: #1E1E1E; /* Cor do ícone */
-  }
-`;
-
-
-export const CardTitle = styled.h3`
-  font-weight: bold;
-  font-size: 1.8rem;
-  color: #2a4f6a;
-  margin: 1rem 0;
-  font-weight: bold;
-  padding: 0 0 0 20px;
-`;
-
-export const CardDescription = styled.p`
-  font-size: 0.9rem;
-  color: #2a4f6a;
-  margin: 0rem 1.3rem 2.5rem;
-  line-height: 1.5;
-  white-space: normal; /* Permite quebras de linha */
-`;
-
-export const CardFooter = styled.div`
-  
-  width: 100%;
-  background-color: #2a4f6a;
-  padding: 2rem 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const CardButton = styled.button`
-  font-family: "Poppins";
-  font-weight: 600;
-  background-color: transparent;
-  color: #fff;
-  border: 1px solid #fff;
-  padding: 0.5rem 2rem;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-
-  transition: all 0.3s ease-in-out;
-
-  &:hover {
-    color: #2a4f6a;
-    background-color: white;
-    border: 1px solid #36a92e;
+    grid-template-columns: 1fr;
   }
 `;

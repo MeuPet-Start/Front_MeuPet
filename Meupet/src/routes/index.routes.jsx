@@ -7,6 +7,7 @@ import Register from "../pages/registro/register.jsx";
 import EsqueceuSenha from "../pages/esqueceuSenha/esqueceuSenha.jsx";
 import ResetSenha from "../pages/resetSenha/resetSenha.jsx";
 import { Especialidades } from "../pages/especialidades/especialidades.jsx";
+import { Agenda } from "../pages/agenda/agenda.jsx";
 
 export const route = createBrowserRouter([
   {
@@ -41,6 +42,11 @@ export const route = createBrowserRouter([
   {
     path: "/especialidades",
     element: <Especialidades />,
+  },
+
+  {
+    path: "/agenda",
+    element: <Agenda />,
   },
 
 ]);

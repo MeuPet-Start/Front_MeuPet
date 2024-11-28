@@ -11,11 +11,12 @@ export const CardContainer = styled.div`
   border: 1px solid #e0e0e0;
   overflow: hidden;
   max-width: 300px;
-  font-family: poppins, sans-serif;
+  font-family: "poppins", sans-serif;
 `;
 
 export const CardInfo = styled.div`
   padding: 0 1.2rem;
+  margin-bottom: 1.0rem;
 `;
 
 export const CardIcon = styled.img`
@@ -57,6 +58,8 @@ export const CardButton = styled.button`
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s ease-in-out;
+  font-family: "poppins";
+  font-weight: 600;
 
   &:hover {
     color: #2a4f6a;
