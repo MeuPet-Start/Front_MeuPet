@@ -5,10 +5,12 @@ import { AppointmentDetails } from "../pages/atendimento/appointmentDetails.jsx"
 import Login from "../pages/login/login.jsx";
 import Register from "../pages/registro/register.jsx";
 import EsqueceuSenha from "../pages/esqueceuSenha/esqueceuSenha.jsx";
-import ResetSenha from "../pages/resetSenha/resetSenha.jsx"
+import ResetSenha from "../pages/resetSenha/resetSenha.jsx";
+import { Agenda } from "../pages/agenda/agenda.jsx";
 import Especialidades  from "../pages/especialidades/especialidades.jsx";
 import Servicos from "../pages/servicos/servicos.jsx";
 import PerfilClinica from "../pages/perfil/clinica/perfilClinica.jsx";
+
 
 export const route = createBrowserRouter([
   {
@@ -50,6 +52,11 @@ export const route = createBrowserRouter([
   {
     path: "/perfil-clinica",
     element: <PerfilClinica />,
+  },
+
+  {
+    path: "/agenda",
+    element: <Agenda />,
   },
 
 ]);
