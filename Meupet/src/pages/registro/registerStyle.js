@@ -38,7 +38,7 @@ export const Logo = styled.img`
 export const Title = styled.h2`
   font-size: 2rem;
   font-weight: 500;
-  color: #0;
+  color: #000;
   margin-bottom: 1rem;
   font-family: "Poppins", sans-serif;
 `;
@@ -132,6 +132,28 @@ export const ButtonEscolha = styled.button`
     background-color: ${(props) => (props.secondary ? "#f0f0f0" : "#002554")};
   }
 `;
+
+export const ButtonVoltar = styled.button`
+  width: 50%;
+  margin: 2rem auto 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: ${(props) => (props.secondary ? "white" : "#2a4f6a")};
+  color: ${(props) => (props.secondary ? "#2a4f6a" : "white")};
+  border: ${(props) => (props.secondary ? "1px solid #2a4f6a" : "none")};
+  text-align: center;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: ${(props) => (props.secondary ? "#f0f0f0" : "#002554")};
+  }
+
+`
 
 export const LinkText = styled.a`
   font-size: 0.9rem;
