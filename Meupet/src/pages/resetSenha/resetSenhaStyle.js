@@ -51,7 +51,7 @@ export const LogoText = styled.h1`
 export const Title = styled.h2`
  font-size: 2rem;
   font-weight: 500;
-  color: #0;
+  color: #000;
   margin-bottom: 0.5rem;
   font-family: "Poppins", sans-serif;
 `;

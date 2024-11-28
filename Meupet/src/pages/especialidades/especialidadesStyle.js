@@ -1,9 +1,6 @@
 import styled from "styled-components";
 import heroBackground from "../../assets/background_home.png";
 import dog from "../../assets/cachorro.png";
-import '@fontsource/poppins';
-import '@fontsource/poppins/700.css';
-import '@fontsource/poppins/600.css';
 
 export const Container = styled.div`
   text-align: center;

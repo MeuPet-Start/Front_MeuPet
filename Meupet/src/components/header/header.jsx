@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import logoImage from "../../assets/logo.png";
 import userImage from "../../assets/logo.png"; 
 import clinicImage from "../../assets/logo.png"; 
+import coin from "../../assets/capiba.png";
+
 import {
   Nav,
   LogoContainer,
@@ -21,12 +23,14 @@ import {
 } from "./headerStyle";
 
 import {useUserType} from "../../hooks/useUserType";
+import {useUserData} from "../../hooks/useUserData";
 
 
-
-const Header = ({ isLoggedIn, userName, userPoints }) => {
+const Header = () => {
   const navigate = useNavigate();
-  const userType = useUserType();
+  const {userType, userEmail} = useUserType();
+  const {userName, userPoints} = useUserData(userEmail);
+  
 
   return (
     <Nav>
@@ -45,28 +49,31 @@ const Header = ({ isLoggedIn, userName, userPoints }) => {
           AdotaPet
         </NavLink>
         <NavLink onClick={() => navigate("/servicos")}>Serviços</NavLink>
-        {isLoggedIn && userType === "user" && (
+        {userType === "user"  && (
+          <NavLink onClick={() => navigate("/consultas")}>Consultas</NavLink>
+        )}
+        {userType === "clinic"  && (
           <NavLink onClick={() => navigate("/consultas")}>Consultas</NavLink>
         )}
       </Links>
-      {isLoggedIn ? (
+      {userType ? (
         <UserSection>
           {userType === "user" && (
             <>
               <CoinsContainer>
-                <CoinIcon src="/path-to-coin-icon.png" alt="Moedas" />
+                <CoinIcon src={coin} alt="Moedas" />
                 <CoinCount>{userPoints || 0}</CoinCount>
               </CoinsContainer>
               <UserContainer>
                 <ProfileImage src={userImage} alt="Usuário" />
-                <UserName>{userName}</UserName>
+                <UserName onClick={() => navigate("/perfil-user")}>{userName}</UserName>
               </UserContainer>
             </>
           )}
           {userType === "clinic" && (
             <ClinicContainer>
               <ProfileImage src={clinicImage} alt="Clínica" />
-              <UserName>{userName}</UserName>
+              <UserName onClick={() => navigate("/perfil-clinica")}>{userName}</UserName>
             </ClinicContainer>
           )}
         </UserSection>

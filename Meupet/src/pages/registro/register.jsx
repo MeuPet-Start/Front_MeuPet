@@ -18,6 +18,7 @@ import {
   ButtonEscolhaContainer,
   ButtonEscolha,
   Label,
+  ButtonVoltar,
 } from "./registerStyle";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import logoImage from "../../assets/logo.png";
@@ -145,9 +146,9 @@ const Register = () => {
           const response = await axios.post(endpoint, requestData);
 
           console.log(response.data)
-          if (response.status === 200) {
+          if (response.status === 201) {
             alert("Cadastro realizado com sucesso!");
-            //navigate("/login");
+            navigate("/login");
           }
         } catch (error) {
           console.error("Erro no cadastro:", error);
@@ -173,6 +174,7 @@ const Register = () => {
           {currentStep === 0 && (
             <ButtonEscolhaContainer>
               <ButtonEscolha
+              secondary
                 onClick={() => {
                   formik.setFieldValue("userType", "clinic");
                   setCurrentStep(currentStep + 1);
@@ -181,7 +183,6 @@ const Register = () => {
                 Cadastrar Clínica
               </ButtonEscolha>
               <ButtonEscolha
-                secondary
                 onClick={() => {
                   formik.setFieldValue("userType", "user");
                   setCurrentStep(currentStep + 1);
@@ -189,6 +190,14 @@ const Register = () => {
               >
                 Cadastrar Usuário
               </ButtonEscolha>
+              <ButtonVoltar
+              secondary
+                onClick={() => {
+                  navigate("/login")  
+                }}
+              >
+                Voltar
+              </ButtonVoltar>
             </ButtonEscolhaContainer>
           )}
 
