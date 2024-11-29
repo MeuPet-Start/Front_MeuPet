@@ -12,7 +12,7 @@ import { useNavigate } from "react-router";
 import { HeaderSection, MainForm, InputGrid, ButtonGroup, SlideItem } from "./consultastyle";
 import "swiper/css"
 
-const Appointment = () => {
+const Consulta = () => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
@@ -144,4 +144,4 @@ const Appointment = () => {
   );
 };
 
-export default Appointment;
+export default Consulta;
