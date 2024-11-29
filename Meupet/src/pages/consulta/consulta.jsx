@@ -93,7 +93,6 @@ const Appointment = () => {
             </div>
           </div>
 
-          {/* Formulário de detalhes do serviço */}
           <div className="divContain">
             <div className="divForm">
               <label>Nome do Pet</label>

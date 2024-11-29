@@ -6,6 +6,7 @@ import Login from "../pages/login/login.jsx";
 import Register from "../pages/registro/register.jsx";
 import Consulta from "../pages/consulta/consulta.jsx";
 import Confirmacao from "../pages/confirmacao/confirmacao.jsx";
+import Historico from '../pages/historico/historico.jsx';
 
 export const route = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const route = createBrowserRouter([
     path: "/consulta",
     element: <Consulta />, 
   },
+  {
+    path: '/historico',
+    element: <Historico/>,
+},
 ]);
 
 const AppRouter = () => {
