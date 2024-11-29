@@ -9,6 +9,11 @@ export const FooterContainer = styled.footer`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+
+  @media (min-width: 768px) {
+    padding: 2rem;
+    display: grid;
+  }
 `;
 
 export const FooterNav = styled.nav`
@@ -25,6 +30,7 @@ export const FooterLinks = styled.button`
   font-size: 1.75rem;
   cursor: pointer;
   font-family: "Londrina Solid", cursive;
+  text-decoration: none;
 
   transition: color 0.3s ease;
 
