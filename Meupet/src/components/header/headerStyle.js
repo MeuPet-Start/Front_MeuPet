@@ -7,6 +7,7 @@ export const Nav = styled.nav`
   padding: 0.5rem 1.5rem;
   max-width: 1158px;
   display: flex;
+  position: relative;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -100,22 +101,17 @@ export const MenuIcon = styled.div`
 `;
 
 export const MobileMenu = styled.div`
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   background-color: #fff;
-  width: 250px;
-  height: 100%;
+  border-radius: 10px;
+  width: 220px;
   box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
   padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  z-index: 1000;
-
-  @media (max-width: 768px) {
-    display: flex;
-  }
 `;
 
 export const CloseButton = styled.button`
@@ -186,6 +182,10 @@ export const UserName = styled.button`
   cursor: pointer;
   text-decoration: none;
   transition: color 0.3s ease;
+  max-width: 150px; 
+  overflow: hidden;
+  white-space: nowrap; 
+  text-overflow: ellipsis;
 
   &:hover {
     color: #36a92e;
