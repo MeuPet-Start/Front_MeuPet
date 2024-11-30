@@ -16,7 +16,7 @@ import {
   AdotaPetSection,
   AdotaPetContent,
   AdotaPetTitle,
-  AdotaPetSubtitle,
+  AdotaPetDescription,
   AdotaPetButton,
   AdotaPetImage,
   AdotaPetInfo,
@@ -61,12 +61,12 @@ export function Home() {
             <AdotaPetTitle>
               Visite o <span>AdotaPET</span> e encontre seu parceiro
             </AdotaPetTitle>
-            <AdotaPetSubtitle>
-              Encontre seu novo melhor amigo de forma <br />
-              prática e emocionante! Escolha e conheça seu <br />
-              pet sem sair de casa. Transforme vidas e crie <br />
+            <AdotaPetDescription>
+              Encontre seu novo melhor amigo de forma 
+              prática e emocionante! Escolha e conheça seu 
+              pet sem sair de casa. Transforme vidas e crie
               histórias de amor e carinho.
-            </AdotaPetSubtitle>
+            </AdotaPetDescription>
             <AdotaPetButton
               as="a"
               href="https://adotapet.recife.pe.gov.br/"
