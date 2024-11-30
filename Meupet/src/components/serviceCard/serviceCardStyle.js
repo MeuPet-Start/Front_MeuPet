@@ -14,6 +14,12 @@ export const ServiceCardContainer = styled.div`
   &:hover {
     transform: translateY(-5px); /* Efeito de hover */
   }
+
+  @media (max-width: 425px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 export const ServiceCardImage = styled.img`

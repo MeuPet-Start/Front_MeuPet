@@ -27,6 +27,10 @@ export const ServicesTitle = styled.h1`
   text-align: center;
   font-size: 4rem;
   color: #fff;
+
+  @media (max-width: 425px) {
+    font-size: 3rem;
+  } 
 `;
 
 export const ServicesDescription = styled.p`
@@ -35,22 +39,64 @@ export const ServicesDescription = styled.p`
   color: #fff;
   margin: 1rem 0;
   font-weight: 300;
+
+  @media (max-width: 425px) {
+    font-size: 1.5rem;
+  }
+
 `;
 
-export const InputFilter = styled.input`
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 1.5rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-  outline: none;
-  font-family: "Poppins", sans-serif;
+export const SearchBarSection = styled.section`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1158px;
+  margin: 2rem auto;
+`;
 
-  &:focus {
-    border-color: #36a92e;
+export const SearchBarContainer = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: #2a4f6a;
+  width:90%;
+  border-radius: 10px;
+  padding: 1rem;
+  @media (max-width: 425px) {
+    padding:  1rem 0.5rem;
   }
 `;
+
+export const SearchIconLeft = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: #f4f4f5;
+  svg {
+    color: #6c757d;
+  }
+`;
+
+export const SearchBar = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: #f4f4f5;
+  border-radius: 10px;
+  padding: 0.5rem;
+  justify-content: space-between;
+`;
+
+export const SearchInput = styled.input`
+  font-family: "Poppins", sans-serif;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: #6c757d;
+  background-color: transparent;
+`;
+
 
 export const ServicesContainer = styled.div`
   display: flex;
@@ -60,6 +106,9 @@ export const ServicesContainer = styled.div`
 
 export const ButtonService = styled.button`
   background-color: #fff;
+  justify-content: center;
+  align-items: center;
+  display: flex;
   width: 100%;
   color: #2a4f6a;
   padding: 0.75rem 1rem;
@@ -74,5 +123,9 @@ export const ButtonService = styled.button`
   &:hover {
     background-color: #36a92e;
     color: #fff;
+  }
+  
+  @media (max-width: 425px) {
+    width: 80%;
   }
 `;

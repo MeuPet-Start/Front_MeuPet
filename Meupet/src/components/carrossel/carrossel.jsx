@@ -4,22 +4,23 @@ import Card from "../card/card";
 import axios from "axios";
 
 const Carrossel = () => {
-//   const [services, setServices] = useState([]);
+  //   const [services, setServices] = useState([]);
 
-//   useEffect(() => {
-//     // Requisição para obter os serviços
-//     axios
-//       .get("http://localhost:8080/api/services") // Atualize com sua rota de API
-//       .then((response) => setServices(response.data))
-//       .catch((error) => console.error("Erro ao carregar serviços:", error));
-//   }, []);
+  //   useEffect(() => {
+  //     // Requisição para obter os serviços
+  //     axios
+  //       .get("http://localhost:8080/api/services") // Atualize com sua rota de API
+  //       .then((response) => setServices(response.data))
+  //       .catch((error) => console.error("Erro ao carregar serviços:", error));
+  //   }, []);
 
   const services = [
     {
       id: 1,
       icon: "https://cdn-icons-png.flaticon.com/512/2913/2913462.png", // Ícone fictício
       title: "Consultas",
-      description: "Cuide da saúde do seu pet com atendimento veterinário especializado.",
+      description:
+        "Cuide da saúde do seu pet com atendimento veterinário especializado.",
     },
     {
       id: 2,
@@ -31,7 +32,8 @@ const Carrossel = () => {
       id: 3,
       icon: "https://cdn-icons-png.flaticon.com/512/4359/4359915.png", // Ícone fictício
       title: "Vacinas",
-      description: "Garanta que seu pet esteja protegido com nossas vacinas especializadas.",
+      description:
+        "Garanta que seu pet esteja protegido com nossas vacinas especializadas.",
     },
     {
       id: 4,
@@ -50,20 +52,29 @@ const Carrossel = () => {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 300,
     slidesToShow: 3,
-    slidesToScroll: 1,
+    slidesToScroll: 2,
     responsive: [
+      {
+        breakpoint: 670,
+        settings: {
+          slidesToShow: 1, 
+          slidesToScroll: 1,
+          centerPadding: '10px',
+          centerMode: true,
+        },
+      },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 2, 
         },
       },
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 3, 
         },
       },
     ],

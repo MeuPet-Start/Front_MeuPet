@@ -6,7 +6,6 @@ import adotapet from "../../assets/adota_pet.png";
 import capiba from "../../assets/capiba.png";
 
 export const Container = styled.div`
-  text-align: center;
   overflow: hidden;
 `;
 
@@ -15,14 +14,18 @@ export const SectionHero = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 50vh;
+
   gap: 2rem;
   background-image: url(${background});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  @media (max-width: 900px) {
+  @media (max-width: 768px) {
+    padding-top: 2rem;
     flex-direction: column;
+    height: auto;
+    gap: 0.25rem;
+    text-align: center;
   }
 `;
 
@@ -42,7 +45,6 @@ export const Title = styled.h1`
   font-size: 4rem;
   color: white;
   margin-bottom: 1rem;
-  text-align: left;
 `;
 
 export const Subtitle = styled.p`
@@ -76,20 +78,30 @@ export const DogImage = styled.div`
   background-position: center;
   z-index: 1;
   align-self: flex-end;
+  @media (max-width: 768px) {
+    width: 18rem;
+    height: 18rem;
+    align-self: center;
+  }
 `;
 
 /* Estilo da seção de serviços */
 export const ServicesSection = styled.section`
-  padding: 4rem 0;
-  text-align: center;
+  padding: 2rem 2rem;
   max-width: 1158px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 
-  & > div {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
+  @media (max-width: 768px) {
+    padding: 2rem 2rem;
+    height: auto;
+    gap: 0.25rem;
+    text-align: center;
+  }
+
+  @media (max-width: 445px) {
+    padding: 1rem 1rem;
   }
 `;
 
@@ -97,8 +109,10 @@ export const ServicesTitle = styled.h2`
   font-size: 4rem;
   color: #2a4f6a;
   margin-bottom: 2rem;
-  text-align: left;
   font-weight: 550;
+  @media (max-width: 445px) {
+    font-size: 3rem;
+  }
 `;
 
 export const ButtonService = styled.button`
@@ -128,18 +142,30 @@ export const AdotaPetSection = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f9f9f9;
+  background-color: #f8f9fa;
   background-image: url(${backgroundImage});
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  height: 75vh;
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 2rem 0;
+  }
 `;
 
 export const AdotaPetContent = styled.div`
   display: flex;
+  width: 100%;
   max-width: 1158px;
   justify-content: space-between;
+  padding: 2rem 2rem;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 2rem;
+  }
 `;
 
 export const AdotaPetInfo = styled.div`
@@ -147,22 +173,26 @@ export const AdotaPetInfo = styled.div`
   flex-direction: column;
   gap: 2rem;
   text-align: left;
-  justify-content: center;
   max-width: 600px;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `;
 
 export const AdotaPetTitle = styled.h2`
   font-size: 4rem;
   font-weight: 500;
   color: #2a4f6a;
-  letter-spacing: 0.25rem;
+  letter-spacing: 0.15rem;
 
-  span {
-    color: #36a92e; /* Destaque do AdotaPET */
+  @media (max-width: 445px) {
+    font-size: 3rem;
+    letter-spacing: 0rem;
   }
 `;
 
-export const AdotaPetSubtitle = styled.p`
+export const AdotaPetDescription = styled.p`
   font-size: 1.5rem;
   color: #5a5a5a;
   line-height: 1.5;
@@ -188,21 +218,28 @@ export const AdotaPetButton = styled.button`
 `;
 
 export const AdotaPetImage = styled.div`
-  width: 40rem;
-  height: 40rem;
+  width: 22em;
+  height: 22rem;
   background-image: url(${adotapet});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   align-self: flex-end;
+
+  @media (max-width: 768px) {
+    align-self: center;
+  }
 `;
 
 export const CapibaSection = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f8f9fa;
-  height: 60vh;
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 2rem 0;
+  }
 `;
 
 export const CapibaContent = styled.div`
@@ -210,7 +247,13 @@ export const CapibaContent = styled.div`
   width: 100%;
   max-width: 1158px;
   justify-content: space-between;
-  
+  padding: 2rem 2rem;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 2rem;
+  }
 `;
 
 export const CapibaInfo = styled.div`
@@ -218,8 +261,11 @@ export const CapibaInfo = styled.div`
   flex-direction: column;
   gap: 2rem;
   text-align: left;
-  justify-content: center;
   max-width: 600px;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `;
 
 export const CapibaTitle = styled.h2`
@@ -227,6 +273,11 @@ export const CapibaTitle = styled.h2`
   font-weight: 500;
   color: #2a4f6a;
   letter-spacing: 0.15rem;
+
+   @media (max-width: 445px) {
+    font-size: 3rem;
+    letter-spacing: 0rem;
+  }
 `;
 
 export const CapibaDescription = styled.p`
@@ -255,11 +306,17 @@ export const CapibaButton = styled.button`
 `;
 
 export const CapibaImage = styled.div`
-  width: 20rem;
-  height: 20rem;
+ width: 22em;
+  height: 22rem;
   background-image: url(${capiba});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   align-self: flex-end;
+
+  @media (max-width: 768px) {
+    align-self: center;
+    width: 18rem;
+    height: 18rem;
+  }
 `;

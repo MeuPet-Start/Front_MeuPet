@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ServiceCard from "../../components/serviceCard/serviceCard";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
+import { FaSearch } from "react-icons/fa";
 import {
   Container,
   ServicesTitle,
@@ -11,7 +12,11 @@ import {
   ButtonService,
   ServicesSection,
   ServicesInfo,
-  InputFilter,
+  SearchBarSection,
+  SearchBarContainer,
+  SearchBar,
+  SearchInput,
+  SearchIconLeft,
   ContainerHeader,
 } from "./servicosStyle";
 
@@ -91,13 +96,21 @@ const Servicos = () => {
           <ServicesDescription>
             Clínicas parceiras e prestadores de serviços mais próximos de você!
           </ServicesDescription>
-
-          <InputFilter
-            type="text"
-            placeholder="Filtrar por tag"
-            value={filterTag}
-            onChange={handleFilterChange}
-          />
+          <SearchBarSection>
+            <SearchBarContainer>
+              <SearchBar>
+                <SearchInput
+                  type="text"
+                  placeholder="Buscar Especialidades"
+                  value={filterTag}
+                  onChange={handleFilterChange}
+                />
+                <SearchIconLeft>
+                  <FaSearch />
+                </SearchIconLeft>
+              </SearchBar>
+            </SearchBarContainer>
+          </SearchBarSection>
           <ServicesContainer>
             {filteredServices
               .slice(0, showAllServices ? filteredServices.length : 4)
