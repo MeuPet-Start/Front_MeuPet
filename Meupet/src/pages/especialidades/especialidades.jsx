@@ -18,58 +18,37 @@ import {
   CardContainer,
 } from "./especialidadesStyle";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Especialidades = () => {
   const navigate = useNavigate();
-
   const [searchQuery, setSearchQuery] = useState("");
+  const [services, setServices] = useState([]);
 
-  const [services, setServices] = useState([
-    {
-      id: 1,
-      icon: "https://cdn-icons-png.flaticon.com/512/2913/2913462.png",
-      title: "Consultas",
-      description:
-        "Cuide da saúde do seu pet com atendimento veterinário especializado.",
-      buttonLabel: "Buscar Clínicas",
-    },
-    {
-      id: 2,
-      icon: "https://cdn-icons-png.flaticon.com/512/616/616554.png",
-      title: "Adoção",
-      description: "Ajude um pet a encontrar um novo lar cheio de amor.",
-      buttonLabel: "Ver Pets",
-    },
-    {
-      id: 3,
-      icon: "https://cdn-icons-png.flaticon.com/512/2913/2913462.png",
-      title: "Vacinas",
-      description:
-        "Garanta que seu pet esteja protegido com nossas vacinas especializadas.",
-      buttonLabel: "Buscar Clínicas",
-    },
-    {
-      id: 4,
-      icon: "https://cdn-icons-png.flaticon.com/512/194/194279.png",
-      title: "Pet Shop",
-      description: "Tudo o que seu pet precisa em um só lugar.",
-      buttonLabel: "Buscar Pet Shop",
-    },
-    {
-      id: 5,
-      icon: "https://cdn-icons-png.flaticon.com/512/5063/5063243.png",
-      title: "Tosa e Banho",
-      description: "Deixe seu pet sempre limpo e bonito.",
-      buttonLabel: "Agendar",
-    },
-  ]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/services"); // Substitua pela URL da sua API
+        setServices(response.data);
+      } catch (error) {
+        setError("Erro ao carregar os serviços", error);
+      }
+    };
+    fetchServices();
+  }, []);
+
   const filteredServices = services.filter((service) =>
     service.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
+  };
+
+  const handleCardClick = (title) => {
+    navigate("/servicos", { state: { filterTag: title } });
   };
 
   return (
@@ -94,7 +73,7 @@ const Especialidades = () => {
               onChange={handleSearchChange}
             />
             <SearchIconLeft>
-            <FaSearch />
+              <FaSearch />
             </SearchIconLeft>
           </SearchBar>
         </SearchBarContainer>
@@ -109,7 +88,7 @@ const Especialidades = () => {
               title={service.title}
               description={service.description}
               buttonLabel="Marcar Serviço"
-              onClick={() => alert("Navegar para detalhes do serviço")}
+              onClick={() => handleCardClick(service.title)}
             />
           ))
         ) : (

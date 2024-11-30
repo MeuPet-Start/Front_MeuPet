@@ -27,46 +27,24 @@ const Servicos = () => {
   const [showAllServices, setShowAllServices] = useState(false);
 
   useEffect(() => {
-    const fetchedServices = [
-      {
-        id: 1,
-        img: "/path/to/image1.jpg",
-        tags: ["Urgente", "Popular"],
-        title: "Serviço 1",
-        description: "Descrição detalhada do serviço 1",
-      },
-      {
-        id: 2,
-        img: "/path/to/image2.jpg",
-        tags: ["Novo", "Promoção"],
-        title: "Serviço 2",
-        description: "Descrição detalhada do serviço 2",
-      },
-      {
-        id: 3,
-        img: "/path/to/image3.jpg",
-        tags: ["Exclusivo"],
-        title: "Serviço 3",
-        description: "Descrição detalhada do serviço 3",
-      },
-      {
-        id: 4,
-        img: "/path/to/image3.jpg",
-        tags: ["Exclusivo"],
-        title: "Serviço 4",
-        description: "Descrição detalhada do serviço 4",
-      },
-      {
-        id: 5,
-        img: "/path/to/image3.jpg",
-        tags: ["Exclusivo"],
-        title: "Serviço 5",
-        description: "Descrição detalhada do serviço 5",
-      },
-    ];
+    if (location.state?.filterTag) {
+      setFilterTag(location.state.filterTag);  
+    }
+  }, [location.state]);
 
-    setServices(fetchedServices);
-    setFilteredServices(fetchedServices);
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/services"); // Ajuste a URL conforme o seu backend
+
+        setServices(response.data);
+        setFilteredServices(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar os serviços:", error);
+      }
+    };
+
+    fetchServices();
   }, []);
 
   const handleFilterChange = (event) => {
