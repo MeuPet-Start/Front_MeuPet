@@ -182,7 +182,7 @@ export const UserName = styled.button`
   cursor: pointer;
   text-decoration: none;
   transition: color 0.3s ease;
-  max-width: 150px; 
+  max-width: 90px; 
   overflow: hidden;
   white-space: nowrap; 
   text-overflow: ellipsis;

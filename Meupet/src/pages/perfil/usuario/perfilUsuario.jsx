@@ -62,10 +62,17 @@ const PerfilUsuario = () => {
   });
   const [image, setImage] = useState(UserImage);
   const [selectedTab, setSelectedTab] = useState("geral");
-  const { userEmail } = useUserType();
+  const { userType, userEmail } = useUserType();
   const { userName } = useUserData(userEmail);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!userType || userType !== "user") { 
+      alert("Você não tem permissão para acessar esta página.");
+      navigate("/login");
+    }
+  }, [userType, navigate]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -144,8 +151,12 @@ const PerfilUsuario = () => {
     }
   };
 
+  const params = new URLSearchParams(location.search);
+  const Tab = params.get("tab");
+
+
   const handleTabClick = (tab) => {
-    setSelectedTab(tab);
+    setSelectedTab(tab) || setSelectedTab(Tab);
   };
 
   const handleLogoff = () => {

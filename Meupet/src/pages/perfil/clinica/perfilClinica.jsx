@@ -40,7 +40,7 @@ const PerfilClinica = () => {
   const navigate = useNavigate();
   const [image, setImage] = useState(UserImage);
   const [selectedTab, setSelectedTab] = useState("geral");
-  const { userEmail } = useUserType();
+  const { userType, userEmail } = useUserType();
   const { userName } = useUserData(userEmail);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [photos, setPhotos] = useState([]);
@@ -89,6 +89,13 @@ const PerfilClinica = () => {
       }
     },
   });
+
+  useEffect(() => {
+    if (!userType || userType !== "clinica") { 
+      alert("Você não tem permissão para acessar esta página.");
+      navigate("/login");
+    }
+  }, [userType, navigate]);
 
   useEffect(() => {
     const fetchClinicData = async () => {
