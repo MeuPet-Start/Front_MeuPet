@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../../components/header/header";
 import Footer from "../../../components/footer/footer";
 import UserImage from "../../../assets/logo.png";
+import exmedImage from "../../../assets/exmed.png";
+import novacImage from "../../../assets/99pop.png";
+import ladydriverImage from "../../../assets/ladydriver.png";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -16,7 +19,6 @@ import {
   Button,
   FormGroup,
   Label,
-  Textarea,
   ProfileSidebar,
   SidebarItem,
   ProfileImageContainer,
@@ -24,100 +26,109 @@ import {
   ProfileImageWrapper,
   ProfileImageChangeButton,
   ProfileTabContent,
-  SidebarUsernameTitle,
+  SidebarUsarnameTitle,
   Modal,
   ModalContent,
   ModalButtonContainer,
   CancelButton,
   ConfirmButton,
   ErrorText,
-} from "./perfilClinicaStyle";
+  BalanceContainer,
+  BalanceText,
+  BalanceAmount,
+  ProductsGrid,
+  ProductCard,
+  ProductImage,
+  ProductDetails,
+  ProductTitle,
+  ProductDescription,
+  ProductPrice,
+  ProductUnits,
+  RedeemButton,
+} from "./perfilUsuarioStyle";
 
 import { useUserType } from "../../../hooks/useUserType";
 import { useUserData } from "../../../hooks/useUserData";
 
-const PerfilClinica = () => {
+const PerfilUsuario = () => {
   const navigate = useNavigate();
+
+  const [userData, setUserData] = useState({
+    name: "",
+    address: "",
+    phone: "",
+    email: "",
+    birthDate: "", 
+  });
   const [image, setImage] = useState(UserImage);
   const [selectedTab, setSelectedTab] = useState("geral");
   const { userType, userEmail } = useUserType();
   const { userName } = useUserData(userEmail);
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [photos, setPhotos] = useState([]);
-
-  const validationSchema = Yup.object({
-    name: Yup.string().required("Nome da clínica é obrigatório"),
-    address: Yup.string().required("Endereço é obrigatório"),
-    contact: Yup.string().required("Contato é obrigatório"),
-    email: Yup.string().email("E-mail inválido").required("E-mail é obrigatório"),
-    about: Yup.string(),
-    openingHours: Yup.string(),
-    password: Yup.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], "As senhas não combinam")
-        .when('password', {
-          is: val => (val && val.length > 0),
-          then: Yup.string().required('Confirme sua senha')
-        }),
-    })
-
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      address: "",
-      contact: "",
-      email: "",
-      about: "",
-      openingHours: "",
-      newPassword: "",
-      confirmPassword: "",
-    },
-    validationSchema,
-    onSubmit: async (values) => {
-      try {
-        const response = await axios.put("/api/clinicProfile", values, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-        });
-        if (response.status === 200) {
-          alert("Dados salvos com sucesso!");
-        } else {
-          alert("Erro ao salvar os dados. Tente novamente.");
-        }
-      } catch (error) {
-        console.error("Erro ao salvar os dados:", error);
-        alert("Ocorreu um erro ao salvar os dados da clínica.");
-      }
-    },
-  });
 
   useEffect(() => {
-    if (!userType || userType !== "clinica") { 
+    if (!userType || userType !== "user") { 
       alert("Você não tem permissão para acessar esta página.");
       navigate("/login");
     }
   }, [userType, navigate]);
 
   useEffect(() => {
-    const fetchClinicData = async () => {
+    const fetchUserData = async () => {
       try {
-        const response = await axios.get("/api/clinicProfile", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-        });
-        formik.setValues(response.data);
+        const response = await axios.get("/api/userProfile");
+        setUserData(response.data);
         if (response.data.image) {
           setImage(response.data.image);
         }
-        if (response.data.photos) {
-          setPhotos(response.data.photos);
-        }
       } catch (error) {
-        console.error("Erro ao carregar os dados da clínica:", error);
-        alert("Não foi possível carregar os dados da clínica.");
+        console.error("Erro ao carregar os dados do usuário:", error);
+        alert("Não foi possível carregar os dados do usuário.");
       }
     };
 
-    fetchClinicData();
+    fetchUserData();
   }, []);
+
+  const formik = useFormik({
+    initialValues: {
+      name: userData.name,
+      address: userData.address,
+      phone: userData.phone,
+      email: userData.email,
+      password: "",
+      confirmPassword: "",
+      birthDate: userData.birthDate || "",
+    },
+    
+    validationSchema: Yup.object({
+      name: Yup.string().required("Nome é obrigatório"),
+      address: Yup.string().required("Endereço é obrigatório"),
+      phone: Yup.string().required("Telefone é obrigatório"),
+      email: Yup.string().email("E-mail inválido").required("E-mail é obrigatório"),
+      birthDate: Yup.date().nullable().required("Data de nascimento é obrigatória"), 
+      password: Yup.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password'), null], "As senhas não combinam")
+        .when('password', {
+          is: val => (val && val.length > 0),
+          then: Yup.string().required('Confirme sua senha')
+        }),
+    }),
+    onSubmit: async (values) => {
+      try {
+        const response = await axios.put("/api/userProfile", values);
+        if (response.status === 200) {
+          alert("Dados salvos com sucesso!");
+          setUserData(values);
+        }
+      } catch (error) {
+        console.error("Erro ao salvar os dados:", error);
+        alert("Ocorreu um erro ao salvar os dados do usuário.");
+      }
+    },
+  });
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -127,13 +138,9 @@ const PerfilClinica = () => {
         const base64Image = reader.result;
         setImage(base64Image);
         try {
-          const response = await axios.put("/api/clinicProfile/image", { image: base64Image }, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-          });
+          const response = await axios.put("/api/userProfile/image", { image: base64Image });
           if (response.status === 200) {
             alert("Imagem alterada com sucesso!");
-          } else {
-            alert("Erro ao alterar a imagem. Tente novamente.");
           }
         } catch (error) {
           console.error("Erro ao salvar a imagem:", error);
@@ -144,32 +151,12 @@ const PerfilClinica = () => {
     }
   };
 
-  const handlePhotoUpload = async (e) => {
-    const files = Array.from(e.target.files);
-    const uploadedPhotos = [];
+  const params = new URLSearchParams(location.search);
+  const Tab = params.get("tab");
 
-    for (const file of files) {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64Image = reader.result;
-        uploadedPhotos.push(base64Image);
-        setPhotos((prevPhotos) => [...prevPhotos, base64Image]);
-
-        try {
-          await axios.post("/api/clinicProfile/photos", { image: base64Image }, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-          });
-        } catch (error) {
-          console.error("Erro ao enviar a foto:", error);
-          alert("Erro ao enviar a foto. Tente novamente.");
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleTabClick = (tab) => {
-    setSelectedTab(tab);
+    setSelectedTab(tab) || setSelectedTab(Tab);
   };
 
   const handleLogoff = () => {
@@ -185,15 +172,14 @@ const PerfilClinica = () => {
   const confirmDeleteAccount = async () => {
     try {
       const response = await axios.delete("/api/deleteAccount", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-        data: { userId: formik.values.id },
+        data: {
+          userId: userData.id,
+        },
       });
       if (response.status === 200) {
-        localStorage.removeItem("clinicProfile");
+        localStorage.removeItem("userProfile");
         alert("Conta deletada com sucesso.");
         navigate("/");
-      } else {
-        alert("Erro ao deletar conta. Tente novamente.");
       }
     } catch (error) {
       console.error("Erro ao deletar a conta:", error);
@@ -203,6 +189,48 @@ const PerfilClinica = () => {
     }
   };
 
+  const saldoAtual = "500 Capibas";
+  const produtos = [
+    {
+      id: 1,
+      title: "Exmed Pass",
+      description: "Clube de Saúde",
+      price: 400,
+      units: 29,
+      image: exmedImage,
+    },
+    {
+      id: 2,
+      title: "99 Pop",
+      description: "R$15,00 de crédito",
+      price: 100,
+      units: 325,
+      image: novacImage,
+    },
+    {
+      id: 3,
+      title: "LadyDriver",
+      description: "R$10,00 de crédito",
+      price: 400,
+      units: 128,
+      image: ladydriverImage,
+    },
+  ];
+ 
+  useEffect(() => {
+    if (userData) {
+      formik.setValues({
+        name: userData.name,
+        address: userData.address,
+        phone: userData.phone,
+        email: userData.email,
+        birthDate: userData.birthDate || "",
+        password: "",
+        confirmPassword: "",
+      });
+    }
+  }, [userData]);
+
   return (
     <Container>
       <Header />
@@ -211,9 +239,7 @@ const PerfilClinica = () => {
           <ProfileImageContainer>
             <ProfileImageWrapper>
               <ProfileImage src={image} alt="Foto de Perfil" />
-              <ProfileImageChangeButton htmlFor="fileInput">
-                Alterar
-              </ProfileImageChangeButton>
+              <ProfileImageChangeButton htmlFor="fileInput">Alterar</ProfileImageChangeButton>
             </ProfileImageWrapper>
             <input
               id="fileInput"
@@ -223,25 +249,11 @@ const PerfilClinica = () => {
               style={{ display: "none" }}
             />
           </ProfileImageContainer>
-          <SidebarUsernameTitle>{userName}</SidebarUsernameTitle>
-          <SidebarItem
-            isSelected={selectedTab === "geral"}
-            onClick={() => handleTabClick("geral")}
-          >
+          <SidebarUsarnameTitle>{userName}</SidebarUsarnameTitle>
+          <SidebarItem isSelected={selectedTab === "geral"} onClick={() => handleTabClick("geral")}>
             Informações Gerais
           </SidebarItem>
-          <SidebarItem
-            isSelected={selectedTab === "sobre"}
-            onClick={() => handleTabClick("sobre")}
-          >
-            Sobre a Clínica
-          </SidebarItem>
-          <SidebarItem
-            isSelected={selectedTab === "fotos"}
-            onClick={() => handleTabClick("fotos")}
-          >
-            Fotos
-          </SidebarItem>
+  
           <SidebarItem
             isSelected={selectedTab === "seguranca"}
             onClick={() => handleTabClick("seguranca")}
@@ -249,9 +261,12 @@ const PerfilClinica = () => {
             Segurança
           </SidebarItem>
           <SidebarItem
-            isSelected={selectedTab === "sair"}
-            onClick={handleLogoff}
+            isSelected={selectedTab === "moedaCapiba"}
+            onClick={() => handleTabClick("moedaCapiba")}
           >
+            Moeda Capiba
+          </SidebarItem>
+          <SidebarItem isSelected={selectedTab === "sair"} onClick={handleLogoff}>
             Sair
           </SidebarItem>
           <SidebarItem
@@ -263,20 +278,21 @@ const PerfilClinica = () => {
         </ProfileSidebar>
 
         <ProfileTabContent>
-          <ProfileTitle>Dados da Clínica</ProfileTitle>
+          <ProfileTitle>Dados do Usuário</ProfileTitle>
           <ProfileSubTitle>
-            Preencha os seguintes campos para <strong>atualizar</strong> os dados.
+            Preencha os campos abaixo para <strong>atualizar</strong> seus dados.
           </ProfileSubTitle>
+
           {selectedTab === "geral" && (
             <ProfileForm onSubmit={formik.handleSubmit}>
               <FormGroup>
-                <Label htmlFor="name">Nome da Clínica</Label>
+                <Label htmlFor="name">Nome</Label>
                 <Input
                   type="text"
                   id="name"
                   name="name"
                   value={formik.values.name}
-                  placeholder="Cemevet"
+                  placeholder="Seu Nome"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -291,7 +307,7 @@ const PerfilClinica = () => {
                   id="address"
                   name="address"
                   value={formik.values.address}
-                  placeholder="Avenida Caxangá"
+                  placeholder="Seu Endereço"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -300,18 +316,18 @@ const PerfilClinica = () => {
                 )}
               </FormGroup>
               <FormGroup>
-                <Label htmlFor="contact">Telefone</Label>
+                <Label htmlFor="phone">Telefone</Label>
                 <Input
                   type="text"
-                  id="contact"
-                  name="contact"
-                  value={formik.values.contact}
-                  placeholder="(81) 98564-0002"
+                  id="phone"
+                  name="phone"
+                  value={formik.values.phone}
+                  placeholder="Seu Telefone"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                {formik.touched.contact && formik.errors.contact && (
-                  <ErrorText>{formik.errors.contact}</ErrorText>
+                {formik.touched.phone && formik.errors.phone && (
+                  <ErrorText>{formik.errors.phone}</ErrorText>
                 )}
               </FormGroup>
               <FormGroup>
@@ -321,7 +337,7 @@ const PerfilClinica = () => {
                   id="email"
                   name="email"
                   value={formik.values.email}
-                  placeholder="contato@cemevet.com"
+                  placeholder="Seu E-mail"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -329,56 +345,35 @@ const PerfilClinica = () => {
                   <ErrorText>{formik.errors.email}</ErrorText>
                 )}
               </FormGroup>
-              <Button type="submit">Salvar Alterações</Button>
-            </ProfileForm>
-          )}
-          {selectedTab === "sobre" && (
-            <ProfileForm onSubmit={formik.handleSubmit}>
               <FormGroup>
-                <Label htmlFor="about">Serviços Oferecidos</Label>
-                <Textarea
-                  id="about"
-                  name="about"
-                  value={formik.values.about}
-                  placeholder="Exemplo: Vacinação, consultas, castração, exames."
+                <Label htmlFor="birthDate">Data de Nascimento</Label>
+                <Input
+                  type="date"
+                  id="birthDate"
+                  name="birthDate"
+                  value={formik.values.birthDate}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
+                {formik.touched.birthDate && formik.errors.birthDate && (
+                  <ErrorText>{formik.errors.birthDate}</ErrorText>
+                )}
               </FormGroup>
-              <Button type="submit">Salvar Alterações</Button>
+              <Button type="submit">Salvar</Button>
             </ProfileForm>
           )}
-          {selectedTab === "fotos" && (
-            <ProfileForm>
-              <FormGroup>
-                <Label htmlFor="photos">Adicionar Fotos</Label>
-                <Input
-                  type="file"
-                  id="photos"
-                  accept="image/*"
-                  multiple
-                  onChange={handlePhotoUpload}
-                />
-              </FormGroup>
-              <div>
-                {photos.map((photo, index) => (
-                  <img key={index} src={photo} alt="Foto da Clínica" style={{ width: '100px', margin: '10px' }} />
-                ))}
-              </div>
-            </ProfileForm>
-          )}
+          
           {selectedTab === "seguranca" && (
             <ProfileForm onSubmit={formik.handleSubmit}>
-             <FormGroup>
+              <FormGroup>
                 <Label htmlFor="password">Nova Senha</Label>
                 <Input
-                  type={formik.values.showPassword ? "text" : "password"}
+                  type="password"
                   id="password"
                   name="password"
                   value={formik.values.password}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  style={{ paddingRight: "1rem" }} 
                 />
                 {formik.touched.password && formik.errors.password && (
                   <ErrorText>{formik.errors.password}</ErrorText>
@@ -387,23 +382,46 @@ const PerfilClinica = () => {
               <FormGroup>
                 <Label htmlFor="confirmPassword">Confirmação de Senha</Label>
                 <Input
-                  type={formik.values.showConfirmPassword ? "text" : "password"}
+                  type="password"
                   id="confirmPassword"
                   name="confirmPassword"
                   value={formik.values.confirmPassword}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  style={{ paddingRight: "1rem" }}
                 />
                 {formik.touched.confirmPassword && formik.errors.confirmPassword && (
                   <ErrorText>{formik.errors.confirmPassword}</ErrorText>
                 )}
               </FormGroup>
-              <Button type="submit">Alterar Senha</Button>
+              <Button type="submit">Salvar</Button>
             </ProfileForm>
+          )}
+          
+          {selectedTab === "moedaCapiba" && (
+            <div>
+              <BalanceContainer>
+                <BalanceText>Saldo Atual:</BalanceText>
+                <BalanceAmount>{saldoAtual}</BalanceAmount>
+              </BalanceContainer>
+              <ProductsGrid>
+                {produtos.map((produto) => (
+                  <ProductCard key={produto.id}>
+                    <ProductImage src={produto.image} alt={produto.title} />
+                    <ProductDetails>
+                      <ProductTitle>{produto.title}</ProductTitle>
+                      <ProductDescription>{produto.description}</ProductDescription>
+                      <ProductPrice>{produto.price} Capibas</ProductPrice>
+                      <ProductUnits>{produto.units} unidades disponíveis</ProductUnits>
+                      <RedeemButton>Trocar</RedeemButton>
+                    </ProductDetails>
+                  </ProductCard>
+                ))}
+              </ProductsGrid>
+            </div>
           )}
         </ProfileTabContent>
       </ProfileSection>
+      
       {isDeleteModalOpen && (
         <Modal isOpen={isDeleteModalOpen}>
           <ModalContent>
@@ -421,4 +439,4 @@ const PerfilClinica = () => {
   );
 };
 
-export default PerfilClinica;
+export default PerfilUsuario;

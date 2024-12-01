@@ -13,6 +13,7 @@ import PerfilClinica from "../pages/perfil/clinica/perfilClinica.jsx";
 import Consulta from "../pages/consulta/consulta.jsx";
 import Confirmacao from "../pages/confirmacao/confirmacao.jsx";
 import Historico from '../pages/historico/historico.jsx';
+import PerfilUsuario from "../pages/perfil/usuario/perfilUsuario.jsx"
 
 
 export const route = createBrowserRouter([
@@ -74,6 +75,10 @@ export const route = createBrowserRouter([
   {
     path: '/historico',
     element: <Historico/>,
-},
+  },
+  {
+    path: "/perfil-usuario",
+    element: <PerfilUsuario />,
+  },
 
 ]);

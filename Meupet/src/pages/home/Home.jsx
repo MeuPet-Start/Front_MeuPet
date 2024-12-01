@@ -88,7 +88,7 @@ export function Home() {
               vacinação e castração. Acumule moedas e troque por descontos em
               serviços, produtos ou benefícios exclusivos!
             </CapibaDescription>
-            <CapibaButton onClick={() => navigate("/recompensas")}>
+            <CapibaButton onClick={() => navigate("/perfil-usuario?tab=recompensas")}>
               Veja as Recompensas
             </CapibaButton>
           </CapibaInfo>

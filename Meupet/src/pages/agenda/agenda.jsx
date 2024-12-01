@@ -26,7 +26,7 @@ import {
 } from "./agendaStyle";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import ptLocale from "@fullcalendar/core/locales/pt";
+import { useUserType } from "../../hooks/useUserType";
 
 export function Agenda() {
   const navigate = useNavigate();
@@ -36,6 +36,14 @@ export function Agenda() {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isCancelledNotificationOpen, setIsCancelledNotificationOpen] = useState(false);
   const [appointmentToCancel, setAppointmentToCancel] = useState(null);
+  const { userType, userEmail } = useUserType();
+
+  useEffect(() => {
+    if (!userType || userType !== "clinica") { 
+      alert("Você não tem permissão para acessar esta página.");
+      navigate("/login");
+    }
+  }, [userType, navigate]);
 
   useEffect(() => {
     const fetchAppointments = async () => {
