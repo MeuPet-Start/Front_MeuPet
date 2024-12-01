@@ -10,7 +10,7 @@ import { Agenda } from "../pages/agenda/agenda.jsx";
 import Especialidades  from "../pages/especialidades/especialidades.jsx";
 import Servicos from "../pages/servicos/servicos.jsx";
 import PerfilClinica from "../pages/perfil/clinica/perfilClinica.jsx";
-
+import PerfilUsuario from "../pages/perfil/usuario/perfilUsuario.jsx"
 
 export const route = createBrowserRouter([
   {
@@ -58,5 +58,12 @@ export const route = createBrowserRouter([
     path: "/agenda",
     element: <Agenda />,
   },
+
+  {
+    path: "/perfil-usuario",
+    element: <PerfilUsuario />,
+  },
+
+
 
 ]);
