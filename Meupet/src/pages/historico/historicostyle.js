@@ -13,7 +13,7 @@ export const Background = styled.div`
 
   .background_White {
     background-color: #ffffff;
-    width: 100%;
+    width: 80%;
     max-width: 75rem; 
     border-radius: 16px; 
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); 

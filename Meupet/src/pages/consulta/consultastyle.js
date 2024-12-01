@@ -8,7 +8,7 @@ export const CarrosselImage = styled.div`
 
   img {
     width: 100%;
-    max-height: 25rem; /* 400px */
+    max-height: 25rem; 
     object-fit: cover;
   }
 `;
@@ -169,9 +169,6 @@ export const InputGrid = styled.div`
       height: 1.25rem; 
     }
 
-    .segundoTitulo {
-      margin: 0 0 0 0.625rem; 
-    }
 
     label {
       margin: 0;
