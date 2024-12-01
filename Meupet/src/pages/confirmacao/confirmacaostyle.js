@@ -75,7 +75,7 @@ export const DogImageContainer = styled.div`
   z-index: 1;
 
   img {
-    max-width: 500px; 
+    max-width: 600px; 
     width: 100%;
     height: auto;
     object-fit: contain;

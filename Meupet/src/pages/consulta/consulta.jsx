@@ -13,7 +13,9 @@ import { useNavigate } from "react-router";
 import { useFormik } from 'formik';
 import { HeaderSection, MainForm, InputGrid, ButtonGroup, SlideItem } from "./consultastyle";
 import "swiper/css"
-import axios from "axios";
+import "swiper/css/autoplay";
+import { api } from "../../services/api";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 
 const Consulta = () => {
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ const Consulta = () => {
 
   const handleSubmit = async (values) => {
     try {
-      const response = await axios.post("https://seu-backend.com/api/agendamento", values);
+      const response = await api.post("/agendamento", values);
       alert("Agendamento realizado com sucesso!");
     } catch (error) {
       console.error("Erro ao enviar o formulário:", error);
@@ -78,6 +80,8 @@ const Consulta = () => {
       </HeaderSection>
 
       <Swiper
+        modules={[Navigation, Pagination, Autoplay]}
+        autoplay={{delay: 4000, disableOnInteraction: true}}
         spaceBetween={50}
         slidesPerView={1}
         pagination={{ clickable: true }}
@@ -122,15 +126,15 @@ const Consulta = () => {
           <div className="divContain">
             <div className="divForm">
               <label>Nome do Pet</label>
-              <input type="text" name="nome do Pet" placeholder="Insira o nome do seu Pet" onChange={formik.handleChange} value={formik.values.nomePet} />
+              <input type="text" name="nome do Pet" placeholder="Insira o nome do seu Pet" onChange={formik.handleChange}/>
             </div>
             <div className="divForm">
               <label>Idade</label>
-              <input type="number" name="idade" placeholder="Exemplo: 3 anos" onChange={formik.handleChange} value={formik.values.idade} />
+              <input type="number" name="idade" placeholder="Exemplo: 3 anos" onChange={formik.handleChange}  />
             </div>
             <div className="divForm">
               <label>Histórico médico relevante (se houver).</label>
-              <input type="text" name="historico médico"  placeholder="Insira aqui as informações adicionais sobre o seu Pet" onChange={formik.handleChange} value={formik.values.historico}/>
+              <input type="text" name="historico médico"  placeholder="Insira aqui as informações adicionais sobre o seu Pet" onChange={formik.handleChange}/>
             </div>
           </div>
 
@@ -151,11 +155,11 @@ const Consulta = () => {
           <div className="divContain">
             <div className="divForm">
               <label>Data do Serviço</label>
-              <input type="date" name="data do serviço" placeholder="Data :" onChange={formik.handleChange} value={formik.values.data} />
+              <input type="date" name="data do serviço" placeholder="Data :" onChange={formik.handleChange}/>
             </div>
             <div className="divForm">
               <label>Horários</label>
-              <input type="time" name="horario" placeholder="Horários" onChange={formik.handleChange} value={formik.values.horarios} ></input>
+              <input type="time" name="horario" placeholder="Horários" onChange={formik.handleChange}></input>
             </div>
           </div>
         </InputGrid>
