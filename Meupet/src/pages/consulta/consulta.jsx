@@ -152,16 +152,7 @@ const Consulta = () => {
 
           <div className="divContain">
             <div className="divForm">
-              <label>Nome do Pet</label>
-              <input type="text" name="nome do Pet" placeholder="Insira o nome do seu Pet" onChange={formik.handleChange}/>
-            </div>
-            <div className="divForm">
-              <label>Idade</label>
-              <input type="number" name="idade" placeholder="Exemplo: 3 anos" onChange={formik.handleChange}  />
-            </div>
-            <div className="divForm">
-              <label>Histórico médico relevante (se houver).</label>
-              <input type="text" name="historico médico"  placeholder="Insira aqui as informações adicionais sobre o seu Pet" onChange={formik.handleChange}/>
+            <label>Nome do Pet</label>
               <input 
                 type="text" 
                 name="nome do Pet" 
@@ -224,7 +215,6 @@ const Consulta = () => {
           <div className="divContain">
             <div className="divForm">
               <label>Data do Serviço</label>
-              <input type="date" name="data do serviço" placeholder="Data :" onChange={formik.handleChange}/>
               <input 
                 type="date"
                 name="data do serviço"

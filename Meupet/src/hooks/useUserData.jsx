@@ -6,6 +6,7 @@ export const useUserData = (userEmail) => {
   const [userData, setUserData] = useState({
     userPoints: 0,
     userName: "",
+    userId: "",
     error: null,
   });
 
@@ -14,7 +15,7 @@ export const useUserData = (userEmail) => {
       if (!userEmail) return;
 
       try {
-        const response = await axios.get("http://localhost:8080/api/v1/authenticable", {
+        const response = await axios.get("/authenticable", {
           params: { email: userEmail },
         });
 
