@@ -106,31 +106,76 @@ const Consulta = () => {
             <h1 className="textgreen">Informações do Animal:</h1>
             <div className="checkboxArea">
               <h1>Tipo do animal:</h1>
-              <input type="checkbox" id="cachorro" name="tipoAnimal" value="Cachorro" onChange={formik.handleChange} />
+              <input 
+                type="radio"
+                id="cachorro"
+                defaultChecked
+                name="tipoAnimal"
+                value="Cachorro"
+                onChange={formik.handleChange}
+              />
               <label for="cachorro">Cachorro</label>
-              <input type="checkbox" id="gato" name="tipoAnimal" value="Gato" onChange={formik.handleChange} />
+              <input 
+                type="radio" 
+                id="gato" 
+                name="tipoAnimal" 
+                value="Gato" 
+                onChange={formik.handleChange} 
+              />
               <label for="gato">Gato</label>
 
               <h1 className="segundoTitulo">Gênero do Pet:</h1>
-              <input type="radio" id="femea"  name="generoPet" value="F" onChange={formik.handleChange} />
+              <input 
+                type="radio" 
+                id="femea" 
+                defaultChecked 
+                name="generoPet" 
+                value="F" 
+                onChange={formik.handleChange} 
+              />
               <label for="radio">Fêmea</label>
-              <input type="radio" id="macho"  name="generoPet" value="M" onChange={formik.handleChange} />
+              <input 
+                type="radio" 
+                id="macho"  
+                name="generoPet"
+                value="M" 
+                onChange={formik.handleChange} 
+              />
               <label for="macho">Macho</label>
             </div>
           </div>
 
+
           <div className="divContain">
             <div className="divForm">
               <label>Nome do Pet</label>
-              <input type="text" name="nome do Pet" placeholder="Insira o nome do seu Pet" onChange={formik.handleChange} value={formik.values.nomePet} />
+              <input 
+                type="text" 
+                name="nome do Pet" 
+                placeholder="Insira o nome do seu Pet" 
+                onChange={formik.handleChange} 
+                value={formik.values.nomePet} 
+              />
             </div>
             <div className="divForm">
               <label>Idade</label>
-              <input type="number" name="idade" placeholder="Exemplo: 3 anos" onChange={formik.handleChange} value={formik.values.idade} />
+              <input 
+              type="number"
+               name="idade" 
+               placeholder="Exemplo: 3 anos" 
+               onChange={formik.handleChange} 
+               value={formik.values.idade} 
+              />
             </div>
             <div className="divForm">
               <label>Histórico médico relevante (se houver).</label>
-              <input type="text" name="historico médico"  placeholder="Insira aqui as informações adicionais sobre o seu Pet" onChange={formik.handleChange} value={formik.values.historico}/>
+              <input 
+                type="text"
+                name="historico médico"  
+                placeholder="Insira aqui as informações adicionais sobre o seu Pet" 
+                onChange={formik.handleChange} 
+                value={formik.values.historico}
+              />
             </div>
           </div>
 
@@ -140,18 +185,39 @@ const Consulta = () => {
           
           <div className="checkboxArea">
             <h1>Tipo do serviço:</h1>
-            <input type="checkbox" id="consulta"  name="tipoServico" value="consulta" onChange={formik.handleChange} />
+            <input type="radio"
+              id="consulta" defaultChecked
+              name="tipoServico"
+              value="consulta"
+              onChange={formik.handleChange}
+            />
             <label for="consulta">Consulta</label>
-            <input type="checkbox" id="exames"  name="tipoServico" value="exame" onChange={formik.handleChange} />
+            <input type="radio"
+              id="exames"
+              name="tipoServico"
+              value="exame"
+              onChange={formik.handleChange} 
+            />
             <label for="exames">Exames</label>
-            <input type="checkbox" id="vacinas" name="tipoServico" value="vacina" onChange={formik.handleChange}  />
+            <input type="radio" 
+              id="vacinas"
+              name="tipoServico"
+              value="vacina" 
+              onChange={formik.handleChange} 
+            />
             <label for="vacinas">Vacinas</label>
           </div>
 
           <div className="divContain">
             <div className="divForm">
               <label>Data do Serviço</label>
-              <input type="date" name="data do serviço" placeholder="Data :" onChange={formik.handleChange} value={formik.values.data} />
+              <input 
+                type="date"
+                name="data do serviço"
+                placeholder="Data :"
+                onChange={formik.handleChange}
+                value={formik.values.data || ""}
+              />
             </div>
             <div className="divForm">
               <label>Horários</label>
