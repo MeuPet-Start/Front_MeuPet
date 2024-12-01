@@ -21,6 +21,7 @@ export const useUserType = () => {
           setUserEmail(null); 
         } else {
           setUserType(decodedToken.roles[0]); 
+          setUserEmail(decodedToken.sub);
         }
       } catch (error) {
         console.error("Erro ao decodificar o token", error);

@@ -20,7 +20,7 @@ export const useUserData = (userEmail) => {
 
         setUserData({
           userPoints: response.data.moedaCapiba || 0,  
-          userName: response.data.name || "Usuário", 
+          userName: response.data.socialName || "Usuário", 
           error: null,
         });
       } catch (error) {

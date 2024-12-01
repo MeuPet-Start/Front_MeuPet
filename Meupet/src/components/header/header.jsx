@@ -32,7 +32,10 @@ import { useUserData } from "../../hooks/useUserData";
 const Header = () => {
   const navigate = useNavigate();
   const { userType, userEmail } = useUserType();
+  console.log("userEmail:" + userEmail)
   const { userName, userPoints } = useUserData(userEmail);
+
+  console.log(userName)
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
