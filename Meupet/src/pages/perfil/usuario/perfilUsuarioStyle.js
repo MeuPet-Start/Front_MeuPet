@@ -24,7 +24,7 @@ export const ProfileSection = styled.div`
   margin: 2rem auto;
   width: 60%; 
   max-width: 72.375rem;
-  padding:
+  /* padding: */
 `;
 
 export const ProfileTitle = styled.h1`
@@ -77,7 +77,7 @@ export const Label = styled.label`
     font-weight: 600;
     color: #454545;
     margin-bottom: 0.2rem;
-  }
+  
 `;
 
 export const Input = styled.input`
@@ -88,7 +88,7 @@ export const Input = styled.input`
     border-radius: 0.5rem;
     border: 0.0625rem solid #ccc;
     font-size: 1rem;
-    color: #727171;
+    color: #000;
     outline: none;
     
 

@@ -169,6 +169,7 @@ export function UserDataContextProvider({children}) {
     }
   };
 
+
   useEffect(() => {
     if (userEmail) { // Só executa se ambos estiverem disponíveis
       fetchUserData();
@@ -177,7 +178,7 @@ export function UserDataContextProvider({children}) {
 
 
   return (
-      <UserDataContext.Provider value={{ userData, loading, setLoading, login, logout, isAuthenticated }}>
+      <UserDataContext.Provider value={{ userData, fetchUserData, loading, setLoading, login, logout, isAuthenticated }}>
           {children}
       </UserDataContext.Provider>
   )

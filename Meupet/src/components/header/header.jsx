@@ -35,7 +35,7 @@ function Header() {
 
   const userType = userData.userType;
 
-  console.log(userData);
+  // console.log(userData);
 
   // if (!userData || !userData.name) {
   //   return <p>Carregando informações do usuário...</p>; // Indicador de carregamento
@@ -125,7 +125,7 @@ function Header() {
               {userType === "user" && (
                 <UserContainer>
                   <ProfileImage src={userImage} alt="Usuário" />
-                  <UserName onClick={() => navigate("/perfil-user")}>
+                  <UserName onClick={() => navigate("/perfil-usuario")}>
                     {userData.name}
                   </UserName>
                 </UserContainer>
@@ -156,7 +156,7 @@ function Header() {
           {userType === "user" && (
             <UserContainer>
               <ProfileImage src={userImage} alt="Usuário" />
-              <UserName onClick={() => navigate("/perfil-user")}>
+              <UserName onClick={() => navigate("/perfil-usuario")}>
                 {userData.name}
               </UserName>
             </UserContainer>

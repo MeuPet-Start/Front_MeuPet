@@ -48,7 +48,7 @@ export function Home() {
     }
   }, [userData, isAuthenticated]);
 
-  // Recarrega a página uma vez, se necessário
+  //Recarrega a página uma vez, se necessário
   useEffect(() => {
     if (shouldReload) {
       window.location.reload();

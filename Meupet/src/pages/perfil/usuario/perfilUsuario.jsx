@@ -6,7 +6,6 @@ import UserImage from "../../../assets/logo.png";
 import exmedImage from "../../../assets/exmed.png";
 import novacImage from "../../../assets/99pop.png";
 import ladydriverImage from "../../../assets/ladydriver.png";
-import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -48,65 +47,35 @@ import {
   RedeemButton,
 } from "./perfilUsuarioStyle";
 
-import { useUserType } from "../../../hooks/useUserType";
 import { useUserData } from "../../../hooks/useUserData";
+import { api } from "../../../services/api";
 
 const PerfilUsuario = () => {
   const navigate = useNavigate();
   const [image, setImage] = useState(UserImage);
   const [selectedTab, setSelectedTab] = useState("geral");
-  const { userType, userEmail } = useUserType();
-  const { userName } = useUserData(userEmail);
+  const { userData, logout, fetchUserData } = useUserData();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [userData, setUserData] = useState({
-    name: "",
-    address: "",
-    phone: "",
-    email: "",
-    birthDate: "", 
+  const [dataState, setDataState] = useState({
+    name: userData.name || "",
+    socialName: userData.socialName || "",
+    phoneNumber: userData.phoneNumber || "",
+    birthDate: userData.dateOfBirth || "", 
+    newPassword: "",
+    confirmPassword: "",
   });
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get("/api/userProfile");
-        setUserData(response.data);
-        if (response.data.image) {
-          setImage(response.data.image);
-        }
-      } catch (error) {
-        console.error("Erro ao carregar os dados do usuário:", error);
-        alert("Não foi possível carregar os dados do usuário.");
-      }
-    };
-
-    // useEffect(() => {
-  //   if (!userType || userType !== "clinica") { 
-  //     alert("Você não tem permissão para acessar esta página.");
-  //     navigate("/login");
-  //   }
-  // }, [userType, navigate]);
-
-    fetchUserData();
-  }, []);
 
   const formik = useFormik({
-    initialValues: {
-      name: "",
-      address: "",
-      phone: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      birthDate: "",
-    },
+    enableReinitialize: true,
+    initialValues: dataState, // Valores iniciais, que dependem do estado de dataState
     validationSchema: Yup.object({
       name: Yup.string().required("Nome é obrigatório"),
-      address: Yup.string().required("Endereço é obrigatório"),
-      phone: Yup.string().required("Telefone é obrigatório"),
-      email: Yup.string().email("E-mail inválido").required("E-mail é obrigatório"),
-      birthDate: Yup.date().nullable().required("Data de nascimento é obrigatória"), 
+      socialName: Yup.string().required("Nome social é obrigatório"),
+      phoneNumber: Yup.string().required("Telefone é obrigatório"),
+      birthDate: Yup.date().nullable().required("Data de nascimento é obrigatória"),
       password: Yup.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), null], "As senhas não combinam")
@@ -118,10 +87,14 @@ const PerfilUsuario = () => {
     onSubmit: async (values) => {
       setIsSubmitting(true); 
       try {
-        const response = await axios.put("/api/userProfile", values);
+        console.log(dataState)
+        const response = await api.patch(`/user/${userData.id}`, dataState);
         if (response.status === 200) {
           alert("Dados salvos com sucesso!");
-          setUserData(values);
+  
+          // Atualize os dados do estado userData e dataState após sucesso
+          // setDataState(values);  // Atualiza dataState com os novos dados
+          fetchUserData(); // Recarrega os dados do usuário, se necessário
         }
       } catch (error) {
         console.error("Erro ao salvar os dados:", error);
@@ -159,6 +132,7 @@ const PerfilUsuario = () => {
 
   const handleLogoff = () => {
     localStorage.removeItem("jwtToken");
+    logout()
     alert("Você foi desconectado com sucesso!");
     navigate("/login");
   };
@@ -214,18 +188,27 @@ const PerfilUsuario = () => {
       image: ladydriverImage,
     },
   ];
+
+
  
   useEffect(() => {
     if (userData) {
       formik.setValues({
         name: userData.name,
-        address: userData.address,
-        phone: userData.phone,
-        email: userData.email,
+        socialName: userData.socialName,
+        phoneNumber: userData.phoneNumber,
         birthDate: userData.birthDate || "",
         password: "",
         confirmPassword: "",
       });
+      setDataState({
+        name: userData.name,
+        socialName: userData.socialName,
+        phoneNumber: userData.phoneNumber,
+        birthDate: userData.birthDate || "",
+        password: "",
+        confirmPassword: "",
+      })
     }
   }, [userData]);
 
@@ -249,7 +232,7 @@ const PerfilUsuario = () => {
               style={{ display: "none" }}
             />
           </ProfileImageContainer>
-          <SidebarUsarnameTitle>{userName}</SidebarUsarnameTitle>
+          <SidebarUsarnameTitle>{userData.name}</SidebarUsarnameTitle>
           <SidebarItem isSelected={selectedTab === "geral"} onClick={() => handleTabClick("geral")}>
             Informações Gerais
           </SidebarItem>
@@ -300,45 +283,31 @@ const PerfilUsuario = () => {
                 )}
               </FormGroup>
               <FormGroup>
-                <Label htmlFor="address">Endereço</Label>
+                <Label htmlFor="socialName">Nome social</Label>
                 <Input
                   type="text"
-                  id="address"
-                  name="address"
-                  value={formik.values.address}
-                  placeholder="Seu Endereço"
-                  {...formik.getFieldProps("address")}
+                  id="socialName"
+                  name="socialName"
+                  value={formik.values.socialName}
+                  placeholder="Seu nome social"
+                  {...formik.getFieldProps("socialName")}
                 />
-                {formik.touched.address && formik.errors.address && (
-                  <ErrorText>{formik.errors.address}</ErrorText>
+                {formik.touched.socialName && formik.errors.socialName && (
+                  <ErrorText>{formik.errors.socialName}</ErrorText>
                 )}
               </FormGroup>
               <FormGroup>
-                <Label htmlFor="phone">Telefone</Label>
+                <Label htmlFor="phoneNumber">Telefone</Label>
                 <Input
                   type="text"
-                  id="phone"
-                  name="phone"
-                  value={formik.values.phone}
+                  id="phophoneNumberne"
+                  name="phoneNumber"
+                  value={formik.values.phoneNumber}
                   placeholder="Seu Telefone"
-                  {...formik.getFieldProps("phone")}
+                  {...formik.getFieldProps("phoneNumber")}
                 />
-                {formik.touched.phone && formik.errors.phone && (
-                  <ErrorText>{formik.errors.phone}</ErrorText>
-                )}
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="email">E-mail</Label>
-                <Input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formik.values.email}
-                  placeholder="Seu E-mail"
-                  {...formik.getFieldProps("email")}
-                />
-                {formik.touched.email && formik.errors.email && (
-                  <ErrorText>{formik.errors.email}</ErrorText>
+                {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+                  <ErrorText>{formik.errors.phoneNumber}</ErrorText>
                 )}
               </FormGroup>
               <FormGroup>
