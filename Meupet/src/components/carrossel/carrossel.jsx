@@ -17,7 +17,7 @@ const Carrossel = () => {
     {
       id: 1,
       icon: "https://cdn-icons-png.flaticon.com/512/2913/2913462.png", // Ícone fictício
-      title: "Consultas",
+      title: "Castração",
       description: "Cuide da saúde do seu pet com atendimento veterinário especializado.",
     },
     {

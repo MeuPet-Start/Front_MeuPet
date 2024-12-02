@@ -8,6 +8,7 @@ import {
   ServiceCardButton,
   ServiceInfo,
 } from "./serviceCardStyle";
+import { useNavigate } from "react-router-dom";
 
 const ServiceCard = ({
   img,
@@ -17,6 +18,10 @@ const ServiceCard = ({
   buttonLabel,
   onClick,
 }) => {
+
+  const navigate = useNavigate();
+
+
   return (
     <ServiceCardContainer>
       <ServiceCardImage src={img} alt={`${title} Imagem`} />
@@ -29,7 +34,7 @@ const ServiceCard = ({
         <ServiceCardTitle>{title}</ServiceCardTitle>
         <ServiceCardDescription>{description}</ServiceCardDescription>
       </ServiceInfo>
-      <ServiceCardButton onClick={onClick}>{buttonLabel}</ServiceCardButton>
+      <ServiceCardButton onClick={() => navigate("/consulta")}>{buttonLabel}</ServiceCardButton>
     </ServiceCardContainer>
   );
 };

@@ -162,7 +162,7 @@ const PerfilUsuario = () => {
     }
   };
 
-  const saldoAtual = "500 Capibas";
+  const saldoAtual = "0 Capibas";
   const produtos = [
     {
       id: 1,
