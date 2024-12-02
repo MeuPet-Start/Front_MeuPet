@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { api } from "../services/api";
 import axios from "axios"; 
 import { useUserType } from "./useUserType";
+
 
 export const useUserData = (userEmail) => {
   const [userData, setUserData] = useState({
@@ -26,7 +28,7 @@ export const useUserData = (userEmail) => {
       if (!userEmail) return;
 
       try {
-        const response = await axios.get("/authenticable", {
+        const response = await api.get("/authenticable", {
           params: { email: userEmail },
         });
 
@@ -61,7 +63,7 @@ export const useUserData = (userEmail) => {
           ...userData,
           error: "Erro ao carregar os dados do usuário",
         });
-        console.error("Erro ao buscar dados do usuário:", error);
+        console.error(error);
       }
     };
 

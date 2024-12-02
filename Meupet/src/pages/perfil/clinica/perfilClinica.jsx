@@ -108,6 +108,36 @@ const PerfilClinica = () => {
     },
   });
 
+
+  useEffect(() => {
+    // if (!userType || userType !== "clinic") { 
+      // alert("Você não tem permissão para acessar esta página.");
+      // navigate("/login");
+    // }
+  }, [userType, navigate]);
+
+  useEffect(() => {
+    const fetchClinicData = async () => {
+      try {
+        const response = await axios.get("/api/clinicProfile", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
+        });
+        formik.setValues(response.data);
+        if (response.data.image) {
+          setImage(response.data.image);
+        }
+        if (response.data.photos) {
+          setPhotos(response.data.photos);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar os dados da clínica:", error);
+        alert("Não foi possível carregar os dados da clínica.");
+      }
+    };
+
+    fetchClinicData();
+  }, []);
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
