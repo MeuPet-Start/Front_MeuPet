@@ -3,6 +3,7 @@ import { RouterProvider } from "react-router-dom";
 import GlobalStyles from "./styles/GlobalStyles";
 import { route } from "./routes/index.routes";
 import Loading from "../../Meupet/src/components/loading/loading";
+import { UserDataContextProvider } from "./hooks/useUserData";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -12,11 +13,11 @@ function App() {
   }, []);
 
   return (
-    <>
+    <UserDataContextProvider>
       <GlobalStyles />
       {loading && <Loading />} 
       <RouterProvider router={route} />
-    </>
+    </UserDataContextProvider>
   );
 }
 

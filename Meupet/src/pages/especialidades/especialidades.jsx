@@ -19,6 +19,7 @@ import {
 } from "./especialidadesStyle";
 
 import { useState, useEffect } from "react";
+import { api } from "../../services/api";
 
 const Especialidades = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const Especialidades = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/services"); // Substitua pela URL da sua API
+        const response = await api.get("/api/services"); // Substitua pela URL da sua API
         setServices(response.data);
       } catch (error) {
         setError("Erro ao carregar os serviços", error);

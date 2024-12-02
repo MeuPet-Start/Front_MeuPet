@@ -1,10 +1,87 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import { api } from "../services/api";
-import axios from "axios"; 
+// import axios from "axios"; 
 import { useUserType } from "./useUserType";
 
 
-export const useUserData = (userEmail) => {
+// export const useUserData = (userEmail) => {
+//   const [userData, setUserData] = useState({
+//     id: "",
+//     name: "",
+//     socialName: "",
+//     email: "",
+//     phoneNumber: "",
+//     document: "",
+//     documentType: "",
+//     dateOfBirth: "",
+//     moedaCapiba: 0,
+//     street: null,
+//     neighborhood: null,
+//     city: null,
+//     cep: null,
+//     error: null,
+//   });
+
+//   const { userType } = useUserType();
+//   useEffect(() => {
+//     const fetchUserData = async () => {
+//       if (!userEmail) return;
+
+//       try {
+//         const response = await api.get("/authenticable", {
+//           params: { email: userEmail },
+//         });
+
+//         const data = response.data;
+
+//         console.log(data)
+
+        
+//         if (userType === "user" || userType === "clinic") {
+//           setUserData({
+//             id: data.id || "",
+//             name: data.name || "",
+//             socialName: data.socialName || "Usuário",
+//             email: data.email || "",
+//             phoneNumber: data.phoneNumber || "",
+//             document: data.document || "",
+//             documentType: data.documentType || "",
+//             dateOfBirth: data.dateOfBirth || "",
+//             moedaCapiba: data.moedaCapiba || 0,
+//             street: data.street || null,
+//             neighborhood: data.neighborhood || null,
+//             city: data.city || null,
+//             error: null,
+//           });
+//         } else {
+          
+//           setUserData({
+//             ...userData,
+//             error: "Tipo de documento inválido ou não encontrado",
+//           });
+//         }
+//       } catch (error) {
+//         setUserData({
+//           ...userData,
+//           error: "Erro ao carregar os dados do usuário",
+//         });
+//         console.error(error);
+//       }
+//     };
+
+//     fetchUserData();
+//   }, [userEmail]);
+
+//   return userData;
+// };
+
+
+const UserDataContext = createContext();
+
+export function UserDataContextProvider({children}) {
+  const { userType, userEmail } = useUserType();
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de login
+  const [loading, setLoading] = useState(true); // Estado de carregamento
   const [userData, setUserData] = useState({
     id: "",
     name: "",
@@ -20,55 +97,92 @@ export const useUserData = (userEmail) => {
     city: null,
     cep: null,
     error: null,
+    userType: ""
   });
 
-  const { userType } = useUserType();
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (!userEmail) return;
+  function login() {
+    setIsAuthenticated(true);
+  }
 
-      try {
-        const response = await api.get("/authenticable", {
-          params: { email: userEmail },
-        });
+  function logout() {
+    setIsAuthenticated(false);
+  }
 
-        const data = response.data;
+  const fetchUserData = async () => {
+    if (!userEmail) return;
 
-        
-        if (userType === "user" || userType === "clinic") {
-          setUserData({
-            id: data.id || "",
-            name: data.name || "",
-            socialName: data.socialName || "Usuário",
-            email: data.email || "",
-            phoneNumber: data.phoneNumber || "",
-            document: data.document || "",
-            documentType: data.documentType || "",
-            dateOfBirth: data.dateOfBirth || "",
-            moedaCapiba: data.moedaCapiba || 0,
-            street: data.street || null,
-            neighborhood: data.neighborhood || null,
-            city: data.city || null,
-            error: null,
-          });
-        } else {
-          
-          setUserData({
-            ...userData,
-            error: "Tipo de documento inválido ou não encontrado",
-          });
-        }
-      } catch (error) {
+    try {
+      const response = await api.get("/authenticable", {
+        params: { email: userEmail }
+      });
+
+      const data = response.data;
+
+
+      if(userType === "user" ) {
         setUserData({
-          ...userData,
-          error: "Erro ao carregar os dados do usuário",
+          id: data.id || "",
+          name: data.name || "",
+          socialName: data.socialName || "Usuário",
+          email: data.email || "",
+          phoneNumber: data.phoneNumber || "",
+          document: data.document || "",
+          documentType: data.documentType || "",
+          dateOfBirth: data.dateOfBirth || "",
+          moedaCapiba: data.moedaCapiba || 0,
+          street: null,
+          neighborhood: null,
+          city: null,
+          error: null,
+          userType
         });
-        console.error(error);
       }
-    };
 
-    fetchUserData();
+      if(userType === "clinic") {
+        setUserData({
+          id: data.id || "",
+          name: data.name || "",
+          socialName: null,
+          email: data.email || "",
+          phoneNumber: data.phoneNumber || "",
+          document: data.document || "",
+          documentType: data.documentType || "",
+          dateOfBirth: data.dateOfBirth || "",
+          moedaCapiba: data.moedaCapiba || 0,
+          street: data.street || null,
+          neighborhood: data.neighborhood || null,
+          city: data.city ||null,
+          error: null,
+          userType
+        });
+      }
+    } catch (error) {
+      setUserData({
+        ...userData,
+        error: "Erro ao carregar os dados do usuário",
+      });
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, "1000");
+    }
+  };
+
+  useEffect(() => {
+    if (userEmail) { // Só executa se ambos estiverem disponíveis
+      fetchUserData();
+    }
   }, [userEmail]);
 
-  return userData;
-};
+
+  return (
+      <UserDataContext.Provider value={{ userData, loading, setLoading, login, logout, isAuthenticated }}>
+          {children}
+      </UserDataContext.Provider>
+  )
+}
+
+export function useUserData() {
+  return useContext(UserDataContext);
+}

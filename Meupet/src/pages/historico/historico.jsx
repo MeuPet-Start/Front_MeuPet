@@ -7,15 +7,18 @@ import { useEffect, useState } from "react";
 import { api } from "../../services/api";
 import { useUserType } from "../../hooks/useUserType";
 import { useUserData } from "../../hooks/useUserData";
+import { useNavigate } from "react-router-dom";
 
 
 
 const MinhasConsulta = () => {
   const [consultas, setConsultas] = useState([{}])
   const { userEmail } = useUserType();
-  const { userId } = useUserData(userEmail);
+  const { userData } = useUserData();
+  const navigate = useNavigate();
+  const userId = userData.id;
 
-  console.log(userId)
+  // console.log(userData.id)
 
   async function handleConsulta() {
     
@@ -30,17 +33,25 @@ const MinhasConsulta = () => {
       partnerName: consulta.partner.name,
       servicoName: consulta.servico.name,
       animalName: consulta.animal.name,
-      animalType: consulta.animal.type,
+      animalType: consulta.animal.type
     }));
+    
+    if(filteredData.partnerName == "") {
+      setConsultas()
+    }
     setConsultas(filteredData);
   }
 
 
-
-
   useEffect(() => {
-    handleConsulta()
-  }, [])
+    if (userData) {
+      if (userData.userType === "clinic") {
+        navigate("/"); // Redireciona para a tela inicial
+      } else {
+        handleConsulta();
+      }
+    }
+  }, [userData]);
 
   return (
     <>

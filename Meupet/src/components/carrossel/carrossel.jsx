@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import Card from "../card/card";
-import axios from "axios";
+import { api } from "../../services/api";
 
 const Carrossel = () => {
   const [services, setServices] = useState([]);
@@ -14,7 +14,7 @@ const Carrossel = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/services");
+        const response = await api.get("/api/services");
         setServices(response.data);
       } catch (error) {
         setError("Erro ao carregar os serviços");

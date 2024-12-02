@@ -34,19 +34,18 @@ import {
   ErrorText,
 } from "./perfilClinicaStyle";
 
-import { useUserType } from "../../../hooks/useUserType";
 import { useUserData } from "../../../hooks/useUserData";
 
 const PerfilClinica = () => {
   const navigate = useNavigate();
   const [image, setImage] = useState(UserImage);
   const [selectedTab, setSelectedTab] = useState("geral");
-  const { userType, userEmail } = useUserType();
-  const { userData } = useUserData(userEmail); // Usando o hook para pegar dados do usuário
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [photos, setPhotos] = useState([]);
 
-  const [userDataState, setUserDataState] = useState({
+  const { userData } = useUserData()
+
+  const [dataState, setDataState] = useState({
     name: userData.name || "",
     address: userData.street || "",  // Assumindo que street vai substituir address
     contact: userData.phoneNumber || "",
@@ -60,12 +59,12 @@ const PerfilClinica = () => {
   
   useEffect(() => {
     if (userData) {
-      setUserDataState({
+      setDataState({
         name: userData.name,
         address: userData.street,
         contact: userData.phoneNumber,
         email: userData.email,
-        about: "",  
+        about: "",
         openingHours: "", // Se houver algum campo de horário de funcionamento, preencha aqui
       });
     }
@@ -89,7 +88,7 @@ const PerfilClinica = () => {
 
   const formik = useFormik({
     enableReinitialize: true, // Isso permite que o Formik seja re-inicializado com os novos dados
-    initialValues: userDataState,
+    initialValues: dataState,
     validationSchema,
     onSubmit: async (values) => {
       try {
@@ -108,35 +107,31 @@ const PerfilClinica = () => {
     },
   });
 
-
   useEffect(() => {
-    // if (!userType || userType !== "clinic") { 
-      // alert("Você não tem permissão para acessar esta página.");
-      // navigate("/login");
-    // }
-  }, [userType, navigate]);
-
-  useEffect(() => {
-    const fetchClinicData = async () => {
-      try {
-        const response = await axios.get("/api/clinicProfile", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-        });
-        formik.setValues(response.data);
-        if (response.data.image) {
-          setImage(response.data.image);
-        }
-        if (response.data.photos) {
-          setPhotos(response.data.photos);
-        }
-      } catch (error) {
-        console.error("Erro ao carregar os dados da clínica:", error);
-        alert("Não foi possível carregar os dados da clínica.");
-      }
-    };
-
-    fetchClinicData();
+    // Re-inicializa os valores do Formik com os dados mais recentes
+    formik.setValues(dataState);
   }, []);
+
+  // useEffect(() => {
+  //   const fetchClinicData = async () => {
+  //     try {
+  //       const response = await axios.get("/api/clinicProfile", {
+  //         headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
+  //       });
+  //       formik.setValues(response.data);
+  //       if (response.data.image) {
+  //         setImage(response.data.image);
+  //       }
+  //       if (response.data.photos) {
+  //         setPhotos(response.data.photos);
+  //       }
+  //     } catch (error) {
+  //       console.error("Erro ao carregar os dados da clínica:", error);
+  //       alert("Não foi possível carregar os dados da clínica.");
+  //     }
+  //   };
+  //   fetchClinicData();
+  // }, []);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -244,7 +239,7 @@ const PerfilClinica = () => {
               style={{ display: "none" }}
             />
           </ProfileImageContainer>
-          <SidebarUsernameTitle>{userName}</SidebarUsernameTitle>
+          <SidebarUsernameTitle>{userData.name}</SidebarUsernameTitle>
           <SidebarItem
             isSelected={selectedTab === "geral"}
             onClick={() => handleTabClick("geral")}

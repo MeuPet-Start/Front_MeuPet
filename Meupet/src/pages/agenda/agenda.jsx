@@ -27,7 +27,6 @@ import {
 } from "./agendaStyle";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import { useUserType } from "../../hooks/useUserType";
 import axios from 'axios';
 
 export function Agenda() {
@@ -38,7 +37,6 @@ export function Agenda() {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isCancelledNotificationOpen, setIsCancelledNotificationOpen] = useState(false);
   const [appointmentToCancel, setAppointmentToCancel] = useState(null);
-  const { userType, userEmail } = useUserType();
 
   // Verificar permissões de usuário
   // useEffect(() => {

@@ -12,7 +12,7 @@ import { useUserType } from "../../hooks/useUserType";
 import { useNavigate } from "react-router-dom";
 
 export default function Footer() {
-  const userType = useUserType();
+  const { userType } = useUserType();
   const navigate = useNavigate();
   return (
     <FooterContainer>

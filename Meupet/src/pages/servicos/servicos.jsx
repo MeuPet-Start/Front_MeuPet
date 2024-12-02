@@ -35,7 +35,7 @@ const Servicos = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/services"); // Ajuste a URL conforme o seu backend
+        const response = await api.get("/api/services"); // Ajuste a URL conforme o seu backend
 
         setServices(response.data);
         setFilteredServices(response.data);

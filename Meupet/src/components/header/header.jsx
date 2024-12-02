@@ -26,17 +26,24 @@ import {
   CloseButton,
 } from "./headerStyle";
 
-import { useUserType } from "../../hooks/useUserType";
 import { useUserData } from "../../hooks/useUserData";
 
-const Header = () => {
+function Header() {
   const navigate = useNavigate();
-  const { userType, userEmail } = useUserType();
-  console.log("userEmail:" + userEmail)
-  const { userName, userPoints, userId } = useUserData(userEmail);
+  const { userData } = useUserData();
 
-  console.log(userName)
-  console.log(userId)
+
+  const userType = userData.userType;
+
+  console.log(userData);
+
+  // if (!userData || !userData.name) {
+  //   return <p>Carregando informações do usuário...</p>; // Indicador de carregamento
+  // }
+
+  
+
+  // console.log(userType)
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -119,7 +126,7 @@ const Header = () => {
                 <UserContainer>
                   <ProfileImage src={userImage} alt="Usuário" />
                   <UserName onClick={() => navigate("/perfil-user")}>
-                    {userName}
+                    {userData.name}
                   </UserName>
                 </UserContainer>
               )}
@@ -127,13 +134,13 @@ const Header = () => {
                 <ClinicContainer>
                   <ProfileImage src={clinicImage} alt="Clínica" />
                   <UserName onClick={() => navigate("/perfil-clinica")}>
-                    {userName}
+                    {userData.name}
                   </UserName>
                 </ClinicContainer>
               )}
               <CoinsContainer>
                 <CoinIcon src={coin} alt="Moedas" />
-                <CoinCount>{userPoints || 0}</CoinCount>
+                <CoinCount>{userData.moedaCapiba || 0}</CoinCount>
               </CoinsContainer>
             </>
           ) : (
@@ -150,7 +157,7 @@ const Header = () => {
             <UserContainer>
               <ProfileImage src={userImage} alt="Usuário" />
               <UserName onClick={() => navigate("/perfil-user")}>
-                {userName}
+                {userData.name}
               </UserName>
             </UserContainer>
           )}
@@ -158,13 +165,13 @@ const Header = () => {
             <ClinicContainer>
               <ProfileImage src={clinicImage} alt="Clínica" />
               <UserName onClick={() => navigate("/perfil-clinica")}>
-                {userName}
+                {userData.name}
               </UserName>
             </ClinicContainer>
           )}
           <CoinsContainer>
             <CoinIcon src={coin} alt="Moedas" />
-            <CoinCount>{userPoints || 0}</CoinCount>
+            <CoinCount>{userData.moedaCapiba || 0}</CoinCount>
           </CoinsContainer>
         </UserSection>
       )}

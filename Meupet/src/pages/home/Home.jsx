@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
@@ -29,9 +29,31 @@ import {
   CapibaInfo,
 } from "./homeStyle";
 import Carrossel from "../../components/carrossel/carrossel";
+import { useUserData } from "../../hooks/useUserData";
 
 export function Home() {
   const navigate = useNavigate();
+  const { userData, isAuthenticated, setLoading } = useUserData();
+  const [shouldReload, setShouldReload] = useState(false);
+
+  useEffect(() => {
+    // Verifica se o userData está carregado
+    if (!isAuthenticated) {
+      setLoading(false);
+    } else if (userData && userData.name) {
+      setLoading(false); // Para de carregar assim que os dados estiverem prontos
+      console.log(userData);
+    } else if (!userData.name && !shouldReload) {
+      setShouldReload(true); // Sinaliza que a página precisa ser recarregada
+    }
+  }, [userData, isAuthenticated]);
+
+  // Recarrega a página uma vez, se necessário
+  useEffect(() => {
+    if (shouldReload) {
+      window.location.reload();
+    }
+  }, [shouldReload]);
 
   return (
     <Container>

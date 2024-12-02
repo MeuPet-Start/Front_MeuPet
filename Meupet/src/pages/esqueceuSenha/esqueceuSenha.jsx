@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import {
   Background,
   ForgotPasswordContainer,
@@ -20,6 +19,7 @@ import {
   Ptext,
 } from "./esqueceuSenhaStyle";
 import logoImage from "../../assets/logo.png";
+import { api } from "../../services/api";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const ForgotPassword = () => {
     }),
     onSubmit: async (values) => {
       try {
-        await axios.post("http://localhost:8080/api/v1/password-recovery/request", {
+        await api.post("/password-recovery/request", {
           email: values.email,
         });
         setIsSubmitted(true);
