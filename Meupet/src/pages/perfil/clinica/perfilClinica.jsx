@@ -8,6 +8,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
   Container,
+  ContainerHeader,
   ProfileSection,
   ProfileTitle,
   ProfileSubTitle,
@@ -41,11 +42,34 @@ const PerfilClinica = () => {
   const [image, setImage] = useState(UserImage);
   const [selectedTab, setSelectedTab] = useState("geral");
   const { userType, userEmail } = useUserType();
-  const { userName } = useUserData(userEmail);
+  const { userData } = useUserData(userEmail); // Usando o hook para pegar dados do usuário
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [photos, setPhotos] = useState([]);
 
-  console.log(userType)
+  const [userDataState, setUserDataState] = useState({
+    name: userData.name || "",
+    address: userData.street || "",  // Assumindo que street vai substituir address
+    contact: userData.phoneNumber || "",
+    email: userData.email || "",
+    about: "",  // Não há campo específico para isso
+    openingHours: "",  // Campo ainda não especificado no exemplo
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  
+  useEffect(() => {
+    if (userData) {
+      setUserDataState({
+        name: userData.name,
+        address: userData.street,
+        contact: userData.phoneNumber,
+        email: userData.email,
+        about: "",  
+        openingHours: "", // Se houver algum campo de horário de funcionamento, preencha aqui
+      });
+    }
+  }, [userData]);
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Nome da clínica é obrigatório"),
@@ -53,27 +77,19 @@ const PerfilClinica = () => {
     contact: Yup.string().required("Contato é obrigatório"),
     email: Yup.string().email("E-mail inválido").required("E-mail é obrigatório"),
     about: Yup.string(),
-    openingHours: Yup.string(),
+    openingHours: Yup.string().required("Horário de funcionamento é obrigatório"),
     password: Yup.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], "As senhas não combinam")
-        .when('password', {
-          is: val => (val && val.length > 0),
-          then: Yup.string().required('Confirme sua senha')
-        }),
-    })
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], "As senhas não combinam")
+      .when('password', {
+        is: val => (val && val.length > 0),
+        then: Yup.string().required('Confirme sua senha')
+      }),
+  });
 
   const formik = useFormik({
-    initialValues: {
-      name: "",
-      address: "",
-      contact: "",
-      email: "",
-      about: "",
-      openingHours: "",
-      newPassword: "",
-      confirmPassword: "",
-    },
+    enableReinitialize: true, // Isso permite que o Formik seja re-inicializado com os novos dados
+    initialValues: userDataState,
     validationSchema,
     onSubmit: async (values) => {
       try {
@@ -91,6 +107,7 @@ const PerfilClinica = () => {
       }
     },
   });
+
 
   useEffect(() => {
     // if (!userType || userType !== "clinic") { 
@@ -207,7 +224,9 @@ const PerfilClinica = () => {
 
   return (
     <Container>
-      <Header />
+      <ContainerHeader>
+        <Header />
+      </ContainerHeader>
       <ProfileSection>
         <ProfileSidebar>
           <ProfileImageContainer>
@@ -279,8 +298,7 @@ const PerfilClinica = () => {
                   name="name"
                   value={formik.values.name}
                   placeholder="Cemevet"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  {...formik.getFieldProps("name")}
                 />
                 {formik.touched.name && formik.errors.name && (
                   <ErrorText>{formik.errors.name}</ErrorText>
@@ -294,8 +312,7 @@ const PerfilClinica = () => {
                   name="address"
                   value={formik.values.address}
                   placeholder="Avenida Caxangá"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  {...formik.getFieldProps("address")}
                 />
                 {formik.touched.address && formik.errors.address && (
                   <ErrorText>{formik.errors.address}</ErrorText>
@@ -309,8 +326,7 @@ const PerfilClinica = () => {
                   name="contact"
                   value={formik.values.contact}
                   placeholder="(81) 98564-0002"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  {...formik.getFieldProps("contact")}
                 />
                 {formik.touched.contact && formik.errors.contact && (
                   <ErrorText>{formik.errors.contact}</ErrorText>
@@ -324,8 +340,7 @@ const PerfilClinica = () => {
                   name="email"
                   value={formik.values.email}
                   placeholder="contato@cemevet.com"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  {...formik.getFieldProps("email")}
                 />
                 {formik.touched.email && formik.errors.email && (
                   <ErrorText>{formik.errors.email}</ErrorText>
@@ -343,10 +358,26 @@ const PerfilClinica = () => {
                   name="about"
                   value={formik.values.about}
                   placeholder="Exemplo: Vacinação, consultas, castração, exames."
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  {...formik.getFieldProps("about")}
                 />
+              {formik.touched.about && formik.errors.about && (
+                    <ErrorText>{formik.errors.about}</ErrorText>
+                  )}
               </FormGroup>
+              <FormGroup>
+              <Label htmlFor="openingHours">Horário de Funcionamento</Label>
+                  <Input
+                    type="text"
+                    id="openingHours"
+                    name="openingHours"
+                    value={formik.values.openingHours}
+                    placeholder="Exemplo: Seg a Sex, 08:00 às 18:00"
+                    {...formik.getFieldProps("openingHours")}
+                  />
+                  {formik.touched.openingHours && formik.errors.openingHours && (
+                    <ErrorText>{formik.errors.openingHours}</ErrorText>
+                  )}
+            </FormGroup>
               <Button type="submit">Salvar Alterações</Button>
             </ProfileForm>
           )}
@@ -378,8 +409,7 @@ const PerfilClinica = () => {
                   id="password"
                   name="password"
                   value={formik.values.password}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  {...formik.getFieldProps("password")}
                   style={{ paddingRight: "1rem" }} 
                 />
                 {formik.touched.password && formik.errors.password && (
@@ -393,8 +423,7 @@ const PerfilClinica = () => {
                   id="confirmPassword"
                   name="confirmPassword"
                   value={formik.values.confirmPassword}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  {...formik.getFieldProps("confirmPassword")}
                   style={{ paddingRight: "1rem" }}
                 />
                 {formik.touched.confirmPassword && formik.errors.confirmPassword && (

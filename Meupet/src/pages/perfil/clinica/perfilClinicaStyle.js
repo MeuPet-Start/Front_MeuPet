@@ -12,6 +12,10 @@ export const Container = styled.div`
   justify-content: space-between;
 `;
 
+export const ContainerHeader = styled.div`
+    background-color: #fff;
+`;
+
 export const ProfileSection = styled.div`
   display: flex;
   background-color: #ffffff;
