@@ -19,9 +19,11 @@ import {
   SearchIconLeft,
   ContainerHeader,
 } from "./servicosStyle";
+import { api } from "../../services/api";
+import clinicImg from "../../assets/hovet.png"
 
 const Servicos = () => {
-  const [services, setServices] = useState([]);
+  const [clinic, setClinic] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
   const [filterTag, setFilterTag] = useState("");
   const [showAllServices, setShowAllServices] = useState(false);
@@ -35,9 +37,9 @@ const Servicos = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await api.get("/api/services"); // Ajuste a URL conforme o seu backend
-
-        setServices(response.data);
+        const response = await api.get("/agendamento/partner/servico"); // Ajuste a URL conforme o seu backend
+        console.log(response.data);
+        setClinic(response.data);
         setFilteredServices(response.data);
       } catch (error) {
         console.error("Erro ao buscar os serviços:", error);
@@ -51,8 +53,8 @@ const Servicos = () => {
     const { value } = event.target;
     setFilterTag(value);
 
-    const filtered = services.filter((service) =>
-      service.tags.some((tag) =>
+    const filtered = clinic.filter((clinic) =>
+      clinic.tags.some((tag) =>
         tag.toLowerCase().includes(value.toLowerCase())
       )
     );
@@ -90,19 +92,19 @@ const Servicos = () => {
             </SearchBarContainer>
           </SearchBarSection>
           <ServicesContainer>
-            {filteredServices
+            {clinic
               .slice(0, showAllServices ? filteredServices.length : 4)
-              .map((service) => (
+              .map((clinic) => (
                 <ServiceCard
-                  key={service.id}
-                  img={service.img}
-                  tags={service.tags}
-                  title={service.title}
-                  description={service.description}
+                  key={clinic.id}
+                  img={clinicImg}
+                  tags={clinic.servicoPrestados}
+                  title={clinic.name}
+                  description={clinic.description || "Endereço clínica"}
                   buttonLabel="Marcar Serviço"
-                  onClick={() => alert("Navegar para detalhes do serviço")}
+                  onClick={() => alert("Navegar para detalhes do serviço")} // Exemplo de ação
                 />
-              ))}
+            ))}
           </ServicesContainer>
 
           <ButtonService onClick={handleShowAllServices}>

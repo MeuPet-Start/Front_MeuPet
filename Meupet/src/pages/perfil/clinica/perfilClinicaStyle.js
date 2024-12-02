@@ -85,7 +85,7 @@ export const Input = styled.input`
   border-radius: 0.5rem; 
   border: 0.0625rem solid #ccc;
   font-size: 1rem;
-  color: #727171;
+  color: #000;
   outline: none;
 
   &:focus {

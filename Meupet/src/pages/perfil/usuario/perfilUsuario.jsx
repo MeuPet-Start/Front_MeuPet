@@ -135,6 +135,7 @@ const PerfilUsuario = () => {
     logout()
     alert("Você foi desconectado com sucesso!");
     navigate("/login");
+    window.location.reload();
   };
 
   const openDeleteModal = () => {
