@@ -7,6 +7,10 @@ export const Container = styled.div`
   min-height: 100vh;
 `;
 
+export const ContainerHeader = styled.div`
+    background-color: #fff;
+`;
+
 export const SectionHero = styled.section`
   background-color: #2e4d65;
   color: white;
