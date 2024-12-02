@@ -11,6 +11,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
   Container,
+  ContainerHeader,
   ProfileSection,
   ProfileTitle,
   ProfileSubTitle,
@@ -52,6 +53,11 @@ import { useUserData } from "../../../hooks/useUserData";
 
 const PerfilUsuario = () => {
   const navigate = useNavigate();
+  const [image, setImage] = useState(UserImage);
+  const [selectedTab, setSelectedTab] = useState("geral");
+  const { userType, userEmail } = useUserType();
+  const { userName } = useUserData(userEmail);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [userData, setUserData] = useState({
     name: "",
@@ -60,19 +66,6 @@ const PerfilUsuario = () => {
     email: "",
     birthDate: "", 
   });
-  const [image, setImage] = useState(UserImage);
-  const [selectedTab, setSelectedTab] = useState("geral");
-  const { userType, userEmail } = useUserType();
-  const { userName } = useUserData(userEmail);
-
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (!userType || userType !== "user") { 
-      alert("Você não tem permissão para acessar esta página.");
-      navigate("/login");
-    }
-  }, [userType, navigate]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -88,20 +81,26 @@ const PerfilUsuario = () => {
       }
     };
 
+    // useEffect(() => {
+  //   if (!userType || userType !== "clinica") { 
+  //     alert("Você não tem permissão para acessar esta página.");
+  //     navigate("/login");
+  //   }
+  // }, [userType, navigate]);
+
     fetchUserData();
   }, []);
 
   const formik = useFormik({
     initialValues: {
-      name: userData.name,
-      address: userData.address,
-      phone: userData.phone,
-      email: userData.email,
+      name: "",
+      address: "",
+      phone: "",
+      email: "",
       password: "",
       confirmPassword: "",
-      birthDate: userData.birthDate || "",
+      birthDate: "",
     },
-    
     validationSchema: Yup.object({
       name: Yup.string().required("Nome é obrigatório"),
       address: Yup.string().required("Endereço é obrigatório"),
@@ -117,6 +116,7 @@ const PerfilUsuario = () => {
         }),
     }),
     onSubmit: async (values) => {
+      setIsSubmitting(true); 
       try {
         const response = await axios.put("/api/userProfile", values);
         if (response.status === 200) {
@@ -126,6 +126,8 @@ const PerfilUsuario = () => {
       } catch (error) {
         console.error("Erro ao salvar os dados:", error);
         alert("Ocorreu um erro ao salvar os dados do usuário.");
+      } finally {
+        setIsSubmitting(false); // Finaliza o processo de envio
       }
     },
   });
@@ -151,12 +153,8 @@ const PerfilUsuario = () => {
     }
   };
 
-  const params = new URLSearchParams(location.search);
-  const Tab = params.get("tab");
-
-
   const handleTabClick = (tab) => {
-    setSelectedTab(tab) || setSelectedTab(Tab);
+    setSelectedTab(tab);
   };
 
   const handleLogoff = () => {
@@ -233,7 +231,9 @@ const PerfilUsuario = () => {
 
   return (
     <Container>
-      <Header />
+      <ContainerHeader>
+        <Header />
+      </ContainerHeader>
       <ProfileSection>
         <ProfileSidebar>
           <ProfileImageContainer>
@@ -293,8 +293,7 @@ const PerfilUsuario = () => {
                   name="name"
                   value={formik.values.name}
                   placeholder="Seu Nome"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  {...formik.getFieldProps("name")}
                 />
                 {formik.touched.name && formik.errors.name && (
                   <ErrorText>{formik.errors.name}</ErrorText>
@@ -308,8 +307,7 @@ const PerfilUsuario = () => {
                   name="address"
                   value={formik.values.address}
                   placeholder="Seu Endereço"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  {...formik.getFieldProps("address")}
                 />
                 {formik.touched.address && formik.errors.address && (
                   <ErrorText>{formik.errors.address}</ErrorText>
@@ -323,8 +321,7 @@ const PerfilUsuario = () => {
                   name="phone"
                   value={formik.values.phone}
                   placeholder="Seu Telefone"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  {...formik.getFieldProps("phone")}
                 />
                 {formik.touched.phone && formik.errors.phone && (
                   <ErrorText>{formik.errors.phone}</ErrorText>
@@ -338,8 +335,7 @@ const PerfilUsuario = () => {
                   name="email"
                   value={formik.values.email}
                   placeholder="Seu E-mail"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  {...formik.getFieldProps("email")}
                 />
                 {formik.touched.email && formik.errors.email && (
                   <ErrorText>{formik.errors.email}</ErrorText>
@@ -352,8 +348,7 @@ const PerfilUsuario = () => {
                   id="birthDate"
                   name="birthDate"
                   value={formik.values.birthDate}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  {...formik.getFieldProps("birthDate")}
                 />
                 {formik.touched.birthDate && formik.errors.birthDate && (
                   <ErrorText>{formik.errors.birthDate}</ErrorText>
@@ -393,7 +388,9 @@ const PerfilUsuario = () => {
                   <ErrorText>{formik.errors.confirmPassword}</ErrorText>
                 )}
               </FormGroup>
-              <Button type="submit">Salvar</Button>
+              <Button type="submit" disabled={formik.isSubmitting}>
+                {formik.isSubmitting ? "Salvando..." : "Salvar"}
+              </Button>
             </ProfileForm>
           )}
           

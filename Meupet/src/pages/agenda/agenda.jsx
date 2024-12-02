@@ -4,6 +4,7 @@ import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
 import {
   Container,
+  ContainerHeader,
   SectionHero,
   HeroContent,
   HeroTitle,
@@ -27,6 +28,7 @@ import {
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { useUserType } from "../../hooks/useUserType";
+import axios from 'axios';
 
 export function Agenda() {
   const navigate = useNavigate();
@@ -38,49 +40,31 @@ export function Agenda() {
   const [appointmentToCancel, setAppointmentToCancel] = useState(null);
   const { userType, userEmail } = useUserType();
 
-  useEffect(() => {
-    if (!userType || userType !== "clinica") { 
-      alert("Você não tem permissão para acessar esta página.");
-      navigate("/login");
+  // Verificar permissões de usuário
+  // useEffect(() => {
+  //   if (!userType || userType !== "clinica") { 
+  //     alert("Você não tem permissão para acessar esta página.");
+  //     navigate("/login");
+  //   }
+  // }, [userType, navigate]);
+
+  const fetchAppointments = async () => {
+    try {
+      const response = await axios.get('/api/appointments');
+      if (Array.isArray(response.data)) {
+        setAppointments(response.data);
+      } else {
+        console.error("A resposta da API não é um array:", response.data);
+        setAppointments([]); 
+      }
+    } catch (error) {
+      console.error("Erro ao buscar agendamentos:", error);
+      setAppointments([]); 
     }
-  }, [userType, navigate]);
+  };
+  
 
   useEffect(() => {
-    const fetchAppointments = async () => {
-      // Chamada para obter os dados do servidor
-      const simulatedAppointments = [
-        {
-          type: "Consulta",
-          name: "Maria Luiza",
-          date: "2024-11-30",
-          time: "9:00",
-          phone: "(81) 9983-7632",
-          status: "confirmado", 
-          id: 1, 
-        },
-        {
-          type: "Vacina",
-          name: "João Silva",
-          date: "2024-12-01",
-          time: "10:30",
-          phone: "(81) 9876-5432",
-          status: "confirmado", 
-          id: 2, 
-        },
-        {
-          type: "Tosa",
-          name: "Ana Clara",
-          date: "2024-12-02",
-          time: "14:00",
-          phone: "(81) 1234-5678",
-          status: "confirmado", 
-          id: 3, 
-        },
-      ];
-
-      setAppointments(simulatedAppointments);
-    };
-
     fetchAppointments();
   }, []);
 
@@ -106,9 +90,7 @@ export function Agenda() {
 
   const confirmCancel = async () => {
     try {
-      await fetch(`/api/appointments/${appointmentToCancel.id}`, {
-        method: 'DELETE',
-      });
+      await axios.delete(`/api/appointments/${appointmentToCancel.id}`); 
       setAppointments((prevAppointments) =>
         prevAppointments.map((app) =>
           app.id === appointmentToCancel.id ? { ...app, status: "cancelado" } : app
@@ -123,7 +105,9 @@ export function Agenda() {
 
   return (
     <Container>
-      <Header />
+       <ContainerHeader>
+        <Header />
+      </ContainerHeader>
       <SectionHero>
         <HeroContent>
           <HeroTitle>Agenda de Consultas</HeroTitle>
@@ -221,7 +205,6 @@ export function Agenda() {
           <ModalContent>
             <h2>Confirmação de Cancelamento</h2>
             <p>Tem certeza que deseja cancelar este agendamento?</p>
-            <p>Ao confirmar, o cliente será informado do cancelamento.</p>
             <ModalButtonContainer>
               <CancelButton onClick={confirmCancel}>Sim</CancelButton>
               <ConfirmButton onClick={() => setIsCancelModalOpen(false)}>Não</ConfirmButton>
