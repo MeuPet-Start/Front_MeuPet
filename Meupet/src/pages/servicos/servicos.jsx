@@ -19,46 +19,72 @@ import {
   SearchIconLeft,
   ContainerHeader,
 } from "./servicosStyle";
-import { api } from "../../services/api";
-import clinicImg from "../../assets/hovet.png"
+
+import { useLocation } from "react-router-dom";
 
 const Servicos = () => {
-  const [clinic, setClinic] = useState([]);
+  const { state } = useLocation();
+  const [services, setServices] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
-  const [filterTag, setFilterTag] = useState("");
+  const [filterTag, setFilterTag] = useState(state?.filterTag || "");
   const [showAllServices, setShowAllServices] = useState(false);
 
   useEffect(() => {
-    if (location.state?.filterTag) {
-      setFilterTag(location.state.filterTag);  
-    }
-  }, [location.state]);
+    const fetchedServices = [
+      {
+        id: 1,
+        img: "/path/to/image1.jpg",
+        tags: ["Urgente", "Popular"],
+        title: "Serviço 1",
+        description: "Descrição detalhada do serviço 1",
+      },
+      {
+        id: 2,
+        img: "/path/to/image2.jpg",
+        tags: ["Novo", "Promoção", "Popular", "Exclusivo", "Urgente"],
+        title: "Serviço 2",
+        description: "Descrição detalhada do serviço 2",
+      },
+      {
+        id: 3,
+        img: "/path/to/image3.jpg",
+        tags: ["Exclusivo"],
+        title: "Serviço 3",
+        description: "Descrição detalhada do serviço 3",
+      },
+      {
+        id: 4,
+        img: "/path/to/image3.jpg",
+        tags: ["Exclusivo"],
+        title: "Serviço 4",
+        description: "Descrição detalhada do serviço 4",
+      },
+      {
+        id: 5,
+        img: "/path/to/image3.jpg",
+        tags: ["Exclusivo"],
+        title: "Serviço 5",
+        description: "Descrição detalhada do serviço 5",
+      },
+    ];
+
+    setServices(fetchedServices);
+    setFilteredServices(fetchedServices);
+  }, []);
 
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await api.get("/agendamento/partner/servico"); // Ajuste a URL conforme o seu backend
-        console.log(response.data);
-        setClinic(response.data);
-        setFilteredServices(response.data);
-      } catch (error) {
-        console.error("Erro ao buscar os serviços:", error);
-      }
-    };
+    const filtered = services.filter((service) =>
+      service.tags.some((tag) =>
+        tag.toLowerCase().includes(filterTag.toLowerCase())
 
-    fetchServices();
-  }, []);
+      )
+    );
+    setFilteredServices(filtered);
+  }, [filterTag, services]);
 
   const handleFilterChange = (event) => {
     const { value } = event.target;
     setFilterTag(value);
-
-    const filtered = clinic.filter((clinic) =>
-      clinic.tags.some((tag) =>
-        tag.toLowerCase().includes(value.toLowerCase())
-      )
-    );
-    setFilteredServices(filtered);
   };
 
   const handleShowAllServices = () => {
