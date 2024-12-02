@@ -23,8 +23,8 @@ export const ServiceCardContainer = styled.div`
 `;
 
 export const ServiceCardImage = styled.img`
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
   border-radius: 10px;
   margin-right: 1rem;

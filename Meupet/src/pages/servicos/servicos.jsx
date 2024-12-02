@@ -19,6 +19,7 @@ import {
   SearchIconLeft,
   ContainerHeader,
 } from "./servicosStyle";
+
 import { useLocation } from "react-router-dom";
 
 const Servicos = () => {
@@ -75,6 +76,7 @@ const Servicos = () => {
     const filtered = services.filter((service) =>
       service.tags.some((tag) =>
         tag.toLowerCase().includes(filterTag.toLowerCase())
+
       )
     );
     setFilteredServices(filtered);
@@ -116,19 +118,19 @@ const Servicos = () => {
             </SearchBarContainer>
           </SearchBarSection>
           <ServicesContainer>
-            {filteredServices
+            {clinic
               .slice(0, showAllServices ? filteredServices.length : 4)
-              .map((service) => (
+              .map((clinic) => (
                 <ServiceCard
-                  key={service.id}
-                  img={service.img}
-                  tags={service.tags}
-                  title={service.title}
-                  description={service.description}
+                  key={clinic.id}
+                  img={clinicImg}
+                  tags={clinic.servicoPrestados}
+                  title={clinic.name}
+                  description={clinic.description || "Endereço clínica"}
                   buttonLabel="Marcar Serviço"
-                  onClick={() => alert("Navegar para detalhes do serviço")}
+                  onClick={() => alert("Navegar para detalhes do serviço")} // Exemplo de ação
                 />
-              ))}
+            ))}
           </ServicesContainer>
 
           <ButtonService onClick={handleShowAllServices}>

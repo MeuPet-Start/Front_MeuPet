@@ -35,6 +35,7 @@ import {
 } from "./perfilClinicaStyle";
 
 import { useUserData } from "../../../hooks/useUserData";
+import { api } from "../../../services/api";
 
 const PerfilClinica = () => {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ const PerfilClinica = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [photos, setPhotos] = useState([]);
 
-  const { userData } = useUserData()
+  const { userData, logout } = useUserData()
 
   const [dataState, setDataState] = useState({
     name: userData.name || "",
@@ -188,8 +189,10 @@ const PerfilClinica = () => {
 
   const handleLogoff = () => {
     localStorage.removeItem("jwtToken");
+    logout();
     alert("Você foi desconectado com sucesso!");
     navigate("/login");
+    window.location.reload();
   };
 
   const openDeleteModal = () => {
@@ -198,14 +201,16 @@ const PerfilClinica = () => {
 
   const confirmDeleteAccount = async () => {
     try {
-      const response = await axios.delete("/api/deleteAccount", {
+      const response = await api.delete("/partner", {
         headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-        data: { userId: formik.values.id },
+        params: { id: userData.id }
       });
       if (response.status === 200) {
         localStorage.removeItem("clinicProfile");
         alert("Conta deletada com sucesso.");
         navigate("/");
+        logout();
+        window.location.reload()
       } else {
         alert("Erro ao deletar conta. Tente novamente.");
       }
