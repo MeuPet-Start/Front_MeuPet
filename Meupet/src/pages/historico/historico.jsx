@@ -5,16 +5,21 @@ import { FaRegClock, FaMapMarkerAlt, FaRegCalendarAlt } from "react-icons/fa";
 import { Background, Container, Card, Categoria, Info, Image } from "./historicostyle";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
+import { useUserType } from "../../hooks/useUserType";
+import { useUserData } from "../../hooks/useUserData";
 
 
 
 const MinhasConsulta = () => {
   const [consultas, setConsultas] = useState([{}])
+  const { userEmail } = useUserType();
+  const { userId } = useUserData(userEmail);
 
+  console.log(userId)
 
   async function handleConsulta() {
-
-    const response = await api.get("/agendamento/atendimento/user/" + "73a07354-dfde-4088-8cb0-f98a5dfd6242");
+    
+    const response = await api.get(`/agendamento/atendimento/user/${userId}`);
 
     console.log(response.data);
     const filteredData = response.data.map((consulta) => ({

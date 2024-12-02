@@ -33,9 +33,10 @@ const Header = () => {
   const navigate = useNavigate();
   const { userType, userEmail } = useUserType();
   console.log("userEmail:" + userEmail)
-  const { userName, userPoints } = useUserData(userEmail);
+  const { userName, userPoints, userId } = useUserData(userEmail);
 
   console.log(userName)
+  console.log(userId)
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -76,7 +77,7 @@ const Header = () => {
           </NavLink>
           <NavLink onClick={() => navigate("/servicos")}>Serviços</NavLink>
           {userType === "user" && (
-            <NavLink onClick={() => navigate("/consultas")}>Consultas</NavLink>
+            <NavLink onClick={() => navigate("/historico")}>Consultas</NavLink>
           )}
           {userType === "clinic" && (
             <NavLink onClick={() => navigate("/consultas")}>Consultas</NavLink>

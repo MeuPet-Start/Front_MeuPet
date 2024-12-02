@@ -1,6 +1,6 @@
 // src/hooks/useUserData.js
 import { useState, useEffect } from "react";
-import axios from "axios"; 
+import { api } from "../services/api";
 
 export const useUserData = (userEmail) => {
   const [userData, setUserData] = useState({
@@ -15,13 +15,14 @@ export const useUserData = (userEmail) => {
       if (!userEmail) return;
 
       try {
-        const response = await axios.get("/authenticable", {
+        const response = await api.get("/authenticable", {
           params: { email: userEmail },
         });
 
         setUserData({
           userPoints: response.data.moedaCapiba || 0,  
-          userName: response.data.socialName || "Usuário", 
+          userName: response.data.name || "Usuário",
+          userId: response.data.id,
           error: null,
         });
       } catch (error) {
@@ -29,7 +30,7 @@ export const useUserData = (userEmail) => {
           ...userData,
           error: "Erro ao carregar os dados do usuário",
         });
-        console.error("Erro ao buscar dados do usuário:", error);
+        console.error(error);
       }
     };
 

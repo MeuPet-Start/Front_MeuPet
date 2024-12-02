@@ -45,6 +45,8 @@ const PerfilClinica = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [photos, setPhotos] = useState([]);
 
+  console.log(userType)
+
   const validationSchema = Yup.object({
     name: Yup.string().required("Nome da clínica é obrigatório"),
     address: Yup.string().required("Endereço é obrigatório"),
@@ -91,10 +93,10 @@ const PerfilClinica = () => {
   });
 
   useEffect(() => {
-    if (!userType || userType !== "clinica") { 
-      alert("Você não tem permissão para acessar esta página.");
-      navigate("/login");
-    }
+    // if (!userType || userType !== "clinic") { 
+      // alert("Você não tem permissão para acessar esta página.");
+      // navigate("/login");
+    // }
   }, [userType, navigate]);
 
   useEffect(() => {
