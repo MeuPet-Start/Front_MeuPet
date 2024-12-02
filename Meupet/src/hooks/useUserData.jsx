@@ -1,15 +1,26 @@
-// src/hooks/useUserData.js
 import { useState, useEffect } from "react";
 import axios from "axios"; 
+import { useUserType } from "./useUserType";
 
 export const useUserData = (userEmail) => {
   const [userData, setUserData] = useState({
-    userPoints: 0,
-    userName: "",
-    userId: "",
+    id: "",
+    name: "",
+    socialName: "",
+    email: "",
+    phoneNumber: "",
+    document: "",
+    documentType: "",
+    dateOfBirth: "",
+    moedaCapiba: 0,
+    street: null,
+    neighborhood: null,
+    city: null,
+    cep: null,
     error: null,
   });
 
+  const { userType } = useUserType();
   useEffect(() => {
     const fetchUserData = async () => {
       if (!userEmail) return;
@@ -19,11 +30,32 @@ export const useUserData = (userEmail) => {
           params: { email: userEmail },
         });
 
-        setUserData({
-          userPoints: response.data.moedaCapiba || 0,  
-          userName: response.data.socialName || "Usuário", 
-          error: null,
-        });
+        const data = response.data;
+
+        
+        if (userType === "user" || userType === "clinic") {
+          setUserData({
+            id: data.id || "",
+            name: data.name || "",
+            socialName: data.socialName || "Usuário",
+            email: data.email || "",
+            phoneNumber: data.phoneNumber || "",
+            document: data.document || "",
+            documentType: data.documentType || "",
+            dateOfBirth: data.dateOfBirth || "",
+            moedaCapiba: data.moedaCapiba || 0,
+            street: data.street || null,
+            neighborhood: data.neighborhood || null,
+            city: data.city || null,
+            error: null,
+          });
+        } else {
+          
+          setUserData({
+            ...userData,
+            error: "Tipo de documento inválido ou não encontrado",
+          });
+        }
       } catch (error) {
         setUserData({
           ...userData,
@@ -34,7 +66,7 @@ export const useUserData = (userEmail) => {
     };
 
     fetchUserData();
-  }, [userEmail]); 
+  }, [userEmail]);
 
   return userData;
 };

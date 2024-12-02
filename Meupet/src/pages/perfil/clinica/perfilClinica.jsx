@@ -42,49 +42,34 @@ const PerfilClinica = () => {
   const [image, setImage] = useState(UserImage);
   const [selectedTab, setSelectedTab] = useState("geral");
   const { userType, userEmail } = useUserType();
-  const { userName } = useUserData(userEmail);
+  const { userData } = useUserData(userEmail); // Usando o hook para pegar dados do usuário
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [photos, setPhotos] = useState([]);
 
-  const [userData, setUserData] = useState({
-    name: "",
-    address: "",
-    contact: "",
-    email: "",
-    about: "",
-    openingHours: "",
+  const [userDataState, setUserDataState] = useState({
+    name: userData.name || "",
+    address: userData.street || "",  // Assumindo que street vai substituir address
+    contact: userData.phoneNumber || "",
+    email: userData.email || "",
+    about: "",  // Não há campo específico para isso
+    openingHours: "",  // Campo ainda não especificado no exemplo
     newPassword: "",
     confirmPassword: "",
   });
 
+  
   useEffect(() => {
-    const fetchClinicData = async () => {
-      try {
-        const response = await axios.get("/api/clinicProfile", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-        });
-        formik.setValues(response.data);
-        if (response.data.image) {
-          setImage(response.data.image);
-        }
-        if (response.data.photos) {
-          setPhotos(response.data.photos);
-        }
-      } catch (error) {
-        console.error("Erro ao carregar os dados da clínica:", error);
-        alert("Não foi possível carregar os dados da clínica.");
-      }
-    };
-
-     // useEffect(() => {
-  //   if (!userType || userType !== "clinica") { 
-  //     alert("Você não tem permissão para acessar esta página.");
-  //     navigate("/login");
-  //   }
-  // }, [userType, navigate]);
-
-    fetchClinicData();
-  }, []);
+    if (userData) {
+      setUserDataState({
+        name: userData.name,
+        address: userData.street,
+        contact: userData.phoneNumber,
+        email: userData.email,
+        about: "",  
+        openingHours: "", // Se houver algum campo de horário de funcionamento, preencha aqui
+      });
+    }
+  }, [userData]);
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Nome da clínica é obrigatório"),
@@ -93,27 +78,18 @@ const PerfilClinica = () => {
     email: Yup.string().email("E-mail inválido").required("E-mail é obrigatório"),
     about: Yup.string(),
     openingHours: Yup.string().required("Horário de funcionamento é obrigatório"),
-    openingHours: Yup.string(),
     password: Yup.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], "As senhas não combinam")
-        .when('password', {
-          is: val => (val && val.length > 0),
-          then: Yup.string().required('Confirme sua senha')
-        }),
-    })
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], "As senhas não combinam")
+      .when('password', {
+        is: val => (val && val.length > 0),
+        then: Yup.string().required('Confirme sua senha')
+      }),
+  });
 
   const formik = useFormik({
-    initialValues: {
-      name: "",
-      address: "",
-      contact: "",
-      email: "",
-      about: "",
-      openingHours: "",
-      newPassword: "",
-      confirmPassword: "",
-    },
+    enableReinitialize: true, // Isso permite que o Formik seja re-inicializado com os novos dados
+    initialValues: userDataState,
     validationSchema,
     onSubmit: async (values) => {
       try {
