@@ -64,9 +64,54 @@ const PerfilUsuario = () => {
     phoneNumber: userData.phoneNumber || "",
     birthDate: userData.dateOfBirth || "", 
     newPassword: "",
-    confirmPassword: "",
+    confirmPassword: ""
   });
 
+  const handleUserUpdate = async (values) => {
+    try {
+      const response = await api.patch(`/user/${userData.id}`, {
+        name: values.name,
+        socialName: values.socialName,
+        phoneNumber: values.phoneNumber,
+        dateOfBirth: values.birthDate,
+      });
+  
+      if (response.status === 200) {
+        alert("Dados do usuário atualizados com sucesso!");
+        fetchUserData(); // Recarrega os dados do usuário, se necessário
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar os dados do usuário:", error);
+      alert("Erro ao salvar os dados do usuário.");
+    }
+  };
+  
+  const handlePasswordChange = async (values) => {
+    if (
+      values.newPassword === values.confirmPassword &&
+      values.newPassword !== null &&
+      values.newPassword !== ""
+    ) {
+      try {
+        const response = await api.patch(
+          `/authenticable/changePassword`,
+          { password: values.newPassword },
+          {
+            params: { id: userData.id },
+          }
+        );
+  
+        if (response.status === 200) {
+          alert("Senha alterada com sucesso!");
+        }
+      } catch (error) {
+        console.error("Erro ao alterar a senha:", error);
+        alert("Erro ao alterar a senha.");
+      }
+    } else if (values.newPassword) {
+      alert("As senhas não combinam!");
+    }
+  };
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -76,31 +121,22 @@ const PerfilUsuario = () => {
       socialName: Yup.string().required("Nome social é obrigatório"),
       phoneNumber: Yup.string().required("Telefone é obrigatório"),
       birthDate: Yup.date().nullable().required("Data de nascimento é obrigatória"),
-      password: Yup.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+      newPassword: Yup.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], "As senhas não combinam")
-        .when('password', {
+        .oneOf([Yup.ref('newPassword'), null], "As senhas não combinam")
+        .when('newPassword', {
           is: val => (val && val.length > 0),
           then: Yup.string().required('Confirme sua senha')
         }),
     }),
     onSubmit: async (values) => {
-      setIsSubmitting(true); 
+      setIsSubmitting(true); // Ativa o estado de envio
       try {
-        console.log(dataState)
-        const response = await api.patch(`/user/${userData.id}`, dataState);
-        if (response.status === 200) {
-          alert("Dados salvos com sucesso!");
-  
-          // Atualize os dados do estado userData e dataState após sucesso
-          // setDataState(values);  // Atualiza dataState com os novos dados
-          fetchUserData(); // Recarrega os dados do usuário, se necessário
-        }
-      } catch (error) {
-        console.error("Erro ao salvar os dados:", error);
-        alert("Ocorreu um erro ao salvar os dados do usuário.");
+        // Realiza as duas operações separadamente
+        await handleUserUpdate(values); // Atualiza dados do usuário
+        await handlePasswordChange(values); // Atualiza senha, se necessário
       } finally {
-        setIsSubmitting(false); // Finaliza o processo de envio
+        setIsSubmitting(false); // Desativa o estado de envio
       }
     },
   });
@@ -301,7 +337,7 @@ const PerfilUsuario = () => {
                 <Label htmlFor="phoneNumber">Telefone</Label>
                 <Input
                   type="text"
-                  id="phophoneNumberne"
+                  id="phophoneNumber"
                   name="phoneNumber"
                   value={formik.values.phoneNumber}
                   placeholder="Seu Telefone"

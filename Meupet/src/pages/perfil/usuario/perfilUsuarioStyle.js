@@ -131,7 +131,7 @@ export const Button = styled.button`
 
 
 export const ProfileSidebar = styled.div`
-  padding: rem;
+  padding: 1rem;
 `;
 
 export const SidebarUsarnameTitle = styled.h2`
@@ -139,6 +139,9 @@ export const SidebarUsarnameTitle = styled.h2`
   font-size: 1.2rem;
   margin-bottom: 1rem;
   color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const SidebarItem = styled.div`
@@ -398,14 +401,14 @@ export const BalanceContainer = styled.div`
   padding: 1rem;
   background-color: #f8f8f8;
   border-radius: 0.rem;
-  0rem 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  /* 0rem 0.125rem 0.25rem rgba(0, 0, 0, 0.1); */
 `;
 
 export const BalanceText = styled.p`
   margin-left: 1.5rem;
   font-size: 1.2rem;
   color: #454545;
-  margin: ;
+  /* margin: ; */
 `;
 
 export const BalanceAmount = styled.span`

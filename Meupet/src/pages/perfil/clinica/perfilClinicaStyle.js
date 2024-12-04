@@ -136,6 +136,9 @@ export const SidebarUsernameTitle = styled.h2`
   font-size: 1.2rem;
   margin-bottom: 1rem;
   color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const SidebarItem = styled.div`

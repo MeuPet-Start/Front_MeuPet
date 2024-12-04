@@ -43,8 +43,8 @@ const PerfilClinica = () => {
   const [selectedTab, setSelectedTab] = useState("geral");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [photos, setPhotos] = useState([]);
-
-  const { userData, logout } = useUserData()
+  const { userData, logout, fetchUserData } = useUserData()
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [dataState, setDataState] = useState({
     name: userData.name || "",
@@ -57,6 +57,51 @@ const PerfilClinica = () => {
     confirmPassword: "",
   });
 
+  const handleClinicUpdate = async (values) => {
+    try {
+      const response = await api.patch(`/partner/${userData.id}`, {
+        name: values.name,
+        phoneNumber: values.contact,
+        dateOfBirth: values.birthDate,
+      });
+  
+      if (response.status === 200) {
+        alert("Dados do usuário atualizados com sucesso!");
+        fetchUserData(); // Recarrega os dados do usuário, se necessário
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar os dados do usuário:", error);
+      alert("Erro ao salvar os dados do usuário.");
+    }
+  };
+  
+  const handlePasswordChange = async (values) => {
+    if (
+      values.newPassword === values.confirmPassword &&
+      values.newPassword !== null &&
+      values.newPassword !== ""
+    ) {
+      try {
+        const response = await api.patch(
+          `/authenticable/changePassword`,
+          { password: values.newPassword },
+          {
+            params: { id: userData.id },
+          }
+        );
+  
+        if (response.status === 200) {
+          alert("Senha alterada com sucesso!");
+        }
+      } catch (error) {
+        console.error("Erro ao alterar a senha:", error);
+        alert("Erro ao alterar a senha.");
+      }
+    } else if (values.newPassword) {
+      alert("As senhas não combinam!");
+    }
+  };
+
   
   useEffect(() => {
     if (userData) {
@@ -64,7 +109,6 @@ const PerfilClinica = () => {
         name: userData.name,
         address: userData.street,
         contact: userData.phoneNumber,
-        email: userData.email,
         about: "",
         openingHours: "", // Se houver algum campo de horário de funcionamento, preencha aqui
       });
@@ -75,16 +119,15 @@ const PerfilClinica = () => {
     name: Yup.string().required("Nome da clínica é obrigatório"),
     address: Yup.string().required("Endereço é obrigatório"),
     contact: Yup.string().required("Contato é obrigatório"),
-    email: Yup.string().email("E-mail inválido").required("E-mail é obrigatório"),
-    about: Yup.string(),
-    openingHours: Yup.string().required("Horário de funcionamento é obrigatório"),
-    password: Yup.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], "As senhas não combinam")
-      .when('password', {
-        is: val => (val && val.length > 0),
-        then: Yup.string().required('Confirme sua senha')
-      }),
+    // about: Yup.string(),
+    // openingHours: Yup.string().required("Horário de funcionamento é obrigatório"),
+    // password: Yup.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+    // confirmPassword: Yup.string()
+    //   .oneOf([Yup.ref('password'), null], "As senhas não combinam")
+    //   .when('password', {
+    //     is: val => (val && val.length > 0),
+    //     then: Yup.string().required('Confirme sua senha')
+    //   }),
   });
 
   const formik = useFormik({
@@ -93,17 +136,12 @@ const PerfilClinica = () => {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await axios.put("/api/clinicProfile", values, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-        });
-        if (response.status === 200) {
-          alert("Dados salvos com sucesso!");
-        } else {
-          alert("Erro ao salvar os dados. Tente novamente.");
-        }
-      } catch (error) {
-        console.error("Erro ao salvar os dados:", error);
-        alert("Ocorreu um erro ao salvar os dados da clínica.");
+        console.log(values)
+        // Realiza as duas operações separadamente
+        await handleClinicUpdate(values); // Atualiza dados do usuário
+        // await handlePasswordChange(values); // Atualiza senha, se necessário
+      } finally {
+        setIsSubmitting(false); // Desativa o estado de envio
       }
     },
   });
@@ -330,20 +368,6 @@ const PerfilClinica = () => {
                 />
                 {formik.touched.contact && formik.errors.contact && (
                   <ErrorText>{formik.errors.contact}</ErrorText>
-                )}
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="email">E-mail</Label>
-                <Input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formik.values.email}
-                  placeholder="contato@cemevet.com"
-                  {...formik.getFieldProps("email")}
-                />
-                {formik.touched.email && formik.errors.email && (
-                  <ErrorText>{formik.errors.email}</ErrorText>
                 )}
               </FormGroup>
               <Button type="submit">Salvar Alterações</Button>
