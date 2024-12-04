@@ -32,6 +32,7 @@ import {
   CancelButton,
   ConfirmButton,
   ErrorText,
+  Select,
 } from "./perfilClinicaStyle";
 
 import { useUserData } from "../../../hooks/useUserData";
@@ -43,16 +44,16 @@ const PerfilClinica = () => {
   const [selectedTab, setSelectedTab] = useState("geral");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [photos, setPhotos] = useState([]);
-  const { userData, logout, fetchUserData } = useUserData()
+  const { userData, logout, fetchUserData } = useUserData();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [dataState, setDataState] = useState({
     name: userData.name || "",
-    address: userData.street || "",  // Assumindo que street vai substituir address
+    address: userData.street || "", // Assumindo que street vai substituir address
     contact: userData.phoneNumber || "",
     email: userData.email || "",
-    about: "",  // Não há campo específico para isso
-    openingHours: "",  // Campo ainda não especificado no exemplo
+    servicosPrestados: [],
+    openingHours: "", // Campo ainda não especificado no exemplo
     newPassword: "",
     confirmPassword: "",
   });
@@ -62,9 +63,12 @@ const PerfilClinica = () => {
       const response = await api.patch(`/partner/${userData.id}`, {
         name: values.name,
         phoneNumber: values.contact,
-        dateOfBirth: values.birthDate,
+        street: values.address,
+        services: values.servicosPrestados,
+        openingHour: values.openingHour,
+        closingHour: values.closingHour,
       });
-  
+
       if (response.status === 200) {
         alert("Dados do usuário atualizados com sucesso!");
         fetchUserData(); // Recarrega os dados do usuário, se necessário
@@ -74,72 +78,63 @@ const PerfilClinica = () => {
       alert("Erro ao salvar os dados do usuário.");
     }
   };
-  
-  const handlePasswordChange = async (values) => {
-    if (
-      values.newPassword === values.confirmPassword &&
-      values.newPassword !== null &&
-      values.newPassword !== ""
-    ) {
-      try {
-        const response = await api.patch(
-          `/authenticable/changePassword`,
-          { password: values.newPassword },
-          {
-            params: { id: userData.id },
-          }
-        );
-  
-        if (response.status === 200) {
-          alert("Senha alterada com sucesso!");
-        }
-      } catch (error) {
-        console.error("Erro ao alterar a senha:", error);
-        alert("Erro ao alterar a senha.");
-      }
-    } else if (values.newPassword) {
-      alert("As senhas não combinam!");
-    }
-  };
 
-  
   useEffect(() => {
     if (userData) {
       setDataState({
         name: userData.name,
         address: userData.street,
         contact: userData.phoneNumber,
-        about: "",
-        openingHours: "", // Se houver algum campo de horário de funcionamento, preencha aqui
+        servicosPrestados: userData.services || [],
+        openingHours: "",
       });
     }
   }, [userData]);
 
-  const validationSchema = Yup.object({
-    name: Yup.string().required("Nome da clínica é obrigatório"),
-    address: Yup.string().required("Endereço é obrigatório"),
-    contact: Yup.string().required("Contato é obrigatório"),
-    // about: Yup.string(),
-    // openingHours: Yup.string().required("Horário de funcionamento é obrigatório"),
-    // password: Yup.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-    // confirmPassword: Yup.string()
-    //   .oneOf([Yup.ref('password'), null], "As senhas não combinam")
-    //   .when('password', {
-    //     is: val => (val && val.length > 0),
-    //     then: Yup.string().required('Confirme sua senha')
-    //   }),
-  });
+  const generateValidationSchema = (tab) => {
+    switch (tab) {
+      case "geral":
+        return Yup.object({
+          name: Yup.string().required("Nome da clínica é obrigatório"),
+          address: Yup.string().required("Endereço é obrigatório"),
+          contact: Yup.string().required("Contato é obrigatório"),
+        });
+
+      case "sobre":
+        return Yup.object({
+          servicosPrestados: Yup.array().min(
+            1,
+            "Selecione pelo menos um serviço."
+          ),
+          openingHour: Yup.string().required(
+            "Horário de abertura é obrigatório"
+          ),
+          closingHour: Yup.string().required(
+            "Horário de fechamento é obrigatório"
+          ),
+        });
+
+      case "seguranca":
+        return Yup.object({
+          password: Yup.string().required("Nova senha é obrigatória"),
+          confirmPassword: Yup.string()
+            .oneOf([Yup.ref("password"), null], "As senhas não coincidem")
+            .required("Confirmação de senha é obrigatória"),
+        });
+
+      default:
+        return Yup.object({});
+    }
+  };
 
   const formik = useFormik({
-    enableReinitialize: true, // Isso permite que o Formik seja re-inicializado com os novos dados
+    enableReinitialize: true,
     initialValues: dataState,
-    validationSchema,
+    validationSchema: generateValidationSchema(selectedTab),
     onSubmit: async (values) => {
       try {
-        console.log(values)
-        // Realiza as duas operações separadamente
-        await handleClinicUpdate(values); // Atualiza dados do usuário
-        // await handlePasswordChange(values); // Atualiza senha, se necessário
+        console.log(values);
+        await handleClinicUpdate(values);
       } finally {
         setIsSubmitting(false); // Desativa o estado de envio
       }
@@ -147,30 +142,8 @@ const PerfilClinica = () => {
   });
 
   useEffect(() => {
-    // Re-inicializa os valores do Formik com os dados mais recentes
     formik.setValues(dataState);
   }, []);
-
-  // useEffect(() => {
-  //   const fetchClinicData = async () => {
-  //     try {
-  //       const response = await axios.get("/api/clinicProfile", {
-  //         headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-  //       });
-  //       formik.setValues(response.data);
-  //       if (response.data.image) {
-  //         setImage(response.data.image);
-  //       }
-  //       if (response.data.photos) {
-  //         setPhotos(response.data.photos);
-  //       }
-  //     } catch (error) {
-  //       console.error("Erro ao carregar os dados da clínica:", error);
-  //       alert("Não foi possível carregar os dados da clínica.");
-  //     }
-  //   };
-  //   fetchClinicData();
-  // }, []);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -180,9 +153,15 @@ const PerfilClinica = () => {
         const base64Image = reader.result;
         setImage(base64Image);
         try {
-          const response = await axios.put("/api/clinicProfile/image", { image: base64Image }, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-          });
+          const response = await axios.put(
+            "/api/clinicProfile/image",
+            { image: base64Image },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+              },
+            }
+          );
           if (response.status === 200) {
             alert("Imagem alterada com sucesso!");
           } else {
@@ -191,30 +170,6 @@ const PerfilClinica = () => {
         } catch (error) {
           console.error("Erro ao salvar a imagem:", error);
           alert("Ocorreu um erro ao salvar a imagem.");
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handlePhotoUpload = async (e) => {
-    const files = Array.from(e.target.files);
-    const uploadedPhotos = [];
-
-    for (const file of files) {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64Image = reader.result;
-        uploadedPhotos.push(base64Image);
-        setPhotos((prevPhotos) => [...prevPhotos, base64Image]);
-
-        try {
-          await axios.post("/api/clinicProfile/photos", { image: base64Image }, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-          });
-        } catch (error) {
-          console.error("Erro ao enviar a foto:", error);
-          alert("Erro ao enviar a foto. Tente novamente.");
         }
       };
       reader.readAsDataURL(file);
@@ -240,21 +195,25 @@ const PerfilClinica = () => {
   const confirmDeleteAccount = async () => {
     try {
       const response = await api.delete("/partner", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwtToken")}` },
-        params: { id: userData.id }
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+        params: { id: userData.id },
       });
       if (response.status === 200) {
         localStorage.removeItem("clinicProfile");
         alert("Conta deletada com sucesso.");
         navigate("/");
         logout();
-        window.location.reload()
+        window.location.reload();
       } else {
         alert("Erro ao deletar conta. Tente novamente.");
       }
     } catch (error) {
       console.error("Erro ao deletar a conta:", error);
-      alert("Houve um erro ao tentar deletar a conta. Tente novamente mais tarde.");
+      alert(
+        "Houve um erro ao tentar deletar a conta. Tente novamente mais tarde."
+      );
     } finally {
       setIsDeleteModalOpen(false);
     }
@@ -296,12 +255,6 @@ const PerfilClinica = () => {
             Sobre a Clínica
           </SidebarItem>
           <SidebarItem
-            isSelected={selectedTab === "fotos"}
-            onClick={() => handleTabClick("fotos")}
-          >
-            Fotos
-          </SidebarItem>
-          <SidebarItem
             isSelected={selectedTab === "seguranca"}
             onClick={() => handleTabClick("seguranca")}
           >
@@ -324,7 +277,8 @@ const PerfilClinica = () => {
         <ProfileTabContent>
           <ProfileTitle>Dados da Clínica</ProfileTitle>
           <ProfileSubTitle>
-            Preencha os seguintes campos para <strong>atualizar</strong> os dados.
+            Preencha os seguintes campos para <strong>atualizar</strong> os
+            dados.
           </ProfileSubTitle>
           {selectedTab === "geral" && (
             <ProfileForm onSubmit={formik.handleSubmit}>
@@ -376,86 +330,84 @@ const PerfilClinica = () => {
           {selectedTab === "sobre" && (
             <ProfileForm onSubmit={formik.handleSubmit}>
               <FormGroup>
-                <Label htmlFor="about">Serviços Oferecidos</Label>
-                <Textarea
-                  id="about"
-                  name="about"
-                  value={formik.values.about}
-                  placeholder="Exemplo: Vacinação, consultas, castração, exames."
-                  {...formik.getFieldProps("about")}
-                />
-              {formik.touched.about && formik.errors.about && (
-                    <ErrorText>{formik.errors.about}</ErrorText>
+                <Label htmlFor="servicosPrestados">Serviços Oferecidos</Label>
+                <div>
+                  {[
+                    { value: "castracao", label: "Castração" },
+                    { value: "vacinas", label: "Vacinas" },
+                    { value: "petShop", label: "Pet Shop" },
+                    { value: "tosaBanho", label: "Tosa e Banho" },
+                    { value: "exames", label: "Exames" },
+                    { value: "cirurgias", label: "Cirurgias" },
+                    { value: "emergencias", label: "Emergências" },
+                    { value: "nutricionista", label: "Nutricionista" },
+                    {
+                      value: "cuidadosGeriatricos",
+                      label: "Cuidados Geriátricos",
+                    },
+                  ].map((service) => (
+                    <div key={service.value}>
+                      <input
+                        type="checkbox"
+                        id={service.value}
+                        name="servicosPrestados"
+                        value={service.value}
+                        checked={formik.values.servicosPrestados.includes(
+                          service.value
+                        )}
+                        onChange={formik.handleChange}
+                      />
+                      <Label htmlFor={service.value}>{service.label}</Label>
+                    </div>
+                  ))}
+                </div>
+                {formik.touched.servicosPrestados &&
+                  formik.errors.servicosPrestados && (
+                    <ErrorText>{formik.errors.servicosPrestados}</ErrorText>
                   )}
               </FormGroup>
+
               <FormGroup>
-              <Label htmlFor="openingHours">Horário de Funcionamento</Label>
-                  <Input
-                    type="text"
-                    id="openingHours"
-                    name="openingHours"
-                    value={formik.values.openingHours}
-                    placeholder="Exemplo: Seg a Sex, 08:00 às 18:00"
-                    {...formik.getFieldProps("openingHours")}
-                  />
-                  {formik.touched.openingHours && formik.errors.openingHours && (
-                    <ErrorText>{formik.errors.openingHours}</ErrorText>
-                  )}
-            </FormGroup>
+                <Label htmlFor="openingHours">Horário de Abertura</Label>
+                <Input
+                  type="time"
+                  id="openingHour"
+                  name="openingHour"
+                  value={formik.values.openingHour}
+                  {...formik.getFieldProps("openingHour")}
+                />
+                {formik.touched.openingHour && formik.errors.openingHour && (
+                  <ErrorText>{formik.errors.openingHour}</ErrorText>
+                )}
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor="openingHours">Horário de Fechamento</Label>
+                <Input
+                  type="time"
+                  id="closingHour"
+                  name="closingHour"
+                  value={formik.values.closingHour}
+                  {...formik.getFieldProps("closingHour")}
+                />
+
+                {formik.touched.closingHour && formik.errors.closingHour && (
+                  <ErrorText>{formik.errors.closingHour}</ErrorText>
+                )}
+              </FormGroup>
+
               <Button type="submit">Salvar Alterações</Button>
             </ProfileForm>
           )}
-          {selectedTab === "fotos" && (
-            <ProfileForm>
-              <FormGroup>
-                <Label htmlFor="photos">Adicionar Fotos</Label>
-                <Input
-                  type="file"
-                  id="photos"
-                  accept="image/*"
-                  multiple
-                  onChange={handlePhotoUpload}
-                />
-              </FormGroup>
-              <div>
-                {photos.map((photo, index) => (
-                  <img key={index} src={photo} alt="Foto da Clínica" style={{ width: '100px', margin: '10px' }} />
-                ))}
-              </div>
-            </ProfileForm>
-          )}
           {selectedTab === "seguranca" && (
-            <ProfileForm onSubmit={formik.handleSubmit}>
-             <FormGroup>
-                <Label htmlFor="password">Nova Senha</Label>
-                <Input
-                  type={formik.values.showPassword ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  value={formik.values.password}
-                  {...formik.getFieldProps("password")}
-                  style={{ paddingRight: "1rem" }} 
-                />
-                {formik.touched.password && formik.errors.password && (
-                  <ErrorText>{formik.errors.password}</ErrorText>
-                )}
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="confirmPassword">Confirmação de Senha</Label>
-                <Input
-                  type={formik.values.showConfirmPassword ? "text" : "password"}
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formik.values.confirmPassword}
-                  {...formik.getFieldProps("confirmPassword")}
-                  style={{ paddingRight: "1rem" }}
-                />
-                {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                  <ErrorText>{formik.errors.confirmPassword}</ErrorText>
-                )}
-              </FormGroup>
-              <Button type="submit">Alterar Senha</Button>
-            </ProfileForm>
+            <Button
+              onClick={() => {
+                logout();
+                navigate("/cadastro");
+                window.location.reload();
+              }}
+            >
+              Alterar Senha
+            </Button>
           )}
         </ProfileTabContent>
       </ProfileSection>
@@ -463,10 +415,17 @@ const PerfilClinica = () => {
         <Modal isOpen={isDeleteModalOpen}>
           <ModalContent>
             <h2>Você está prestes a deletar sua conta.</h2>
-            <p>Tem certeza de que deseja deletar sua conta? Esta ação é irreversível.</p>
+            <p>
+              Tem certeza de que deseja deletar sua conta? Esta ação é
+              irreversível.
+            </p>
             <ModalButtonContainer>
-              <CancelButton onClick={() => setIsDeleteModalOpen(false)}>Cancelar</CancelButton>
-              <ConfirmButton onClick={confirmDeleteAccount}>Confirmar</ConfirmButton>
+              <CancelButton onClick={() => setIsDeleteModalOpen(false)}>
+                Cancelar
+              </CancelButton>
+              <ConfirmButton onClick={confirmDeleteAccount}>
+                Confirmar
+              </ConfirmButton>
             </ModalButtonContainer>
           </ModalContent>
         </Modal>

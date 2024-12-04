@@ -62,9 +62,10 @@ const PerfilUsuario = () => {
     name: userData.name || "",
     socialName: userData.socialName || "",
     phoneNumber: userData.phoneNumber || "",
-    birthDate: userData.dateOfBirth || "", 
+    birthDate: userData.dateOfBirth || "",
+    moedaCapiba: userData.moedaCapiba,
     newPassword: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   const handleUserUpdate = async (values) => {
@@ -75,7 +76,7 @@ const PerfilUsuario = () => {
         phoneNumber: values.phoneNumber,
         dateOfBirth: values.birthDate,
       });
-  
+
       if (response.status === 200) {
         alert("Dados do usuário atualizados com sucesso!");
         fetchUserData(); // Recarrega os dados do usuário, se necessário
@@ -85,7 +86,7 @@ const PerfilUsuario = () => {
       alert("Erro ao salvar os dados do usuário.");
     }
   };
-  
+
   const handlePasswordChange = async (values) => {
     if (
       values.newPassword === values.confirmPassword &&
@@ -100,7 +101,7 @@ const PerfilUsuario = () => {
             params: { id: userData.id },
           }
         );
-  
+
         if (response.status === 200) {
           alert("Senha alterada com sucesso!");
         }
@@ -120,13 +121,18 @@ const PerfilUsuario = () => {
       name: Yup.string().required("Nome é obrigatório"),
       socialName: Yup.string().required("Nome social é obrigatório"),
       phoneNumber: Yup.string().required("Telefone é obrigatório"),
-      birthDate: Yup.date().nullable().required("Data de nascimento é obrigatória"),
-      newPassword: Yup.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+      birthDate: Yup.date()
+        .nullable()
+        .required("Data de nascimento é obrigatória"),
+      newPassword: Yup.string().min(
+        6,
+        "A senha deve ter pelo menos 6 caracteres"
+      ),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref('newPassword'), null], "As senhas não combinam")
-        .when('newPassword', {
-          is: val => (val && val.length > 0),
-          then: Yup.string().required('Confirme sua senha')
+        .oneOf([Yup.ref("newPassword"), null], "As senhas não combinam")
+        .when("newPassword", {
+          is: (val) => val && val.length > 0,
+          then: Yup.string().required("Confirme sua senha"),
         }),
     }),
     onSubmit: async (values) => {
@@ -149,7 +155,9 @@ const PerfilUsuario = () => {
         const base64Image = reader.result;
         setImage(base64Image);
         try {
-          const response = await axios.put("/api/userProfile/image", { image: base64Image });
+          const response = await axios.put("/api/userProfile/image", {
+            image: base64Image,
+          });
           if (response.status === 200) {
             alert("Imagem alterada com sucesso!");
           }
@@ -168,7 +176,7 @@ const PerfilUsuario = () => {
 
   const handleLogoff = () => {
     localStorage.removeItem("jwtToken");
-    logout()
+    logout();
     alert("Você foi desconectado com sucesso!");
     navigate("/login");
     window.location.reload();
@@ -192,13 +200,14 @@ const PerfilUsuario = () => {
       }
     } catch (error) {
       console.error("Erro ao deletar a conta:", error);
-      alert("Houve um erro ao tentar deletar a conta. Tente novamente mais tarde.");
+      alert(
+        "Houve um erro ao tentar deletar a conta. Tente novamente mais tarde."
+      );
     } finally {
       setIsDeleteModalOpen(false);
     }
   };
 
-  const saldoAtual = "0 Capibas";
   const produtos = [
     {
       id: 1,
@@ -226,18 +235,8 @@ const PerfilUsuario = () => {
     },
   ];
 
-
- 
   useEffect(() => {
     if (userData) {
-      formik.setValues({
-        name: userData.name,
-        socialName: userData.socialName,
-        phoneNumber: userData.phoneNumber,
-        birthDate: userData.birthDate || "",
-        password: "",
-        confirmPassword: "",
-      });
       setDataState({
         name: userData.name,
         socialName: userData.socialName,
@@ -245,7 +244,7 @@ const PerfilUsuario = () => {
         birthDate: userData.birthDate || "",
         password: "",
         confirmPassword: "",
-      })
+      });
     }
   }, [userData]);
 
@@ -259,7 +258,9 @@ const PerfilUsuario = () => {
           <ProfileImageContainer>
             <ProfileImageWrapper>
               <ProfileImage src={image} alt="Foto de Perfil" />
-              <ProfileImageChangeButton htmlFor="fileInput">Alterar</ProfileImageChangeButton>
+              <ProfileImageChangeButton htmlFor="fileInput">
+                Alterar
+              </ProfileImageChangeButton>
             </ProfileImageWrapper>
             <input
               id="fileInput"
@@ -270,10 +271,13 @@ const PerfilUsuario = () => {
             />
           </ProfileImageContainer>
           <SidebarUsarnameTitle>{userData.name}</SidebarUsarnameTitle>
-          <SidebarItem isSelected={selectedTab === "geral"} onClick={() => handleTabClick("geral")}>
+          <SidebarItem
+            isSelected={selectedTab === "geral"}
+            onClick={() => handleTabClick("geral")}
+          >
             Informações Gerais
           </SidebarItem>
-  
+
           <SidebarItem
             isSelected={selectedTab === "seguranca"}
             onClick={() => handleTabClick("seguranca")}
@@ -286,7 +290,10 @@ const PerfilUsuario = () => {
           >
             Moeda Capiba
           </SidebarItem>
-          <SidebarItem isSelected={selectedTab === "sair"} onClick={handleLogoff}>
+          <SidebarItem
+            isSelected={selectedTab === "sair"}
+            onClick={handleLogoff}
+          >
             Sair
           </SidebarItem>
           <SidebarItem
@@ -300,7 +307,8 @@ const PerfilUsuario = () => {
         <ProfileTabContent>
           <ProfileTitle>Dados do Usuário</ProfileTitle>
           <ProfileSubTitle>
-            Preencha os campos abaixo para <strong>atualizar</strong> seus dados.
+            Preencha os campos abaixo para <strong>atualizar</strong> seus
+            dados.
           </ProfileSubTitle>
 
           {selectedTab === "geral" && (
@@ -363,7 +371,7 @@ const PerfilUsuario = () => {
               <Button type="submit">Salvar</Button>
             </ProfileForm>
           )}
-          
+
           {selectedTab === "seguranca" && (
             <ProfileForm onSubmit={formik.handleSubmit}>
               <FormGroup>
@@ -390,21 +398,22 @@ const PerfilUsuario = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                  <ErrorText>{formik.errors.confirmPassword}</ErrorText>
-                )}
+                {formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword && (
+                    <ErrorText>{formik.errors.confirmPassword}</ErrorText>
+                  )}
               </FormGroup>
               <Button type="submit" disabled={formik.isSubmitting}>
                 {formik.isSubmitting ? "Salvando..." : "Salvar"}
               </Button>
             </ProfileForm>
           )}
-          
+
           {selectedTab === "moedaCapiba" && (
             <div>
               <BalanceContainer>
                 <BalanceText>Saldo Atual:</BalanceText>
-                <BalanceAmount>{saldoAtual}</BalanceAmount>
+                <BalanceAmount>{userData.moedaCapiba} Capibas</BalanceAmount>
               </BalanceContainer>
               <ProductsGrid>
                 {produtos.map((produto) => (
@@ -412,9 +421,13 @@ const PerfilUsuario = () => {
                     <ProductImage src={produto.image} alt={produto.title} />
                     <ProductDetails>
                       <ProductTitle>{produto.title}</ProductTitle>
-                      <ProductDescription>{produto.description}</ProductDescription>
+                      <ProductDescription>
+                        {produto.description}
+                      </ProductDescription>
                       <ProductPrice>{produto.price} Capibas</ProductPrice>
-                      <ProductUnits>{produto.units} unidades disponíveis</ProductUnits>
+                      <ProductUnits>
+                        {produto.units} unidades disponíveis
+                      </ProductUnits>
                       <RedeemButton>Trocar</RedeemButton>
                     </ProductDetails>
                   </ProductCard>
@@ -424,15 +437,22 @@ const PerfilUsuario = () => {
           )}
         </ProfileTabContent>
       </ProfileSection>
-      
+
       {isDeleteModalOpen && (
         <Modal isOpen={isDeleteModalOpen}>
           <ModalContent>
             <h2>Você está prestes a deletar sua conta.</h2>
-            <p>Tem certeza de que deseja deletar sua conta? Esta ação é irreversível.</p>
+            <p>
+              Tem certeza de que deseja deletar sua conta? Esta ação é
+              irreversível.
+            </p>
             <ModalButtonContainer>
-              <CancelButton onClick={() => setIsDeleteModalOpen(false)}>Cancelar</CancelButton>
-              <ConfirmButton onClick={confirmDeleteAccount}>Confirmar</ConfirmButton>
+              <CancelButton onClick={() => setIsDeleteModalOpen(false)}>
+                Cancelar
+              </CancelButton>
+              <ConfirmButton onClick={confirmDeleteAccount}>
+                Confirmar
+              </ConfirmButton>
             </ModalButtonContainer>
           </ModalContent>
         </Modal>
