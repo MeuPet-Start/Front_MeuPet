@@ -17,7 +17,6 @@ import {
   Button,
   FormGroup,
   Label,
-  Textarea,
   ProfileSidebar,
   SidebarItem,
   ProfileImageContainer,
@@ -32,7 +31,9 @@ import {
   CancelButton,
   ConfirmButton,
   ErrorText,
-  Select,
+  ValorServico,
+  Servico,
+  InputValor,
 } from "./perfilClinicaStyle";
 
 import { useUserData } from "../../../hooks/useUserData";
@@ -43,27 +44,53 @@ const PerfilClinica = () => {
   const [image, setImage] = useState(UserImage);
   const [selectedTab, setSelectedTab] = useState("geral");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [photos, setPhotos] = useState([]);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const { userData, logout, fetchUserData } = useUserData();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [dataState, setDataState] = useState({
     name: userData.name || "",
-    address: userData.street || "", // Assumindo que street vai substituir address
-    contact: userData.phoneNumber || "",
-    email: userData.email || "",
+    street: userData.street || "",
+    neighborhood: userData.neighborhood || "",
+    phoneNumber: userData.phoneNumber || "",
     servicosPrestados: [],
-    openingHours: "", // Campo ainda não especificado no exemplo
-    newPassword: "",
-    confirmPassword: "",
+    servicosPrestadosValores: {
+      castracao: "",
+      vacinas: "",
+      petShop: "",
+      tosaBanho: "",
+      exames: "",
+      cirurgias: "",
+      emergencias: "",
+      nutricionista: "",
+      cuidadosGeriatricos: "",
+    },
+    openingHour: "",
+    closingHour: "",
   });
 
-  const handleClinicUpdate = async (values) => {
+  const handleClinicUpdateGeral = async (values) => {
     try {
       const response = await api.patch(`/partner/${userData.id}`, {
         name: values.name,
-        phoneNumber: values.contact,
-        street: values.address,
+        phoneNumber: values.phoneNumber,
+        street: values.street,
+        neighborhood: values.neighborhood,
+      });
+
+      if (response.status === 200) {
+        alert("Dados do usuário atualizados com sucesso!");
+        fetchUserData();
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar os dados do usuário:", error);
+      alert("Erro ao salvar os dados do usuário.");
+    }
+  };
+
+  const handleClinicUpdateSobre = async (values) => {
+    try {
+      const response = await api.patch(`/partner/${userData.id}`, {
         services: values.servicosPrestados,
         openingHour: values.openingHour,
         closingHour: values.closingHour,
@@ -71,7 +98,7 @@ const PerfilClinica = () => {
 
       if (response.status === 200) {
         alert("Dados do usuário atualizados com sucesso!");
-        fetchUserData(); // Recarrega os dados do usuário, se necessário
+        fetchUserData();
       }
     } catch (error) {
       console.error("Erro ao atualizar os dados do usuário:", error);
@@ -83,10 +110,23 @@ const PerfilClinica = () => {
     if (userData) {
       setDataState({
         name: userData.name,
-        address: userData.street,
+        street: userData.street,
+        neighborhood: userData.neighborhood,
         contact: userData.phoneNumber,
         servicosPrestados: userData.services || [],
+        servicosPrestadosValores: {
+          castracao: "",
+          vacinas: "",
+          petShop: "",
+          tosaBanho: "",
+          exames: "",
+          cirurgias: "",
+          emergencias: "",
+          nutricionista: "",
+          cuidadosGeriatricos: "",
+        },
         openingHours: "",
+        closingHours: "",
       });
     }
   }, [userData]);
@@ -96,7 +136,8 @@ const PerfilClinica = () => {
       case "geral":
         return Yup.object({
           name: Yup.string().required("Nome da clínica é obrigatório"),
-          address: Yup.string().required("Endereço é obrigatório"),
+          street: Yup.string().required("Rua e complemento são obrigatórios"),
+          neighborhood: Yup.string().required("Bairro é obrigatório"),
           contact: Yup.string().required("Contato é obrigatório"),
         });
 
@@ -113,15 +154,6 @@ const PerfilClinica = () => {
             "Horário de fechamento é obrigatório"
           ),
         });
-
-      case "seguranca":
-        return Yup.object({
-          password: Yup.string().required("Nova senha é obrigatória"),
-          confirmPassword: Yup.string()
-            .oneOf([Yup.ref("password"), null], "As senhas não coincidem")
-            .required("Confirmação de senha é obrigatória"),
-        });
-
       default:
         return Yup.object({});
     }
@@ -132,11 +164,16 @@ const PerfilClinica = () => {
     initialValues: dataState,
     validationSchema: generateValidationSchema(selectedTab),
     onSubmit: async (values) => {
+      console.log("values", values);
+      setIsSubmitting(true);
       try {
-        console.log(values);
-        await handleClinicUpdate(values);
+        if (selectedTab === "geral") {
+          await handleClinicUpdateGeral(values);
+        } else if (selectedTab === "sobre") {
+          await handleClinicUpdateSobre(values);
+        }
       } finally {
-        setIsSubmitting(false); // Desativa o estado de envio
+        setIsSubmitting(false);
       }
     },
   });
@@ -180,12 +217,23 @@ const PerfilClinica = () => {
     setSelectedTab(tab);
   };
 
-  const handleLogoff = () => {
-    localStorage.removeItem("jwtToken");
-    logout();
-    alert("Você foi desconectado com sucesso!");
-    navigate("/login");
-    window.location.reload();
+  const openLogoutModal = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const confirmLogoutAccount = () => {
+    try {
+      localStorage.removeItem("jwtToken");
+      logout();
+      alert("Você foi desconectado com sucesso!");
+      navigate("/login");
+      window.location.reload();
+    } catch (error) {
+      console.error("Erro ao desconectar:", error);
+      alert("Erro ao desconectar.");
+    } finally {
+      setIsLogoutModalOpen(false);
+    }
   };
 
   const openDeleteModal = () => {
@@ -216,6 +264,7 @@ const PerfilClinica = () => {
       );
     } finally {
       setIsDeleteModalOpen(false);
+      onst[(photos, setPhotos)] = useState([]);
     }
   };
 
@@ -262,7 +311,7 @@ const PerfilClinica = () => {
           </SidebarItem>
           <SidebarItem
             isSelected={selectedTab === "sair"}
-            onClick={handleLogoff}
+            onClick={openLogoutModal}
           >
             Sair
           </SidebarItem>
@@ -297,17 +346,32 @@ const PerfilClinica = () => {
                 )}
               </FormGroup>
               <FormGroup>
-                <Label htmlFor="address">Endereço</Label>
+                <Label htmlFor="street">Rua e Complemento</Label>
                 <Input
                   type="text"
-                  id="address"
-                  name="address"
-                  value={formik.values.address}
-                  placeholder="Avenida Caxangá"
-                  {...formik.getFieldProps("address")}
+                  id="street"
+                  name="street"
+                  value={formik.values.street}
+                  placeholder="Ex: Avenida Caxangá, nº 123"
+                  {...formik.getFieldProps("street")}
                 />
-                {formik.touched.address && formik.errors.address && (
-                  <ErrorText>{formik.errors.address}</ErrorText>
+                {formik.touched.street && formik.errors.street && (
+                  <ErrorText>{formik.errors.street}</ErrorText>
+                )}
+              </FormGroup>
+
+              <FormGroup>
+                <Label htmlFor="neighborhood">Bairro</Label>
+                <Input
+                  type="text"
+                  id="neighborhood"
+                  name="neighborhood"
+                  value={formik.values.neighborhood}
+                  placeholder="Ex: Bairro do Recife"
+                  {...formik.getFieldProps("neighborhood")}
+                />
+                {formik.touched.neighborhood && formik.errors.neighborhood && (
+                  <ErrorText>{formik.errors.neighborhood}</ErrorText>
                 )}
               </FormGroup>
               <FormGroup>
@@ -346,8 +410,8 @@ const PerfilClinica = () => {
                       label: "Cuidados Geriátricos",
                     },
                   ].map((service) => (
-                    <div key={service.value}>
-                      <input
+                    <Servico>
+                      <Input
                         type="checkbox"
                         id={service.value}
                         name="servicosPrestados"
@@ -358,13 +422,35 @@ const PerfilClinica = () => {
                         onChange={formik.handleChange}
                       />
                       <Label htmlFor={service.value}>{service.label}</Label>
-                    </div>
+
+                      <ValorServico>
+                        <Label htmlFor={service.value}>Valor:</Label>
+                        <InputValor
+                          type="text"
+                          id={service.value}
+                          name={service.value}
+                          value={
+                            formik.values.servicosPrestadosValores[
+                              service.value
+                            ]
+                          }
+                          placeholder="Ex: R$ 100,00"
+                          onChange={(e) => {
+                            formik.setFieldValue(
+                              `servicosPrestadosValores.${service.value}`,
+                              e.target.value
+                            );
+                            formik.handleChange(e);
+                          }}
+                        />
+                      </ValorServico>
+                    </Servico>
                   ))}
                 </div>
                 {formik.touched.servicosPrestados &&
                   formik.errors.servicosPrestados && (
                     <ErrorText>{formik.errors.servicosPrestados}</ErrorText>
-                  )}
+                  )}                
               </FormGroup>
 
               <FormGroup>
@@ -402,7 +488,7 @@ const PerfilClinica = () => {
             <Button
               onClick={() => {
                 logout();
-                navigate("/cadastro");
+                navigate("/recuperar-senha");
                 window.location.reload();
               }}
             >
@@ -424,6 +510,22 @@ const PerfilClinica = () => {
                 Cancelar
               </CancelButton>
               <ConfirmButton onClick={confirmDeleteAccount}>
+                Confirmar
+              </ConfirmButton>
+            </ModalButtonContainer>
+          </ModalContent>
+        </Modal>
+      )}
+      {isLogoutModalOpen && (
+        <Modal isOpen={isLogoutModalOpen}>
+          <ModalContent>
+            <h2>Você está prestes a sair sua conta.</h2>
+            <p>Tem certeza de que deseja sair sua conta?</p>
+            <ModalButtonContainer>
+              <CancelButton onClick={() => setIsLogoutModalOpen(false)}>
+                Cancelar
+              </CancelButton>
+              <ConfirmButton onClick={confirmLogoutAccount}>
                 Confirmar
               </ConfirmButton>
             </ModalButtonContainer>

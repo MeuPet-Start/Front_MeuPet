@@ -56,6 +56,7 @@ const PerfilUsuario = () => {
   const [selectedTab, setSelectedTab] = useState("geral");
   const { userData, logout, fetchUserData } = useUserData();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [dataState, setDataState] = useState({
@@ -64,8 +65,6 @@ const PerfilUsuario = () => {
     phoneNumber: userData.phoneNumber || "",
     birthDate: userData.dateOfBirth || "",
     moedaCapiba: userData.moedaCapiba,
-    newPassword: "",
-    confirmPassword: "",
   });
 
   const handleUserUpdate = async (values) => {
@@ -79,7 +78,7 @@ const PerfilUsuario = () => {
 
       if (response.status === 200) {
         alert("Dados do usuário atualizados com sucesso!");
-        fetchUserData(); // Recarrega os dados do usuário, se necessário
+        fetchUserData();
       }
     } catch (error) {
       console.error("Erro ao atualizar os dados do usuário:", error);
@@ -87,36 +86,9 @@ const PerfilUsuario = () => {
     }
   };
 
-  const handlePasswordChange = async (values) => {
-    if (
-      values.newPassword === values.confirmPassword &&
-      values.newPassword !== null &&
-      values.newPassword !== ""
-    ) {
-      try {
-        const response = await api.patch(
-          `/authenticable/changePassword`,
-          { password: values.newPassword },
-          {
-            params: { id: userData.id },
-          }
-        );
-
-        if (response.status === 200) {
-          alert("Senha alterada com sucesso!");
-        }
-      } catch (error) {
-        console.error("Erro ao alterar a senha:", error);
-        alert("Erro ao alterar a senha.");
-      }
-    } else if (values.newPassword) {
-      alert("As senhas não combinam!");
-    }
-  };
-
   const formik = useFormik({
     enableReinitialize: true,
-    initialValues: dataState, // Valores iniciais, que dependem do estado de dataState
+    initialValues: dataState,
     validationSchema: Yup.object({
       name: Yup.string().required("Nome é obrigatório"),
       socialName: Yup.string().required("Nome social é obrigatório"),
@@ -124,25 +96,13 @@ const PerfilUsuario = () => {
       birthDate: Yup.date()
         .nullable()
         .required("Data de nascimento é obrigatória"),
-      newPassword: Yup.string().min(
-        6,
-        "A senha deve ter pelo menos 6 caracteres"
-      ),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref("newPassword"), null], "As senhas não combinam")
-        .when("newPassword", {
-          is: (val) => val && val.length > 0,
-          then: Yup.string().required("Confirme sua senha"),
-        }),
     }),
     onSubmit: async (values) => {
-      setIsSubmitting(true); // Ativa o estado de envio
+      setIsSubmitting(true);
       try {
-        // Realiza as duas operações separadamente
-        await handleUserUpdate(values); // Atualiza dados do usuário
-        await handlePasswordChange(values); // Atualiza senha, se necessário
+        await handleUserUpdate(values);
       } finally {
-        setIsSubmitting(false); // Desativa o estado de envio
+        setIsSubmitting(false);
       }
     },
   });
@@ -174,12 +134,23 @@ const PerfilUsuario = () => {
     setSelectedTab(tab);
   };
 
-  const handleLogoff = () => {
-    localStorage.removeItem("jwtToken");
-    logout();
-    alert("Você foi desconectado com sucesso!");
-    navigate("/login");
-    window.location.reload();
+  const openLogoutModal = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const confirmLogoutAccount = () => {
+    try {
+      localStorage.removeItem("jwtToken");
+      logout();
+      alert("Você foi desconectado com sucesso!");
+      navigate("/login");
+      window.location.reload();
+    } catch (error) {
+      console.error("Erro ao desconectar:", error);
+      alert("Erro ao desconectar.");
+    } finally {
+      setIsLogoutModalOpen(false);
+    }
   };
 
   const openDeleteModal = () => {
@@ -242,8 +213,7 @@ const PerfilUsuario = () => {
         socialName: userData.socialName,
         phoneNumber: userData.phoneNumber,
         birthDate: userData.birthDate || "",
-        password: "",
-        confirmPassword: "",
+        moedaCapiba: userData.moedaCapiba,
       });
     }
   }, [userData]);
@@ -292,7 +262,7 @@ const PerfilUsuario = () => {
           </SidebarItem>
           <SidebarItem
             isSelected={selectedTab === "sair"}
-            onClick={handleLogoff}
+            onClick={openLogoutModal}
           >
             Sair
           </SidebarItem>
@@ -373,40 +343,15 @@ const PerfilUsuario = () => {
           )}
 
           {selectedTab === "seguranca" && (
-            <ProfileForm onSubmit={formik.handleSubmit}>
-              <FormGroup>
-                <Label htmlFor="password">Nova Senha</Label>
-                <Input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.password && formik.errors.password && (
-                  <ErrorText>{formik.errors.password}</ErrorText>
-                )}
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="confirmPassword">Confirmação de Senha</Label>
-                <Input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formik.values.confirmPassword}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword && (
-                    <ErrorText>{formik.errors.confirmPassword}</ErrorText>
-                  )}
-              </FormGroup>
-              <Button type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? "Salvando..." : "Salvar"}
-              </Button>
-            </ProfileForm>
+            <Button
+              onClick={() => {
+                logout();
+                navigate("/recuperar-senha");
+                window.location.reload();
+              }}
+            >
+              Alterar Senha
+            </Button>
           )}
 
           {selectedTab === "moedaCapiba" && (
@@ -451,6 +396,22 @@ const PerfilUsuario = () => {
                 Cancelar
               </CancelButton>
               <ConfirmButton onClick={confirmDeleteAccount}>
+                Confirmar
+              </ConfirmButton>
+            </ModalButtonContainer>
+          </ModalContent>
+        </Modal>
+      )}
+      {isLogoutModalOpen && (
+        <Modal isOpen={isLogoutModalOpen}>
+          <ModalContent>
+            <h2>Você está prestes a sair sua conta.</h2>
+            <p>Tem certeza de que deseja sair sua conta?</p>
+            <ModalButtonContainer>
+              <CancelButton onClick={() => setIsLogoutModalOpen(false)}>
+                Cancelar
+              </CancelButton>
+              <ConfirmButton onClick={confirmLogoutAccount}>
                 Confirmar
               </ConfirmButton>
             </ModalButtonContainer>

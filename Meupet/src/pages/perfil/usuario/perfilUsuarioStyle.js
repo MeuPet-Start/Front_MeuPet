@@ -111,21 +111,22 @@ export const Textarea = styled.textarea`
 `;
 
 export const Button = styled.button`
-  font-family: "poppins";
+  font-family: "Poppins";
   font-weight: 500;
-  background-color: #2A4F6A; 
-  color: white; 
-  padding: 0.625rem 1.25rem; 
-  border: none; 
-  border-radius: 0.3125rem; 
-  cursor: pointer; 
+  background-color: #2a4f6a;
+  color: white;
+  padding: 0.7rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s; 
-  max-width: 11.875rem;
+  transition: background-color 0.3s ease;
+  margin-top: 0.625rem;
   margin: 0 auto;
+  width: 100%;
 
   &:hover {
-    background-color: #45a049;
+    background-color: #4caf50;
   }
 `;
 

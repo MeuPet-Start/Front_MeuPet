@@ -67,13 +67,28 @@ export const FormGroup = styled.div`
 
 export const Label = styled.label`
   font-family: "Poppins";
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #454545;
   margin-bottom: 0.2rem;
+  width: 50%
+`;
+
+export const Servico = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem; 
+  justify-content: space-between;
+`;
+
+export const ValorServico = styled.div`
+  display: flex;
+  flex-direction: column;   
 `;
 
 export const Input = styled.input`
+  display: flex;
   font-family: "Poppins";
   font-weight: 100;
   padding: 0.6875rem;
@@ -82,6 +97,24 @@ export const Input = styled.input`
   font-size: 1rem;
   color: #000;
   outline: none;
+
+  &:focus {
+    border-color: #2a4f6a;
+    box-shadow: 0 0 0.125rem rgba(42, 79, 106, 0.5);
+  }
+`;
+
+export const InputValor = styled.input`
+  display: flex;
+  font-family: "Poppins";
+  font-weight: 100;
+  padding: 0.6875rem;
+  border-radius: 0.5rem;
+  border: 0.0625rem solid #ccc;
+  font-size: 1rem;
+  color: #000;
+  outline: none;
+  width: 50%; 
 
   &:focus {
     border-color: #2a4f6a;
