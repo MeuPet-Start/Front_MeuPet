@@ -22,19 +22,22 @@ export const ProfileSection = styled.div`
   border-radius: 0.625rem;
   box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
   margin: 2rem auto;
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+    margin: 1rem;
+  }
 `;
 
 export const ProfileTitle = styled.h1`
-  margin-top: 0.5rem;
-
+  display: flex;
   font-weight: 300;
   background-color: #4caf50;
   color: #ffffff;
   padding: 0.3rem 0.7rem;
   border-radius: 0.625rem;
   font-size: 1.8rem;
-  text-align: center;
-  display: inline-block;
+  justify-content: center;
   margin-bottom: 0.6rem;
 `;
 
@@ -43,7 +46,6 @@ export const ProfileSubTitle = styled.h1`
   font-weight: 400;
   color: #1c2b38;
   padding: 0.3rem 0.4rem;
-  border-radius: 0.625rem;
   font-size: 1rem;
   margin-bottom: 1rem;
 `;
@@ -51,10 +53,9 @@ export const ProfileSubTitle = styled.h1`
 export const ProfileForm = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
+  gap: 1rem;
   background-color: #fff;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 0.5rem;
   box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
 `;
@@ -62,7 +63,6 @@ export const ProfileForm = styled.form`
 export const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
 `;
 
 export const Label = styled.label`
@@ -71,7 +71,7 @@ export const Label = styled.label`
   font-weight: 600;
   color: #454545;
   margin-bottom: 0.2rem;
-  width: 50%
+  margin-right: 0.5rem;
 `;
 
 export const Servico = styled.div`
@@ -80,6 +80,10 @@ export const Servico = styled.div`
   width: 100%;
   margin-bottom: 1rem; 
   justify-content: space-between;
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+  }
 `;
 
 export const ValorServico = styled.div`
@@ -97,11 +101,17 @@ export const Input = styled.input`
   font-size: 1rem;
   color: #000;
   outline: none;
+  width: 100%;
 
   &:focus {
     border-color: #2a4f6a;
     box-shadow: 0 0 0.125rem rgba(42, 79, 106, 0.5);
   }
+`;
+
+export const Inputcheck = styled.input`
+  display: flex;
+  margin-right: 0.5rem;
 `;
 
 export const InputValor = styled.input`
@@ -114,11 +124,14 @@ export const InputValor = styled.input`
   font-size: 1rem;
   color: #000;
   outline: none;
-  width: 50%; 
 
   &:focus {
     border-color: #2a4f6a;
     box-shadow: 0 0 0.125rem rgba(42, 79, 106, 0.5);
+  }
+
+  @media (max-width: 750px) {
+    width: 100%;
   }
 `;
 
@@ -138,16 +151,6 @@ export const Select = styled.select`
     border-color: #2a4f6a;
     box-shadow: 0 0 0.125rem rgba(42, 79, 106, 0.5);
   }
-`;
-
-export const Textarea = styled.textarea`
-  font-family: "Poppins";
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: 0.0625rem solid #ccc;
-  font-size: 1rem;
-  color: #333;
-  min-height: 4rem;
 `;
 
 export const Button = styled.button`
@@ -171,7 +174,10 @@ export const Button = styled.button`
 `;
 
 export const ProfileSidebar = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 1rem;
+  align-items: left;
 `;
 
 export const SidebarUsernameTitle = styled.h2`
@@ -185,7 +191,6 @@ export const SidebarUsernameTitle = styled.h2`
 `;
 
 export const SidebarItem = styled.div`
-  margin-left: 3.75rem;
   font-family: "Poppins";
   font-weight: 600;
   font-size: 1rem;
@@ -251,6 +256,8 @@ export const HiddenFileInput = styled.input`
 `;
 
 export const ProfileTabContent = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 2rem;
 `;
 

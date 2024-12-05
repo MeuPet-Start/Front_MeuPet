@@ -34,6 +34,7 @@ import {
   ValorServico,
   Servico,
   InputValor,
+  Inputcheck
 } from "./perfilClinicaStyle";
 
 import { useUserData } from "../../../hooks/useUserData";
@@ -410,7 +411,7 @@ const PerfilClinica = () => {
                     { value: "nutricionista", label: "Nutricionista" },
                   ].map((service) => (
                     <Servico key={service.value}>
-                      <Input
+                      <Inputcheck
                         type="checkbox"
                         id={service.value}
                         name="servicosPrestados"
