@@ -83,3 +83,11 @@ export const ServiceCardButton = styled.button`
     background-color: #36a92e;
   }
 `;
+
+export const ServiceCardNeighborhoodLocaltion = styled.p`
+  font-size: 1rem;
+  color: #5a5a5a;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+  font-family: "Poppins", sans-serif;
+`;

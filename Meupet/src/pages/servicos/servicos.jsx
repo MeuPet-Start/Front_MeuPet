@@ -52,7 +52,7 @@ const Servicos = () => {
   useEffect(() => {
     const filtered = clinic.filter((clinic) =>
       clinic.servicoPrestados.some((tag) =>
-        tag.toLowerCase().includes(filterTag.toLowerCase())
+        tag.name.toLowerCase().includes(filterTag.toLowerCase())
       )
     );
     setFilteredServices(filtered);
@@ -95,11 +95,12 @@ const Servicos = () => {
               .slice(0, showAllServices ? filteredServices.length : 4)
               .map((clinic) => (
                 <ServiceCard
-                  key={clinic.id}
+                  key={clinic.name}
                   img={clinicImg}
                   tags={clinic.servicoPrestados}
                   title={clinic.name}
-                  description={clinic.description || "Endereço clínica"}
+                  description={clinic.streetAndNumber || "Endereço clínica"}
+                  neighborhoodLocation={"Bairro: " + clinic.neighborhood || "Bairro da clínica"}
                   buttonLabel="Marcar Serviço"
                   onClick={() => alert("Navegar para detalhes do serviço")} // Exemplo de ação
                 />

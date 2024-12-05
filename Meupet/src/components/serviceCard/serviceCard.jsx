@@ -7,6 +7,7 @@ import {
   ServiceCardDescription,
   ServiceCardButton,
   ServiceInfo,
+  ServiceCardNeighborhoodLocaltion,
 } from "./serviceCardStyle";
 import { useNavigate } from "react-router-dom";
 
@@ -15,6 +16,7 @@ const ServiceCard = ({
   tags,
   title,
   description,
+  neighborhoodLocation,
   buttonLabel,
   onClick,
 }) => {
@@ -28,11 +30,12 @@ const ServiceCard = ({
       <ServiceInfo>
         <ServiceCardtags>
           {tags.map((tag, index) => (
-            <span key={index}>{tag}</span>
+            <span key={index}>{tag.name}</span>
           ))}
         </ServiceCardtags>
         <ServiceCardTitle>{title}</ServiceCardTitle>
         <ServiceCardDescription>{description}</ServiceCardDescription>
+        <ServiceCardNeighborhoodLocaltion>{neighborhoodLocation}</ServiceCardNeighborhoodLocaltion>
       </ServiceInfo>
       <ServiceCardButton onClick={() => navigate("/consulta")}>{buttonLabel}</ServiceCardButton>
     </ServiceCardContainer>
