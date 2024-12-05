@@ -89,9 +89,14 @@ const PerfilClinica = () => {
   };
 
   const handleClinicUpdateSobre = async (values) => {
+    const servicesAndValues = values.servicosPrestados.map((service) => ({
+      name: service,
+      price: values.servicosPrestadosValores[service] || "",
+    }));
+    console.log("servicesAndValues", servicesAndValues);
     try {
       const response = await api.patch(`/partner/${userData.id}`, {
-        services: values.servicosPrestados,
+        services: servicesAndValues,
         openingHour: values.openingHour,
         closingHour: values.closingHour,
       });
@@ -164,7 +169,6 @@ const PerfilClinica = () => {
     initialValues: dataState,
     validationSchema: generateValidationSchema(selectedTab),
     onSubmit: async (values) => {
-      console.log("values", values);
       setIsSubmitting(true);
       try {
         if (selectedTab === "geral") {
@@ -410,7 +414,7 @@ const PerfilClinica = () => {
                       label: "Cuidados Geriátricos",
                     },
                   ].map((service) => (
-                    <Servico>
+                    <Servico key={service.value }> 
                       <Input
                         type="checkbox"
                         id={service.value}
@@ -432,7 +436,7 @@ const PerfilClinica = () => {
                           value={
                             formik.values.servicosPrestadosValores[
                               service.value
-                            ]
+                            ] || ""
                           }
                           placeholder="Ex: R$ 100,00"
                           onChange={(e) => {
@@ -450,7 +454,7 @@ const PerfilClinica = () => {
                 {formik.touched.servicosPrestados &&
                   formik.errors.servicosPrestados && (
                     <ErrorText>{formik.errors.servicosPrestados}</ErrorText>
-                  )}                
+                  )}
               </FormGroup>
 
               <FormGroup>
