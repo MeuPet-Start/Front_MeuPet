@@ -11,8 +11,6 @@ import {
   ButtonService,
   ServicesSection,
   ServicesInfo,
-  SearchBarSection,
-  SearchBarContainer,
   SearchBar,
   SearchInput,
   SearchIconLeft,
@@ -21,7 +19,7 @@ import {
 
 import { useLocation } from "react-router-dom";
 import { api } from "../../services/api";
-import clinicImg from "../../assets/hovet.png"
+import clinicImg from "../../assets/hovet.png";
 
 const Servicos = () => {
   const { state } = useLocation();
@@ -32,7 +30,7 @@ const Servicos = () => {
 
   useEffect(() => {
     if (location.state?.filterTag) {
-      setFilterTag(location.state.filterTag);  
+      setFilterTag(location.state.filterTag);
     }
   }, [location.state]);
 
@@ -80,21 +78,18 @@ const Servicos = () => {
           <ServicesDescription>
             Clínicas parceiras e prestadores de serviços mais próximos de você!
           </ServicesDescription>
-          <SearchBarSection>
-            <SearchBarContainer>
-              <SearchBar>
-                <SearchInput
-                  type="text"
-                  placeholder="Buscar Especialidades"
-                  value={filterTag}
-                  onChange={handleFilterChange}
-                />
-                <SearchIconLeft>
-                  <FaSearch />
-                </SearchIconLeft>
-              </SearchBar>
-            </SearchBarContainer>
-          </SearchBarSection>
+          <SearchBar>
+            <SearchInput
+              type="text"
+              placeholder="Buscar Especialidades"
+              value={filterTag}
+              onChange={handleFilterChange}
+            />
+            <SearchIconLeft>
+              <FaSearch />
+            </SearchIconLeft>
+          </SearchBar>
+
           <ServicesContainer>
             {clinic
               .slice(0, showAllServices ? filteredServices.length : 4)
@@ -108,7 +103,7 @@ const Servicos = () => {
                   buttonLabel="Marcar Serviço"
                   onClick={() => alert("Navegar para detalhes do serviço")} // Exemplo de ação
                 />
-            ))}
+              ))}
           </ServicesContainer>
 
           <ButtonService onClick={handleShowAllServices}>
