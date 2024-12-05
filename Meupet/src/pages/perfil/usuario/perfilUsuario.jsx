@@ -63,7 +63,7 @@ const PerfilUsuario = () => {
     name: userData.name || "",
     socialName: userData.socialName || "",
     phoneNumber: userData.phoneNumber || "",
-    birthDate: userData.dateOfBirth || "",
+    dateOfBirth: userData.dateOfBirth || "",
     moedaCapiba: userData.moedaCapiba,
   });
 
@@ -73,7 +73,7 @@ const PerfilUsuario = () => {
         name: values.name,
         socialName: values.socialName,
         phoneNumber: values.phoneNumber,
-        dateOfBirth: values.birthDate,
+        dateOfBirth: values.dateOfBirth,
       });
 
       if (response.status === 200) {
@@ -93,7 +93,7 @@ const PerfilUsuario = () => {
       name: Yup.string().required("Nome é obrigatório"),
       socialName: Yup.string().required("Nome social é obrigatório"),
       phoneNumber: Yup.string().required("Telefone é obrigatório"),
-      birthDate: Yup.date()
+      dateOfBirth: Yup.date()
         .nullable()
         .required("Data de nascimento é obrigatória"),
     }),
@@ -140,7 +140,6 @@ const PerfilUsuario = () => {
 
   const confirmLogoutAccount = () => {
     try {
-      localStorage.removeItem("jwtToken");
       logout();
       alert("Você foi desconectado com sucesso!");
       navigate("/login");
@@ -159,15 +158,16 @@ const PerfilUsuario = () => {
 
   const confirmDeleteAccount = async () => {
     try {
-      const response = await axios.delete("/api/deleteAccount", {
-        data: {
-          userId: userData.id,
-        },
+      const response = await api.delete("/user", {
+        params: {
+          id: userData.id
+        }
       });
-      if (response.status === 200) {
-        localStorage.removeItem("userProfile");
+      if (response.status === 204) {
+        logout();
         alert("Conta deletada com sucesso.");
         navigate("/");
+        window.location.reload();
       }
     } catch (error) {
       console.error("Erro ao deletar a conta:", error);
@@ -212,7 +212,7 @@ const PerfilUsuario = () => {
         name: userData.name,
         socialName: userData.socialName,
         phoneNumber: userData.phoneNumber,
-        birthDate: userData.birthDate || "",
+        dateOfBirth: userData.dateOfBirth || "",
         moedaCapiba: userData.moedaCapiba,
       });
     }
@@ -326,16 +326,16 @@ const PerfilUsuario = () => {
                 )}
               </FormGroup>
               <FormGroup>
-                <Label htmlFor="birthDate">Data de Nascimento</Label>
+                <Label htmlFor="dateOfBirth">Data de Nascimento</Label>
                 <Input
                   type="date"
-                  id="birthDate"
-                  name="birthDate"
-                  value={formik.values.birthDate}
-                  {...formik.getFieldProps("birthDate")}
+                  id="dateOfBirth"
+                  name="dateOfBirth"
+                  value={formik.values.dateOfBirth}
+                  {...formik.getFieldProps("dateOfBirth")}
                 />
-                {formik.touched.birthDate && formik.errors.birthDate && (
-                  <ErrorText>{formik.errors.birthDate}</ErrorText>
+                {formik.touched.dateOfBirth && formik.errors.dateOfBirth && (
+                  <ErrorText>{formik.errors.dateOfBirth}</ErrorText>
                 )}
               </FormGroup>
               <Button type="submit">Salvar</Button>

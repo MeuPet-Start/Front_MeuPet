@@ -31,6 +31,7 @@ export function UserDataContextProvider({ children }) {
   }
 
   function logout() {
+    localStorage.removeItem("jwtToken");
     setIsAuthenticated(false);
   }
 

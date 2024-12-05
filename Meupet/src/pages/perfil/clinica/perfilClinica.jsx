@@ -83,13 +83,23 @@ const PerfilClinica = () => {
       name: service,
       price: values.servicosPrestadosValores[service] || "",
     }));
-    console.log("servicesAndValues", servicesAndValues);
     try {
-      const response = await api.post(`/agendamento/partner/servico/${userData.id}`, {
+      const request = {
         services: servicesAndValues,
-        // openingHour: values.openingHour,
-        // closingHour: values.closingHour,
+        disponibilidade: {
+          openingHour: values.openingHour,
+          closingHour: values.closingHour
+        }
+      }
+      console.log(request)
+      const response = await api.post(`/partner/service/disponibilidade/${userData.id}`, {
+        services: servicesAndValues,
+        disponibilidade: {
+          openingHour: values.openingHour,
+          closingHour: values.closingHour
+        }
       });
+
 
       if (response.status === 200) {
         alert("Dados do usuário atualizados com sucesso!");
@@ -133,12 +143,21 @@ const PerfilClinica = () => {
             1,
             "Selecione pelo menos um serviço."
           ),
-          openingHour: Yup.string().required(
-            "Horário de abertura é obrigatório"
-          ),
-          closingHour: Yup.string().required(
-            "Horário de fechamento é obrigatório"
-          ),
+          openingHour: Yup.string().required('Horário de Abertura é obrigatório'),
+          closingHour: Yup.string().required('Horário de Fechamento é obrigatório')
+            .test(
+              'is-before-opening',
+              'Horário de Fechamento não pode ser antes do Horário de Abertura',
+              function (value) {
+                const { openingHour } = this.parent; // Obtém o valor de openingHour
+
+                // Se ambos os horários estiverem definidos, realiza a comparação
+                if (openingHour && value) {
+                  return value >= openingHour; // Verifica se o horário de fechamento é depois ou igual ao de abertura
+                }
+                return true; // Se não tiver ambos os horários, a validação passa
+              }
+            ),
         });
       default:
         return Yup.object({});
@@ -233,11 +252,10 @@ const PerfilClinica = () => {
         },
         params: { id: userData.id },
       });
-      if (response.status === 200) {
-        localStorage.removeItem("clinicProfile");
+      if (response.status === 204) {
+        logout();
         alert("Conta deletada com sucesso.");
         navigate("/");
-        logout();
         window.location.reload();
       } else {
         alert("Erro ao deletar conta. Tente novamente.");
