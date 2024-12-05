@@ -50,21 +50,11 @@ const PerfilClinica = () => {
 
   const [dataState, setDataState] = useState({
     name: userData.name || "",
-    street: userData.street || "",
+    streetAndNumber: userData.streetAndNumber || "",
     neighborhood: userData.neighborhood || "",
     phoneNumber: userData.phoneNumber || "",
-    servicosPrestados: [],
-    servicosPrestadosValores: {
-      castracao: "",
-      vacinas: "",
-      petShop: "",
-      tosaBanho: "",
-      exames: "",
-      cirurgias: "",
-      emergencias: "",
-      nutricionista: "",
-      cuidadosGeriatricos: "",
-    },
+    servicosPrestados: userData.servicosPrestados,
+    servicosPrestadosValores: userData.servicosPrestadosValores,
     openingHour: "",
     closingHour: "",
   });
@@ -74,7 +64,7 @@ const PerfilClinica = () => {
       const response = await api.patch(`/partner/${userData.id}`, {
         name: values.name,
         phoneNumber: values.phoneNumber,
-        street: values.street,
+        streetAndNumber: values.streetAndNumber,
         neighborhood: values.neighborhood,
       });
 
@@ -95,10 +85,10 @@ const PerfilClinica = () => {
     }));
     console.log("servicesAndValues", servicesAndValues);
     try {
-      const response = await api.patch(`/partner/${userData.id}`, {
+      const response = await api.post(`/agendamento/partner/servico/${userData.id}`, {
         services: servicesAndValues,
-        openingHour: values.openingHour,
-        closingHour: values.closingHour,
+        // openingHour: values.openingHour,
+        // closingHour: values.closingHour,
       });
 
       if (response.status === 200) {
@@ -115,24 +105,15 @@ const PerfilClinica = () => {
     if (userData) {
       setDataState({
         name: userData.name,
-        street: userData.street,
+        streetAndNumber: userData.streetAndNumber,
         neighborhood: userData.neighborhood,
         contact: userData.phoneNumber,
         servicosPrestados: userData.services || [],
-        servicosPrestadosValores: {
-          castracao: "",
-          vacinas: "",
-          petShop: "",
-          tosaBanho: "",
-          exames: "",
-          cirurgias: "",
-          emergencias: "",
-          nutricionista: "",
-          cuidadosGeriatricos: "",
-        },
+        servicosPrestadosValores: userData.servicosPrestadosValores || {},
         openingHours: "",
         closingHours: "",
       });
+      console.log(userData)
     }
   }, [userData]);
 
@@ -141,7 +122,7 @@ const PerfilClinica = () => {
       case "geral":
         return Yup.object({
           name: Yup.string().required("Nome da clínica é obrigatório"),
-          street: Yup.string().required("Rua e complemento são obrigatórios"),
+          streetAndNumber: Yup.string().required("Rua e complemento são obrigatórios"),
           neighborhood: Yup.string().required("Bairro é obrigatório"),
           contact: Yup.string().required("Contato é obrigatório"),
         });
@@ -350,17 +331,17 @@ const PerfilClinica = () => {
                 )}
               </FormGroup>
               <FormGroup>
-                <Label htmlFor="street">Rua e Complemento</Label>
+                <Label htmlFor="streetAndNumber">Rua e Complemento</Label>
                 <Input
                   type="text"
-                  id="street"
-                  name="street"
-                  value={formik.values.street}
+                  id="streetAndNumber"
+                  name="streetAndNumber"
+                  value={formik.values.streetAndNumber}
                   placeholder="Ex: Avenida Caxangá, nº 123"
-                  {...formik.getFieldProps("street")}
+                  {...formik.getFieldProps("streetAndNumber")}
                 />
-                {formik.touched.street && formik.errors.street && (
-                  <ErrorText>{formik.errors.street}</ErrorText>
+                {formik.touched.streetAndNumber && formik.errors.streetAndNumber && (
+                  <ErrorText>{formik.errors.streetAndNumber}</ErrorText>
                 )}
               </FormGroup>
 
@@ -409,39 +390,29 @@ const PerfilClinica = () => {
                     { value: "cirurgias", label: "Cirurgias" },
                     { value: "emergencias", label: "Emergências" },
                     { value: "nutricionista", label: "Nutricionista" },
-                    {
-                      value: "cuidadosGeriatricos",
-                      label: "Cuidados Geriátricos",
-                    },
                   ].map((service) => (
-                    <Servico key={service.value }> 
+                    <Servico key={service.value}>
                       <Input
                         type="checkbox"
                         id={service.value}
                         name="servicosPrestados"
                         value={service.value}
-                        checked={formik.values.servicosPrestados.includes(
-                          service.value
-                        )}
+                        checked={formik.values.servicosPrestados.includes(service.value)}
                         onChange={formik.handleChange}
                       />
                       <Label htmlFor={service.value}>{service.label}</Label>
 
                       <ValorServico>
-                        <Label htmlFor={service.value}>Valor:</Label>
+                        <Label htmlFor={`${service.value}-valor`}>Valor:</Label>
                         <InputValor
                           type="text"
-                          id={service.value}
-                          name={service.value}
-                          value={
-                            formik.values.servicosPrestadosValores[
-                              service.value
-                            ] || ""
-                          }
+                          id={`${service.value}-valor`}
+                          name={`servicosPrestadosValores.${service.value}`}
+                          value={formik.values.servicosPrestadosValores[service.label] || ""}
                           placeholder="Ex: R$ 100,00"
                           onChange={(e) => {
                             formik.setFieldValue(
-                              `servicosPrestadosValores.${service.value}`,
+                              `servicosPrestadosValores.${service.label}`,
                               e.target.value
                             );
                             formik.handleChange(e);
