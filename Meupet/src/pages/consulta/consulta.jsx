@@ -6,6 +6,7 @@ import { BsClipboardCheck } from "react-icons/bs";
 import { MdLocalPhone } from "react-icons/md";
 import { useNavigate } from "react-router";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 import {
   HeaderSection,
   Form,
@@ -67,9 +68,48 @@ const Consulta = () => {
       tipoAnimal: [],
       generoPet: "",
       tipoServico: [],
-      data: "",
+      dataServico: "",
       horarios: "",
     },
+    validationSchema: Yup.object({
+      nomePet: Yup.string()
+        .required("Nome do pet é obrigatório.")
+        .min(2, "O nome do pet deve ter pelo menos 2 caracteres."),
+    
+      idade: Yup.number()
+        .required("A idade do pet é obrigatória.")
+        .positive("A idade deve ser um número positivo.")
+        .integer("A idade deve ser um número inteiro."),
+    
+      historico: Yup.string()
+        .optional()
+        .max(500, "O histórico médico não pode exceder 500 caracteres."),
+    
+      tipoAnimal: Yup.array()
+        .min(1, "Por favor, selecione o tipo do animal.")
+        .required("O tipo de animal é obrigatório."),
+    
+      generoPet: Yup.string()
+        .required("Por favor, selecione o gênero do pet."),
+    
+      tipoServico: Yup.array()
+        .min(1, "Por favor, selecione o tipo de serviço.")
+        .required("O tipo de serviço é obrigatório."),
+    
+      data: Yup.string()
+        .required("A data do serviço é obrigatória.")
+        .matches(
+          /^\d{4}-\d{2}-\d{2}$/,
+          "Formato de data inválido. Use o formato YYYY-MM-DD."
+        ),
+    
+      horarios: Yup.string()
+        .required("Horário é obrigatório.")
+        .matches(
+          /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/,
+          "Formato de horário inválido. Use o formato HH:mm."
+        ),
+    }),
     onSubmit: handleSubmit,
   });
   return (
@@ -116,7 +156,7 @@ const Consulta = () => {
               <Label>Nome do Pet:</Label>
               <Input
                 type="text"
-                name="nome do Pet"
+                name="nomePet"
                 placeholder="Insira o nome do seu Pet"
                 onChange={formik.handleChange}
                 value={formik.values.nomePet}
@@ -137,7 +177,7 @@ const Consulta = () => {
 
               <Input
                 type="text"
-                name="historico médico"
+                name="historico"
                 placeholder="Insira aqui as informações adicionais sobre o seu Pet"
                 onChange={formik.handleChange}
                 value={formik.values.historico}
@@ -189,7 +229,7 @@ const Consulta = () => {
               value="consulta"
               onChange={formik.handleChange}
             />
-            <Label for="consulta">Consulta</Label>
+            <Label>Consulta</Label>
           </FormGroup>
 
           <FormGroupDetalhes>
@@ -198,17 +238,18 @@ const Consulta = () => {
               <Label>Data do Serviço:</Label>
               <Input
                 type="date"
-                name="data do serviço"
+                name="dataServico"
                 placeholder="Data :"
                 onChange={formik.handleChange}
-                value={formik.values.data || ""}
+                value={formik.values.dataServico || ""}
               />
               <Label>Horários:</Label>
               <Input
                 type="time"
-                name="horario"
+                name="horarios"
                 placeholder="Horários"
                 onChange={formik.handleChange}
+                value={formik.values.horarios || ""}
               />
             </FormGroupDetalhesInput>
           </FormGroupDetalhes>
