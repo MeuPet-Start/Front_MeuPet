@@ -218,6 +218,22 @@ const PerfilUsuario = () => {
     }
   }, [userData]);
 
+  const maskPhone = (value) => {
+    const cleanValue = value.replace(/\D/g, "");
+
+    if (cleanValue.length >= 11) {
+      return cleanValue
+        .replace(/(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d{5})(\d)/, "$1-$2")
+        .replace(/(-\d{4})\d+?$/, "$1");
+    }
+
+    return cleanValue
+      .replace(/(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{4})(\d)/, "$1-$2")
+      .replace(/(-\d{4})\d+?$/, "$1");
+  };
+
   return (
     <Container>
       <ContainerHeader>
@@ -320,6 +336,10 @@ const PerfilUsuario = () => {
                   value={formik.values.phoneNumber}
                   placeholder="Seu Telefone"
                   {...formik.getFieldProps("phoneNumber")}
+                  onChange={(e) => {
+                    const formattedPhone = maskPhone(e.target.value);
+                    formik.setFieldValue("phoneNumber", formattedPhone);
+                  }}
                 />
                 {formik.touched.phoneNumber && formik.errors.phoneNumber && (
                   <ErrorText>{formik.errors.phoneNumber}</ErrorText>

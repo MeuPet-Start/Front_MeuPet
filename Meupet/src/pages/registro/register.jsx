@@ -39,7 +39,7 @@ const Register = () => {
         return Yup.object().shape({
           cpfCnpj: Yup.string()
             .required("O CPF ou CNPJ é obrigatório.")
-            .min(11, "O CPF/CNPJ deve ter pelo menos 11 caracteres.")
+            .min(14, "O CPF/CNPJ deve ter pelo menos 14 caracteres.")
             .max(18, "O CPF/CNPJ deve ter no máximo 18 caracteres."),
           name: Yup.string().required(
             "O Nome Fantasia ou Pessoal é obrigatório."
@@ -56,9 +56,9 @@ const Register = () => {
         return Yup.object().shape({
           cpfCnpj: Yup.string()
             .required("O CPF é obrigatório.")
-            .length(11, "O CPF deve ter exatamente 11 caracteres."),
+            .length(14, "O CPF deve ter exatamente 14 caracteres."),
           name: Yup.string().required("O Nome Completo é obrigatório."),
-          socialName: Yup.string(), // Opcional
+          socialName: Yup.string(),
           birthDate: Yup.string().required(
             "A Data de Nascimento é obrigatória."
           ),
@@ -107,45 +107,46 @@ const Register = () => {
       phone: "",
       password: "",
       confirmPassword: "",
-      birthDate: ""
+      birthDate: "",
     },
     validationSchema: stepValidationSchemas[currentStep],
     onSubmit: async (values) => {
       if (currentStep < 2) {
         setCurrentStep(currentStep + 1);
       } else {
+        console.log(values);
         try {
           const endpoint =
             formik.values.userType === "clinic"
               ? "http://localhost:8080/api/v1/partner"
               : "http://localhost:8080/api/v1/user";
 
-              const requestData =
-          values.userType === "clinic"
-            ? {
-                name: values.name,
-                email: values.email,
-                phoneNumber: values.phone,
-                password: values.password,
-                document: values.cpfCnpj,
-                documentType: values.cpfCnpj.length === 11 ? "CPF" : "CNPJ",
-              }
-            : {
-                name: values.name,
-                socialName: values.socialName,
-                email: values.email,
-                phoneNumber: values.phone,
-                password: values.password,
-                document: values.cpfCnpj,
-                documentType: "CPF",
-                birthDate: values.birthDate,
-              };
+          const requestData =
+            values.userType === "clinic"
+              ? {
+                  name: values.name,
+                  email: values.email,
+                  phoneNumber: values.phone,
+                  password: values.password,
+                  document: values.cpfCnpj,
+                  documentType: values.cpfCnpj.length === 11 ? "CPF" : "CNPJ",
+                }
+              : {
+                  name: values.name,
+                  socialName: values.socialName,
+                  email: values.email,
+                  phoneNumber: values.phone,
+                  password: values.password,
+                  document: values.cpfCnpj,
+                  documentType: "CPF",
+                  birthDate: values.birthDate,
+                };
 
-              console.log(values.birthDate)
+          console.log(values.birthDate);
 
           const response = await axios.post(endpoint, requestData);
 
-          console.log(response.data)
+          console.log(response.data);
           if (response.status === 201) {
             alert("Cadastro realizado com sucesso!");
             navigate("/login");
@@ -157,6 +158,50 @@ const Register = () => {
       }
     },
   });
+
+  const maskCPF = (value) => {
+    return value
+      .replace(/\D/g, "")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})/, "$1-$2")
+      .replace(/(-\d{2})\d+?$/, "$1");
+  };
+
+  const maskCpfCnpj = (value) => {
+    const cleanValue = value.replace(/\D/g, "");
+
+    if (cleanValue.length > 11) {
+      return cleanValue
+        .replace(/(\d{2})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1/$2")
+        .replace(/(\d{4})(\d)/, "$1-$2")
+        .replace(/(-\d{2})\d+?$/, "$1");
+    }
+
+    return cleanValue
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})/, "$1-$2")
+      .replace(/(-\d{2})\d+?$/, "$1");
+  };
+
+  const maskPhone = (value) => {
+    const cleanValue = value.replace(/\D/g, "");
+
+    if (cleanValue.length >= 11) {
+      return cleanValue
+        .replace(/(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d{5})(\d)/, "$1-$2")
+        .replace(/(-\d{4})\d+?$/, "$1");
+    }
+
+    return cleanValue
+      .replace(/(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{4})(\d)/, "$1-$2")
+      .replace(/(-\d{4})\d+?$/, "$1");
+  };
 
   return (
     <Background>
@@ -174,7 +219,7 @@ const Register = () => {
           {currentStep === 0 && (
             <ButtonEscolhaContainer>
               <ButtonEscolha
-              secondary
+                secondary
                 onClick={() => {
                   formik.setFieldValue("userType", "clinic");
                   setCurrentStep(currentStep + 1);
@@ -191,9 +236,9 @@ const Register = () => {
                 Cadastrar Usuário
               </ButtonEscolha>
               <ButtonVoltar
-              secondary
+                secondary
                 onClick={() => {
-                  navigate("/login")  
+                  navigate("/login");
                 }}
               >
                 Voltar
@@ -213,7 +258,10 @@ const Register = () => {
                       name="cpfCnpj"
                       placeholder="Digite aqui"
                       value={formik.values.cpfCnpj}
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        const formattedValue = maskCpfCnpj(e.target.value);
+                        formik.setFieldValue("cpfCnpj", formattedValue);
+                      }}
                       onBlur={formik.handleBlur}
                     />
                     {formik.touched.cpfCnpj && formik.errors.cpfCnpj && (
@@ -261,7 +309,10 @@ const Register = () => {
                       name="phone"
                       placeholder="(XX) XXXXX-XXXX"
                       value={formik.values.phone}
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        const formattedPhone = maskPhone(e.target.value);
+                        formik.setFieldValue("phone", formattedPhone);
+                      }}
                       onBlur={formik.handleBlur}
                     />
                     {formik.touched.phone && formik.errors.phone && (
@@ -279,7 +330,10 @@ const Register = () => {
                       name="cpfCnpj"
                       placeholder="Digite aqui"
                       value={formik.values.cpfCnpj}
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        const formattedCPF = maskCPF(e.target.value);
+                        formik.setFieldValue("cpfCnpj", formattedCPF);
+                      }}
                       onBlur={formik.handleBlur}
                     />
                     {formik.touched.cpfCnpj && formik.errors.cpfCnpj && (
@@ -325,7 +379,7 @@ const Register = () => {
                       value={formik.values.birthDate || ""}
                       onChange={(e) => {
                         const dateValue = e.target.value;
-                        formik.setFieldValue("birthDate", dateValue); 
+                        formik.setFieldValue("birthDate", dateValue);
                       }}
                       onBlur={formik.handleBlur}
                     />
@@ -421,7 +475,10 @@ const Register = () => {
                       name="phone"
                       placeholder="(XX) XXXXX-XXXX"
                       value={formik.values.phone}
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        const formattedPhone = maskPhone(e.target.value);
+                        formik.setFieldValue("phone", formattedPhone);
+                      }}
                       onBlur={formik.handleBlur}
                     />
                     {formik.touched.phone && formik.errors.phone && (

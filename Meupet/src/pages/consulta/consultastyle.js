@@ -249,3 +249,75 @@ export const ErrorText = styled.div`
   margin-top: 0.5rem;
   margin-bottom: 0rem;
 `;
+
+export const ModalButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 1.25rem;
+  gap: 0.9375rem;
+`;
+
+export const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+export const ModalContent = styled.div`
+  background: white;
+  padding: 1.25rem;
+  border-radius: 0.9375rem;
+  max-width: 31.25rem;
+  width: 90%;
+  box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+
+  h2{
+    font-size: 2rem;
+    color: #2a4f6a;
+  }
+  p{
+    font-size: 1rem;
+    color: #2a4f6a;
+    font-family: "Poppins";
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-1.25rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
+export const ConfirmButton = styled.button`
+  font-family: "Poppins";
+  font-weight: 600;
+  background-color: #2A4F6A;
+  color: white;
+  border: none;
+  border-radius: 0.3125rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 1rem;
+  min-width: 7.5rem;
+  cursor: pointer;
+  
+
+  &:hover {
+    background-color: #388e3c;
+  }
+`;
+

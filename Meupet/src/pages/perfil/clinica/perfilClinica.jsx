@@ -272,6 +272,23 @@ const PerfilClinica = () => {
     }
   };
 
+  const maskPhone = (value) => {
+    const cleanValue = value.replace(/\D/g, "");
+
+    if (cleanValue.length >= 11) {
+      return cleanValue
+        .replace(/(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d{5})(\d)/, "$1-$2")
+        .replace(/(-\d{4})\d+?$/, "$1");
+    }
+
+    return cleanValue
+      .replace(/(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{4})(\d)/, "$1-$2")
+      .replace(/(-\d{4})\d+?$/, "$1");
+  };
+
+
   return (
     <Container>
       <ContainerHeader>
@@ -387,6 +404,10 @@ const PerfilClinica = () => {
                   value={formik.values.contact}
                   placeholder="(81) 98564-0002"
                   {...formik.getFieldProps("contact")}
+                  onChange={(e) => {
+                    const formattedPhone = maskPhone(e.target.value);
+                    formik.setFieldValue("contact", formattedPhone); // Changed from "phone" to "phoneNumber"
+                  }}
                 />
                 {formik.touched.contact && formik.errors.contact && (
                   <ErrorText>{formik.errors.contact}</ErrorText>

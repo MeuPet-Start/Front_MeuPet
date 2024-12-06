@@ -29,6 +29,10 @@ import {
   FormGroupDetalhesInput,
   Button,
   ErrorText,
+  Modal,
+  ModalContent,
+  ModalButtonContainer,
+  ConfirmButton,
 } from "./consultastyle";
 
 import { api } from "../../services/api";
@@ -55,8 +59,7 @@ const Consulta = () => {
     horarios: "",
   });
 
-  const [serviceSelected, setServiceSelected] = useState({});
-
+  const [isConfirmaModalOpen, setIsConfirmaModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -65,10 +68,10 @@ const Consulta = () => {
     return response.data;
   };
 
-  let clinicId = "";
+  let clinicId = state.id;
+  console.log(clinicId);
   useEffect(() => {
     if (state?.id) {
-      clinicId = state.id;
       getData(clinicId).then((data) => {
         setClinicData({
           name: data.name,
@@ -105,26 +108,34 @@ const Consulta = () => {
 
   const handleRequisicao = async (values) => {
     try {
+      let serviceSelected;
+      values.servicos.forEach((element) => {
+        if (element.name === values.tipoServico) {
+          serviceSelected = {
+            name: element.name,
+            id: element.id,
+          };
+        }
+      });
+
       const response = await api.post("/agendamento/atendimento", {
         partnerId: clinicId,
         userId: userData.id,
         serviceId: serviceSelected.id,
         animal: {
           name: values.nomePet,
-          age: values.idade,
+          age: values.idade.toString(),
           history: values.historico,
-          type: values.tipoAnimal,
+          type: values.tipoAnimal.toUpperCase(),
           sexo: values.generoPet,
         },
         appointmentDate: values.dataServico,
         startTime: values.openingHour,
         endTime: values.closingHour,
       });
-      // const response = await api.post("/agendamento/atendimento",);
-      alert("Agendamento realizado com sucesso!");
+      setIsConfirmaModalOpen(true);
     } catch (error) {
       console.error("Erro ao enviar o formulário:", error);
-      alert("Erro ao realizar o agendamento. Tente novamente.");
     }
   };
 
@@ -354,6 +365,27 @@ const Consulta = () => {
 
         <Button type="submit">Efetuar Marcação</Button>
       </Form>
+      {isConfirmaModalOpen && (
+        <Modal isOpen={isConfirmaModalOpen}>
+          <ModalContent>
+            <h2>SEU AGENDAMENTO FOI CONFIRMADO!</h2>
+            <p>
+              Prepare o seu pet e chegue com 10 minutos de antecedência para um
+              atendimento tranquilo.
+            </p>
+            <ModalButtonContainer>
+              <ConfirmButton
+                onClick={() => {
+                  setIsConfirmaModalOpen(false);
+                  navigate("/historico");
+                }}
+              >
+                Confirmar
+              </ConfirmButton>
+            </ModalButtonContainer>
+          </ModalContent>
+        </Modal>
+      )}
 
       <Footer />
     </>
