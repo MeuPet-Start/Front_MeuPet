@@ -4,7 +4,7 @@ import Cemevet from "../../assets/Cemevet.png";
 import { PiStethoscopeDuotone } from "react-icons/pi";
 import { BsClipboardCheck } from "react-icons/bs";
 import { MdLocalPhone } from "react-icons/md";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -31,10 +31,65 @@ import {
 } from "./consultastyle";
 
 import { api } from "../../services/api";
-import { number } from "yup";
+import { useEffect, useState } from "react";
+import { useUserData } from "../../hooks/useUserData";
 
 const Consulta = () => {
+  const { state } = useLocation();
+  const { userData } = useUserData();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [clinicData, setClinicData] = useState({
+    name: "",
+    servicos: [],
+    openingHour: "",
+    closingHour: "",
+    phoneNumber: "",
+    nomePet: "",
+    idade: "",
+    historico: "",
+    tipoAnimal: "",
+    generoPet: "",
+    tipoServico: "",
+    dataServico: "",
+    horarios: ""
+  });
+
+
+  const [serviceSelected, setServiceSelected] = useState({});
+
+  // const [animalData, ]
   const navigate = useNavigate();
+
+  const getData = async (clinicId) => {
+    const response = await api.get(`/partner/agendamento/${clinicId}`);
+    return response.data;
+  }
+
+  let clinicId = "";
+  useEffect(() => {
+    if (state?.id) {
+      clinicId = state.id;
+      getData(clinicId).then((data) => {
+        setClinicData({
+          name: data.name,
+          servicos: data.services,
+          openingHour: data.disponibilidades[0].openingHour,
+          closingHour: data.disponibilidades[0].closingHour,
+          phoneNumber: data.phoneNumber,
+          nomePet: "",
+          idade: "",
+          historico: "",
+          tipoAnimal: "",
+          generoPet: "",
+          tipoServico: "",
+          dataServico: "",
+          horarios: ""
+        });
+        console.log(clinicData);
+
+      });
+    }
+  }, [state]);
 
   const genderOptions = [
     { id: "femea", label: "Fêmea", value: "F" },
@@ -46,63 +101,73 @@ const Consulta = () => {
     { id: "gato", label: "Gato", value: "Gato" },
   ];
 
-  const handleButtonClick = () => {
-    navigate("/confirmacao");
-  };
+  // const handleButtonClick = () => {
+  // navigate("/confirmacao");
+  // };/
 
-  const handleSubmit = async (values) => {
+  const handleRequisicao = async (values) => {
     try {
-      const response = await api.post("/agendamento", values);
+      console.log(values);
+      const response = await api.post("/agendamento/atendimento", {
+        partnerId: clinicId,
+        userId: userData.id,
+        serviceId: serviceSelected.id,
+        animal: {
+          name: values.nomePet,
+          age: values.idade,
+          history: values.historico,
+          type: values.tipoAnimal,
+          sexo: values.generoPet
+        },
+        appointmentDate: values.dataServico,
+        startTime: values.openingHour,
+        endTime: values.closingHour
+      });
+      console.log(response);
+      // const response = await api.post("/agendamento/atendimento",);
       alert("Agendamento realizado com sucesso!");
     } catch (error) {
       console.error("Erro ao enviar o formulário:", error);
       alert("Erro ao realizar o agendamento. Tente novamente.");
     }
-  };
+  }
+
 
   const formik = useFormik({
-    initialValues: {
-      nomePet: "",
-      idade: "",
-      historico: "",
-      tipoAnimal: [],
-      generoPet: "",
-      tipoServico: [],
-      dataServico: "",
-      horarios: "",
-    },
+    enableReinitialize: true,
+    initialValues: clinicData,
     validationSchema: Yup.object({
       nomePet: Yup.string()
         .required("Nome do pet é obrigatório.")
         .min(2, "O nome do pet deve ter pelo menos 2 caracteres."),
-    
+
       idade: Yup.number()
         .required("A idade do pet é obrigatória.")
         .positive("A idade deve ser um número positivo.")
         .integer("A idade deve ser um número inteiro."),
-    
+
       historico: Yup.string()
         .optional()
         .max(500, "O histórico médico não pode exceder 500 caracteres."),
-    
+
       tipoAnimal: Yup.array()
         .min(1, "Por favor, selecione o tipo do animal.")
         .required("O tipo de animal é obrigatório."),
-    
+
       generoPet: Yup.string()
         .required("Por favor, selecione o gênero do pet."),
-    
+
       tipoServico: Yup.array()
         .min(1, "Por favor, selecione o tipo de serviço.")
         .required("O tipo de serviço é obrigatório."),
-    
+
       data: Yup.string()
         .required("A data do serviço é obrigatória.")
         .matches(
           /^\d{4}-\d{2}-\d{2}$/,
           "Formato de data inválido. Use o formato YYYY-MM-DD."
         ),
-    
+
       horarios: Yup.string()
         .required("Horário é obrigatório.")
         .matches(
@@ -110,8 +175,22 @@ const Consulta = () => {
           "Formato de horário inválido. Use o formato HH:mm."
         ),
     }),
-    onSubmit: handleSubmit,
+    onSubmit: async (values) => {
+      console.log(values);
+      setIsSubmitting(true);
+      try {
+        handleRequisicao(values)
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
   });
+
+  // useEffect(() => {
+  //   if (userData) {
+  //   }
+  // }, [userData])
+
   return (
     <>
       <Header />
@@ -119,23 +198,28 @@ const Consulta = () => {
       <HeaderSection>
         <HeaderImage src={Cemevet} alt="Clínica" />
         <Headerinfo>
-          <Headertitle>Centro Médico Veterinário</Headertitle>
+          <Headertitle>{clinicData.name}</Headertitle>
           <HeaderSubTitle>
             Sua Clínica Veterinária: Saúde e Cuidado para o seu Pet
           </HeaderSubTitle>
 
           <HeaderText>
             <PiStethoscopeDuotone style={{ height: "2rem", width: "2rem" }} />
-            +4 Serviços Inclusos: Consultas, Exames e Cirurgias
+            +{clinicData.servicos.length} Serviços Inclusos: {clinicData.servicos.map((servico, index) => {
+              if (index == clinicData.servicos.length - 1) {
+                return servico.name + ".";
+              }
+              return servico.name + ", ";
+            })}
           </HeaderText>
           <HeaderText>
             <BsClipboardCheck style={{ height: "2rem", width: "2rem" }} />
-            Atendimento: Das 8h às 18h, todos os dias
+            Atendimento: Das {clinicData.openingHour.slice(0, 5)} às {clinicData.closingHour.slice(0, 5)}, segunda a sexta.
           </HeaderText>
 
           <HeaderText>
             <MdLocalPhone style={{ height: "2rem", width: "2rem" }} />
-            Em caso de urgências, ligue: (81) 3440-0443
+            Em caso de urgências, ligue: {clinicData.phoneNumber}
           </HeaderText>
         </Headerinfo>
       </HeaderSection>
@@ -221,15 +305,18 @@ const Consulta = () => {
 
           <FormGroup>
             <FormInputTitle>Tipo do serviço:</FormInputTitle>
-            <Input
-              type="radio"
-              id="consulta"
-              defaultChecked
-              name="tipoServico"
-              value="consulta"
-              onChange={formik.handleChange}
-            />
-            <Label>Consulta</Label>
+            {clinicData.servicos.map((servico) => (
+              <FormGroup key={servico.name}>
+                <Input
+                  type="radio"
+                  id={servico.name}
+                  name="tipoServico"
+                  value={servico.name}
+                  onChange={formik.handleChange}
+                />
+                <Label htmlFor={servico.name}>{servico.name}</Label>
+              </FormGroup>
+            ))}
           </FormGroup>
 
           <FormGroupDetalhes>
@@ -255,7 +342,7 @@ const Consulta = () => {
           </FormGroupDetalhes>
         </InputGrid>
 
-        <Button onClick={handleButtonClick}>Efetuar Marcação</Button>
+        <Button type="submit">Efetuar Marcação</Button>
       </Form>
 
       <Footer />

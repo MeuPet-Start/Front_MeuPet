@@ -122,9 +122,9 @@ const PerfilClinica = () => {
         servicosPrestados: userData.services || [],
         servicosPrestadosValores: userData.servicosPrestadosValores || {},
         openingHours: "",
-        closingHours: "",
+        closingHours: ""
       });
-      console.log(userData)
+      console.log(userData);
     }
   }, [userData]);
 

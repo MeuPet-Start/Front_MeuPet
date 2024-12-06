@@ -34,70 +34,55 @@ const Servicos = () => {
     }
   }, [location.state]);
 
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = [
-          {
-            id: "c9070a0c-d48a-4045-87b2-0edfa407990b",
-            name: "Clinica Veterinaria Balestre",
-            email: "isabella-bolzan@tuamaeaquelaursa.com",
-            phoneNumber: "(81) 99999-9999",
-            streetAndNumber: "Rua Avenida 2",
-            neighborhood: "Feijão",
-            servicoPrestados: [
-              {
-                name: "Castração",
-                price: "",
-              },
-            ],
-          },
-          {
-            id: "c9070a0c-d48a-4045-87b2-0edfa407990b",
-            name: "Clinica Veterinaria Balestre",
-            email: "isabella-bolzan@tuamaeaquelaursa.com",
-            phoneNumber: "(81) 99999-9999",
-            streetAndNumber: "Rua Avenida 2",
-            neighborhood: "Feijão",
-            servicoPrestados: [
-              {
-                name: "Castração",
-                price: "",
-              },
-            ],
-          },
-          {
-            id: "c9070a0c-d48a-4045-87b2-0edfa407990b",
-            name: "Clinica Veterinaria Balestre",
-            email: "isabella-bolzan@tuamaeaquelaursa.com",
-            phoneNumber: "(81) 99999-9999",
-            streetAndNumber: "Rua Avenida 2",
-            neighborhood: "Feijão",
-            servicoPrestados: [
-              {
-                name: "Castração",
-                price: "",
-              },
-            ],
-          },
-        ];
-        setClinic(response);
-        setFilteredServices(response);
-      } catch (error) {
-        console.error("Erro ao buscar os serviços:", error);
-      }
-    };
-
-    fetchServices();
-  }, []);
-
   // useEffect(() => {
   //   const fetchServices = async () => {
   //     try {
-  //       const response = await api.get("/agendamento/partner/servico"); // Ajuste a URL conforme o seu backend
-  //       console.log(response.data);
-  //       setClinic(response.data);
-  //       setFilteredServices(response.data);
+  //       const response = [
+  //         {
+  //           id: "c9070a0c-d48a-4045-87b2-0edfa407990b",
+  //           name: "Clinica Veterinaria Balestre",
+  //           email: "isabella-bolzan@tuamaeaquelaursa.com",
+  //           phoneNumber: "(81) 99999-9999",
+  //           streetAndNumber: "Rua Avenida 2",
+  //           neighborhood: "Feijão",
+  //           servicoPrestados: [
+  //             {
+  //               name: "Castração",
+  //               price: "",
+  //             },
+  //           ],
+  //         },
+  //         {
+  //           id: "c9070a0c-d48a-4045-87b2-0edfa407990b",
+  //           name: "Clinica Veterinaria Balestre",
+  //           email: "isabella-bolzan@tuamaeaquelaursa.com",
+  //           phoneNumber: "(81) 99999-9999",
+  //           streetAndNumber: "Rua Avenida 2",
+  //           neighborhood: "Feijão",
+  //           servicoPrestados: [
+  //             {
+  //               name: "Castração",
+  //               price: "",
+  //             },
+  //           ],
+  //         },
+  //         {
+  //           id: "c9070a0c-d48a-4045-87b2-0edfa407990b",
+  //           name: "Clinica Veterinaria Balestre",
+  //           email: "isabella-bolzan@tuamaeaquelaursa.com",
+  //           phoneNumber: "(81) 99999-9999",
+  //           streetAndNumber: "Rua Avenida 2",
+  //           neighborhood: "Feijão",
+  //           servicoPrestados: [
+  //             {
+  //               name: "Castração",
+  //               price: "",
+  //             },
+  //           ],
+  //         },
+  //       ];
+  //       setClinic(response);
+  //       setFilteredServices(response);
   //     } catch (error) {
   //       console.error("Erro ao buscar os serviços:", error);
   //     }
@@ -106,14 +91,29 @@ const Servicos = () => {
   //   fetchServices();
   // }, []);
 
-  // useEffect(() => {
-  //   const filtered = clinic.filter((clinic) =>
-  //     clinic.servicoPrestados.some((tag) =>
-  //       tag.name.toLowerCase().includes(filterTag.toLowerCase())
-  //     )
-  //   );
-  //   setFilteredServices(filtered);
-  // }, [filterTag, clinic]);
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await api.get("/agendamento/partner/servico"); // Ajuste a URL conforme o seu backend
+        console.log(response.data);
+        setClinic(response.data);
+        setFilteredServices(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar os serviços:", error);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  useEffect(() => {
+    const filtered = clinic.filter((clinic) =>
+      clinic.servicoPrestados.some((tag) =>
+        tag.name.toLowerCase().includes(filterTag.toLowerCase())
+      )
+    );
+    setFilteredServices(filtered);
+  }, [filterTag, clinic]);
 
   const handleFilterChange = (event) => {
     const { value } = event.target;

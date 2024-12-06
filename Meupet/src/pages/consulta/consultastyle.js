@@ -77,7 +77,7 @@ export const HeaderText = styled.h2`
   }
 `;
 
-export const Form = styled.div`
+export const Form = styled.form`
   max-width: 1156px;
   margin: 1.25rem auto;
   padding: 1.25rem;
