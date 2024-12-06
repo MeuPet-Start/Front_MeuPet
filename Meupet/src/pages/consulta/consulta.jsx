@@ -1,34 +1,52 @@
-
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import carrossel1 from "../../assets/carrossel1.png";
-import carrossel2 from "../../assets/carrossel2.png";
-import carrossel3 from "../../assets/carrossel3.png";
 import Cemevet from "../../assets/Cemevet.png";
 import { PiStethoscopeDuotone } from "react-icons/pi";
 import { BsClipboardCheck } from "react-icons/bs";
 import { MdLocalPhone } from "react-icons/md";
-import { useNavigate } from "react-router"; 
-import { useFormik } from 'formik';
-import { HeaderSection, MainForm, InputGrid, ButtonGroup, SlideItem } from "./consultastyle";
-import "swiper/css"
-import "swiper/css/autoplay";
+import { useNavigate } from "react-router";
+import { useFormik } from "formik";
+import {
+  HeaderSection,
+  Form,
+  InputGrid,
+  Headertitle,
+  HeaderSubTitle,
+  Headerinfo,
+  HeaderImage,
+  HeaderText,
+  FormHeader,
+  FormTitle,
+  FormSubTitle,
+  FormGroup,
+  Label,
+  Input,
+  FormInputTitle,
+  FormGroupInfo,
+  FormGroupInfoInput,
+  FormGroupDetalhes,
+  FormGroupDetalhesInput,
+  Button,
+} from "./consultastyle";
+
 import { api } from "../../services/api";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
 
 const Consulta = () => {
   const navigate = useNavigate();
 
-  const handleButtonClick = () => {
-    navigate("/confirmacao");  
-  };
-
-  const data = [
-    { id: '1', image: carrossel1 },
-    { id: '2', image: carrossel2 },
-    { id: '3', image: carrossel3 },
+  const genderOptions = [
+    { id: "femea", label: "Fêmea", value: "F" },
+    { id: "macho", label: "Macho", value: "M" },
   ];
+
+  const animalOptions = [
+    { id: "cachorro", label: "Cachorro", value: "Cachorro" },
+    { id: "gato", label: "Gato", value: "Gato" },
+  ];
+
+  const handleButtonClick = () => {
+    navigate("/confirmacao");
+  };
 
   const handleSubmit = async (values) => {
     try {
@@ -49,191 +67,154 @@ const Consulta = () => {
       generoPet: "",
       tipoServico: [],
       data: "",
-      horarios: ""
+      horarios: "",
     },
-    onSubmit: handleSubmit
+    onSubmit: handleSubmit,
   });
   return (
     <>
       <Header />
-      
+
       <HeaderSection>
-        <div>
-          <img src={Cemevet} alt="Clínica" />
-          <div className="text">
-            <h1>Centro Médico Veterinário</h1>
-            <h2>Sua Clínica Veterinária: Saúde e Cuidado para o seu Pet</h2>
-            <div className="divInformacoes">
-              <PiStethoscopeDuotone className="headerIcones" />
-              <p><strong> +4 Serviços Inclusos: </strong> Consultas, Exames e Cirurgias</p>
-            </div>
-            <div className="divInformacoes">
-              <BsClipboardCheck className="headerIcones" />
-              <p><strong>Atendimento: Das 8h às 18h,</strong> todos os dias</p>
-            </div>
-            <div className="divInformacoes">
-              <MdLocalPhone className="headerIcones" />
-              <p>Em caso de urgências, ligue: <strong>(81) 3440-0443</strong></p>
-            </div>
-          </div>
-        </div>
+        <HeaderImage src={Cemevet} alt="Clínica" />
+        <Headerinfo>
+          <Headertitle>Centro Médico Veterinário</Headertitle>
+          <HeaderSubTitle>
+            Sua Clínica Veterinária: Saúde e Cuidado para o seu Pet
+          </HeaderSubTitle>
+
+          <HeaderText>
+            <PiStethoscopeDuotone style={{height: "2rem", width: "2rem" }} />
+            +4 Serviços Inclusos: Consultas, Exames e Cirurgias
+          </HeaderText>
+          <HeaderText>
+            <BsClipboardCheck style={{height: "2rem", width: "2rem" }}/>
+            Atendimento: Das 8h às 18h, todos os dias
+          </HeaderText>
+
+          <HeaderText>
+            <MdLocalPhone style={{height: "2rem", width: "2rem" }}/>
+            Em caso de urgências, ligue: (81) 3440-0443
+          </HeaderText>
+        </Headerinfo>
       </HeaderSection>
 
-      <Swiper
-        modules={[Navigation, Pagination, Autoplay]}
-        autoplay={{delay: 4000, disableOnInteraction: true}}
-        spaceBetween={50}
-        slidesPerView={1}
-        pagination={{ clickable: true }}
-        navigation
-      >
-        {data.map((item) => (
-          <SwiperSlide key={item.id}>
-            <SlideItem
-              src={item.image}
-              alt="Veterinário com Cachorro"
-              className="slide-item"
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      <Form onSubmit={formik.handleSubmit}>
+        <FormHeader>
+          <FormTitle>Serviços de Agendamento</FormTitle>
+          <FormSubTitle>
+            Preencha Rapidamente as informações de seu Pet e Agende com
+            Facilidade:
+          </FormSubTitle>
+        </FormHeader>
 
-      <MainForm onSubmit={formik.handleSubmit}>
-        <div className="tituloFormulario">
-          <h1>Serviços de Agendamento</h1>
-          <h2>Preencha Rapidamente as informações de seu Pet e <strong>Agende com Facilidade:</strong></h2>
-        </div>
-        
-        
         <InputGrid>
-          <div>
-            <h1 className="textgreen">Informações do Animal:</h1>
-            <div className="checkboxArea">
-              <h1>Tipo do animal:</h1>
-              <input 
-                type="radio"
-                id="cachorro"
-                defaultChecked
-                name="tipoAnimal"
-                value="Cachorro"
-                onChange={formik.handleChange}
-              />
-              <label for="cachorro">Cachorro</label>
-              <input 
-                type="radio" 
-                id="gato" 
-                name="tipoAnimal" 
-                value="Gato" 
-                onChange={formik.handleChange} 
-              />
-              <label for="gato">Gato</label>
-
-              <h1 className="segundoTitulo">Gênero do Pet:</h1>
-              <input 
-                type="radio" 
-                id="femea" 
-                defaultChecked 
-                name="generoPet" 
-                value="F" 
-                onChange={formik.handleChange} 
-              />
-              <label for="radio">Fêmea</label>
-              <input 
-                type="radio" 
-                id="macho"  
-                name="generoPet"
-                value="M" 
-                onChange={formik.handleChange} 
-              />
-              <label for="macho">Macho</label>
-            </div>
-          </div>
-
-
-          <div className="divContain">
-            <div className="divForm">
-            <label>Nome do Pet</label>
-              <input 
-                type="text" 
-                name="nome do Pet" 
-                placeholder="Insira o nome do seu Pet" 
-                onChange={formik.handleChange} 
-                value={formik.values.nomePet} 
-              />
-            </div>
-            <div className="divForm">
-              <label>Idade</label>
-              <input 
-              type="number"
-               name="idade" 
-               placeholder="Exemplo: 3 anos" 
-               onChange={formik.handleChange} 
-               value={formik.values.idade} 
-              />
-            </div>
-            <div className="divForm">
-              <label>Histórico médico relevante (se houver).</label>
-              <input 
+          <FormInputTitle>Informações do Animal:</FormInputTitle>
+          <FormGroupInfo>
+            <FormGroupInfoInput>
+              <Label>Nome do Pet:</Label>
+              <Input
                 type="text"
-                name="historico médico"  
-                placeholder="Insira aqui as informações adicionais sobre o seu Pet" 
-                onChange={formik.handleChange} 
+                name="nome do Pet"
+                placeholder="Insira o nome do seu Pet"
+                onChange={formik.handleChange}
+                value={formik.values.nomePet}
+              />
+            </FormGroupInfoInput>
+            <FormGroupInfoInput>
+              <Label>Idade:</Label>
+              <Input
+                type="number"
+                name="idade"
+                placeholder="Exemplo: 3 anos"
+                onChange={formik.handleChange}
+                value={formik.values.idade}
+              />
+            </FormGroupInfoInput>
+            <FormGroupInfoInput>
+              <Label>Histórico médico relevante (se houver):</Label>
+
+              <Input
+                type="text"
+                name="historico médico"
+                placeholder="Insira aqui as informações adicionais sobre o seu Pet"
+                onChange={formik.handleChange}
                 value={formik.values.historico}
               />
-            </div>
-          </div>
+            </FormGroupInfoInput>
+          </FormGroupInfo>
+          <FormGroup>
+            <FormInputTitle>Tipo do animal:</FormInputTitle>
 
-          <div>
-            <h1 className="textgreen detalhes">Detalhes do serviço: </h1>
-          </div>
-          
-          <div className="checkboxArea">
-            <h1>Tipo do serviço:</h1>
-            <input type="radio"
-              id="consulta" defaultChecked
+            {animalOptions.map((option) => (
+              <FormGroup key={option.id}>
+                <Input
+                  type="radio"
+                  id={option.id}
+                  name="tipoAnimal"
+                  value={option.value}
+                  onChange={formik.handleChange}
+                  defaultChecked={option.value === "Cachorro"}
+                />
+                <Label htmlFor={option.id}>{option.label}</Label>
+              </FormGroup>
+            ))}
+          </FormGroup>
+
+          <FormGroup>
+            <FormInputTitle>Gênero do Pet:</FormInputTitle>
+            {genderOptions.map((option) => (
+              <FormGroup key={option.id}>
+                <Input
+                  type="radio"
+                  id={option.id}
+                  name="generoPet"
+                  value={option.value}
+                  onChange={formik.handleChange}
+                  defaultChecked={option.value === "F"} // Marca 'Fêmea' como padrão
+                />
+                <Label htmlFor={option.id}>{option.label}</Label>
+              </FormGroup>
+            ))}
+          </FormGroup>
+
+          <FormGroup>
+            <FormInputTitle>Tipo do serviço:</FormInputTitle>
+            <Input
+              type="radio"
+              id="consulta"
+              defaultChecked
               name="tipoServico"
               value="consulta"
               onChange={formik.handleChange}
             />
-            <label for="consulta">Consulta</label>
-            <input type="radio"
-              id="exames"
-              name="tipoServico"
-              value="exame"
-              onChange={formik.handleChange} 
-            />
-            <label for="exames">Exames</label>
-            <input type="radio" 
-              id="vacinas"
-              name="tipoServico"
-              value="vacina" 
-              onChange={formik.handleChange} 
-            />
-            <label for="vacinas">Vacinas</label>
-          </div>
+            <Label for="consulta">Consulta</Label>
+          </FormGroup>
 
-          <div className="divContain">
-            <div className="divForm">
-              <label>Data do Serviço</label>
-              <input 
+          <FormGroupDetalhes>
+            <FormInputTitle>Detalhes do serviço: </FormInputTitle>
+            <FormGroupDetalhesInput>
+              <Label>Data do Serviço:</Label>
+              <Input
                 type="date"
                 name="data do serviço"
                 placeholder="Data :"
                 onChange={formik.handleChange}
                 value={formik.values.data || ""}
               />
-            </div>
-            <div className="divForm">
-              <label>Horários</label>
-              <input type="time" name="horario" placeholder="Horários" onChange={formik.handleChange}></input>
-            </div>
-          </div>
+              <Label>Horários:</Label>
+              <Input
+                type="time"
+                name="horario"
+                placeholder="Horários"
+                onChange={formik.handleChange}
+              />
+            </FormGroupDetalhesInput>
+          </FormGroupDetalhes>
         </InputGrid>
 
-        <ButtonGroup>
-          <button onClick={handleButtonClick}>Efetuar Marcação</button>
-        </ButtonGroup>
-      </MainForm>
+        <Button onClick={handleButtonClick}>Efetuar Marcação</Button>
+      </Form>
 
       <Footer />
     </>

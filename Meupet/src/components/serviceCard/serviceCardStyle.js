@@ -60,12 +60,13 @@ export const ServiceCardTitle = styled.h3`
   margin-bottom: 0.5rem;
 `;
 
-export const ServiceCardDescription = styled.p`
+
+export const ServiceCardstreetLocation = styled.p`
   font-size: 1rem;
   color: #5a5a5a;
-  margin-bottom: 1rem;
-  flex-grow: 1;
   font-family: "Poppins", sans-serif;
+  display: flex;
+  align-items: center;
 `;
 
 export const ServiceCardButton = styled.button`
