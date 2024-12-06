@@ -240,3 +240,12 @@ export const SlideItem = styled.img`
     width: 90%;
   }
 `;
+
+export const ErrorText = styled.div`
+  color: red;
+  font-size: 0.8rem;
+  font-family: "Poppins", sans-serif;
+  text-align: left;
+  margin-top: 0.5rem;
+  margin-bottom: 0rem;
+`;

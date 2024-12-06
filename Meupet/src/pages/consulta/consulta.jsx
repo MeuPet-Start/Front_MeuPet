@@ -28,6 +28,7 @@ import {
   FormGroupDetalhes,
   FormGroupDetalhesInput,
   Button,
+  ErrorText,
 } from "./consultastyle";
 
 import { api } from "../../services/api";
@@ -51,19 +52,18 @@ const Consulta = () => {
     generoPet: "",
     tipoServico: "",
     dataServico: "",
-    horarios: ""
+    horarios: "",
   });
-
 
   const [serviceSelected, setServiceSelected] = useState({});
 
-  // const [animalData, ]
+
   const navigate = useNavigate();
 
   const getData = async (clinicId) => {
     const response = await api.get(`/partner/agendamento/${clinicId}`);
     return response.data;
-  }
+  };
 
   let clinicId = "";
   useEffect(() => {
@@ -83,10 +83,8 @@ const Consulta = () => {
           generoPet: "",
           tipoServico: "",
           dataServico: "",
-          horarios: ""
+          horarios: "",
         });
-        console.log(clinicData);
-
       });
     }
   }, [state]);
@@ -107,7 +105,6 @@ const Consulta = () => {
 
   const handleRequisicao = async (values) => {
     try {
-      console.log(values);
       const response = await api.post("/agendamento/atendimento", {
         partnerId: clinicId,
         userId: userData.id,
@@ -117,21 +114,19 @@ const Consulta = () => {
           age: values.idade,
           history: values.historico,
           type: values.tipoAnimal,
-          sexo: values.generoPet
+          sexo: values.generoPet,
         },
         appointmentDate: values.dataServico,
         startTime: values.openingHour,
-        endTime: values.closingHour
+        endTime: values.closingHour,
       });
-      console.log(response);
       // const response = await api.post("/agendamento/atendimento",);
       alert("Agendamento realizado com sucesso!");
     } catch (error) {
       console.error("Erro ao enviar o formulário:", error);
       alert("Erro ao realizar o agendamento. Tente novamente.");
     }
-  }
-
+  };
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -149,37 +144,26 @@ const Consulta = () => {
       historico: Yup.string()
         .optional()
         .max(500, "O histórico médico não pode exceder 500 caracteres."),
-
-      tipoAnimal: Yup.array()
-        .min(1, "Por favor, selecione o tipo do animal.")
-        .required("O tipo de animal é obrigatório."),
-
+      tipoAnimal: Yup.string()
+        .required("Por favor, selecione o tipo do animal.")
+        .oneOf(["Cachorro", "Gato"], "Tipo de animal inválido."),
       generoPet: Yup.string()
-        .required("Por favor, selecione o gênero do pet."),
-
-      tipoServico: Yup.array()
-        .min(1, "Por favor, selecione o tipo de serviço.")
-        .required("O tipo de serviço é obrigatório."),
-
-      data: Yup.string()
-        .required("A data do serviço é obrigatória.")
-        .matches(
-          /^\d{4}-\d{2}-\d{2}$/,
-          "Formato de data inválido. Use o formato YYYY-MM-DD."
+        .required("Por favor, selecione o gênero do animal.")
+        .oneOf(["F", "M"], "Gênero inválido."),
+      tipoServico: Yup.string()
+        .required("O tipo do serviço é obrigatório.")
+        .oneOf(
+          clinicData.servicos.map((servico) => servico.name),
+          "Serviço inválido."
         ),
-
-      horarios: Yup.string()
-        .required("Horário é obrigatório.")
-        .matches(
-          /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/,
-          "Formato de horário inválido. Use o formato HH:mm."
-        ),
+      dataServico: Yup.date().required("A data do serviço é obrigatória."),
+      horarios: Yup.string().required("O horário do serviço é obrigatório."),
     }),
     onSubmit: async (values) => {
       console.log(values);
       setIsSubmitting(true);
       try {
-        handleRequisicao(values)
+        handleRequisicao(values);
       } finally {
         setIsSubmitting(false);
       }
@@ -204,8 +188,9 @@ const Consulta = () => {
           </HeaderSubTitle>
 
           <HeaderText>
-            <PiStethoscopeDuotone style={{ height: "2rem", width: "2rem" }} />
-            +{clinicData.servicos.length} Serviços Inclusos: {clinicData.servicos.map((servico, index) => {
+            <PiStethoscopeDuotone style={{ height: "2rem", width: "2rem" }} />+
+            {clinicData.servicos.length} Serviços Inclusos:{" "}
+            {clinicData.servicos.map((servico, index) => {
               if (index == clinicData.servicos.length - 1) {
                 return servico.name + ".";
               }
@@ -214,7 +199,8 @@ const Consulta = () => {
           </HeaderText>
           <HeaderText>
             <BsClipboardCheck style={{ height: "2rem", width: "2rem" }} />
-            Atendimento: Das {clinicData.openingHour.slice(0, 5)} às {clinicData.closingHour.slice(0, 5)}, segunda a sexta.
+            Atendimento: Das {clinicData.openingHour.slice(0, 5)} às{" "}
+            {clinicData.closingHour.slice(0, 5)}, segunda a sexta.
           </HeaderText>
 
           <HeaderText>
@@ -245,6 +231,9 @@ const Consulta = () => {
                 onChange={formik.handleChange}
                 value={formik.values.nomePet}
               />
+              {formik.touched.nomePet && formik.errors.nomePet && (
+                <ErrorText>{formik.errors.nomePet}</ErrorText>
+              )}
             </FormGroupInfoInput>
             <FormGroupInfoInput>
               <Label>Idade:</Label>
@@ -255,6 +244,9 @@ const Consulta = () => {
                 onChange={formik.handleChange}
                 value={formik.values.idade}
               />
+              {formik.touched.idade && formik.errors.idade && (
+                <ErrorText>{formik.errors.idade}</ErrorText>
+              )}
             </FormGroupInfoInput>
             <FormGroupInfoInput>
               <Label>Histórico médico relevante (se houver):</Label>
@@ -266,6 +258,9 @@ const Consulta = () => {
                 onChange={formik.handleChange}
                 value={formik.values.historico}
               />
+              {formik.touched.historico && formik.errors.historico && (
+                <ErrorText>{formik.errors.historico}</ErrorText>
+              )}
             </FormGroupInfoInput>
           </FormGroupInfo>
           <FormGroup>
@@ -279,11 +274,14 @@ const Consulta = () => {
                   name="tipoAnimal"
                   value={option.value}
                   onChange={formik.handleChange}
-                  defaultChecked={option.value === "Cachorro"}
+                  checked={formik.values.tipoAnimal === option.value}
                 />
                 <Label htmlFor={option.id}>{option.label}</Label>
               </FormGroup>
             ))}
+            {formik.touched.tipoAnimal && formik.errors.tipoAnimal && (
+              <ErrorText>{formik.errors.tipoAnimal}</ErrorText>
+            )}
           </FormGroup>
 
           <FormGroup>
@@ -296,11 +294,14 @@ const Consulta = () => {
                   name="generoPet"
                   value={option.value}
                   onChange={formik.handleChange}
-                  defaultChecked={option.value === "F"} // Marca 'Fêmea' como padrão
+                  checked={formik.values.generoPet === option.value}
                 />
                 <Label htmlFor={option.id}>{option.label}</Label>
               </FormGroup>
             ))}
+            {formik.touched.generoPet && formik.errors.generoPet && (
+              <ErrorText>{formik.errors.generoPet}</ErrorText>
+            )}
           </FormGroup>
 
           <FormGroup>
@@ -317,6 +318,9 @@ const Consulta = () => {
                 <Label htmlFor={servico.name}>{servico.name}</Label>
               </FormGroup>
             ))}
+            {formik.touched.tipoServico && formik.errors.tipoServico && (
+              <ErrorText>{formik.errors.tipoServico}</ErrorText>
+            )}
           </FormGroup>
 
           <FormGroupDetalhes>
@@ -330,6 +334,9 @@ const Consulta = () => {
                 onChange={formik.handleChange}
                 value={formik.values.dataServico || ""}
               />
+              {formik.touched.dataServico && formik.errors.dataServico && (
+                <ErrorText>{formik.errors.dataServico}</ErrorText>
+              )}
               <Label>Horários:</Label>
               <Input
                 type="time"
@@ -338,6 +345,9 @@ const Consulta = () => {
                 onChange={formik.handleChange}
                 value={formik.values.horarios || ""}
               />
+              {formik.touched.horarios && formik.errors.horarios && (
+                <ErrorText>{formik.errors.horarios}</ErrorText>
+              )}
             </FormGroupDetalhesInput>
           </FormGroupDetalhes>
         </InputGrid>
