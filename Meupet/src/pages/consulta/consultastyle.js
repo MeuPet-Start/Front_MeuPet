@@ -186,7 +186,7 @@ export const Label = styled.label`
   font-size: 1rem;
   font-weight: 600;
   color: #454545;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.5rem;
   margin-right: 1rem;
 `;
 
@@ -201,7 +201,7 @@ export const Input = styled.input`
   color: #000;
   outline: none;
   margin-right: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 
   &:focus {
     border-color: #2a4f6a;
@@ -221,7 +221,7 @@ export const Button = styled.button`
   font-size: 1rem;
   transition: background-color 0.3s ease;
   margin-top: 0.625rem;
-  margin: 0 auto;
+  margin: 1rem auto 0 auto;
   width: 100%;
 
   &:hover {

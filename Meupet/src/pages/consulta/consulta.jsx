@@ -30,6 +30,7 @@ import {
 } from "./consultastyle";
 
 import { api } from "../../services/api";
+import { number } from "yup";
 
 const Consulta = () => {
   const navigate = useNavigate();
@@ -84,16 +85,16 @@ const Consulta = () => {
           </HeaderSubTitle>
 
           <HeaderText>
-            <PiStethoscopeDuotone style={{height: "2rem", width: "2rem" }} />
+            <PiStethoscopeDuotone style={{ height: "2rem", width: "2rem" }} />
             +4 Serviços Inclusos: Consultas, Exames e Cirurgias
           </HeaderText>
           <HeaderText>
-            <BsClipboardCheck style={{height: "2rem", width: "2rem" }}/>
+            <BsClipboardCheck style={{ height: "2rem", width: "2rem" }} />
             Atendimento: Das 8h às 18h, todos os dias
           </HeaderText>
 
           <HeaderText>
-            <MdLocalPhone style={{height: "2rem", width: "2rem" }}/>
+            <MdLocalPhone style={{ height: "2rem", width: "2rem" }} />
             Em caso de urgências, ligue: (81) 3440-0443
           </HeaderText>
         </Headerinfo>
