@@ -55,7 +55,6 @@ const Login = () => {
 
         if (response.status === 200) {
           localStorage.setItem("jwtToken", response.data.token);
-          alert("Login bem-sucedido!");
           login();
           setTimeout(() => {
             navigate("/");

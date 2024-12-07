@@ -43,7 +43,7 @@ export const ServiceCardtags = styled.div`
   display: flex;
   gap: 0.25rem;
   margin-bottom: 0.5rem;
-  flex-wrap: wrap; /* Permite que as tags quebrem para a linha seguinte */
+  flex-wrap: wrap;
   
   span {
     background-color: #36a92e;

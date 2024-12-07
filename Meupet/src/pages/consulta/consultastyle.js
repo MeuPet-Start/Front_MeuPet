@@ -283,12 +283,13 @@ export const ModalContent = styled.div`
 
   h2{
     font-size: 2rem;
-    color: #2a4f6a;
+    color: #388e3c;
+    margin-bottom: 1rem;
   }
   p{
-    font-size: 1rem;
     color: #2a4f6a;
     font-family: "Poppins";
+    margin-bottom: 1rem;
   }
 
   @keyframes fadeIn {

@@ -77,12 +77,10 @@ const PerfilUsuario = () => {
       });
 
       if (response.status === 200) {
-        alert("Dados do usuário atualizados com sucesso!");
         fetchUserData();
       }
     } catch (error) {
       console.error("Erro ao atualizar os dados do usuário:", error);
-      alert("Erro ao salvar os dados do usuário.");
     }
   };
 
@@ -120,6 +118,8 @@ const PerfilUsuario = () => {
           });
           if (response.status === 200) {
             alert("Imagem alterada com sucesso!");
+          }else {
+            alert("Erro ao alterar a imagem. Tente novamente.");
           }
         } catch (error) {
           console.error("Erro ao salvar a imagem:", error);
@@ -141,12 +141,10 @@ const PerfilUsuario = () => {
   const confirmLogoutAccount = () => {
     try {
       logout();
-      alert("Você foi desconectado com sucesso!");
       navigate("/login");
       window.location.reload();
     } catch (error) {
       console.error("Erro ao desconectar:", error);
-      alert("Erro ao desconectar.");
     } finally {
       setIsLogoutModalOpen(false);
     }
@@ -160,12 +158,11 @@ const PerfilUsuario = () => {
     try {
       const response = await api.delete("/user", {
         params: {
-          id: userData.id
-        }
+          id: userData.id,
+        },
       });
       if (response.status === 204) {
         logout();
-        alert("Conta deletada com sucesso.");
         navigate("/");
         window.location.reload();
       }

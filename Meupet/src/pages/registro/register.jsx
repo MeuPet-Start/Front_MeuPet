@@ -11,7 +11,6 @@ import {
   InputContainer,
   Input,
   Button,
-  LinkText,
   Background,
   ErrorText,
   ButtonContainer,
@@ -19,6 +18,10 @@ import {
   ButtonEscolha,
   Label,
   ButtonVoltar,
+  Modal,
+  ModalContent,
+  ModalButtonContainer,
+  ConfirmButton,
 } from "./registerStyle";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import logoImage from "../../assets/logo.png";
@@ -28,6 +31,7 @@ const Register = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isRegistrationConfirmed, setIsRegistrationConfirmed] = useState(false);
 
   const stepValidationSchemas = [
     Yup.object().shape({
@@ -114,7 +118,6 @@ const Register = () => {
       if (currentStep < 2) {
         setCurrentStep(currentStep + 1);
       } else {
-        console.log(values);
         try {
           const endpoint =
             formik.values.userType === "clinic"
@@ -142,13 +145,11 @@ const Register = () => {
                   birthDate: values.birthDate,
                 };
 
-          console.log(values.birthDate);
+          
 
           const response = await axios.post(endpoint, requestData);
-
-          console.log(response.data);
           if (response.status === 201) {
-            alert("Cadastro realizado com sucesso!");
+            setIsRegistrationConfirmed(true);
             navigate("/login");
           }
         } catch (error) {
@@ -544,6 +545,28 @@ const Register = () => {
           )}
         </RegisterCard>
       </RegisterContainer>
+      {isRegistrationConfirmed && (
+        <Modal isOpen={isRegistrationConfirmed}>
+          <ModalContent>
+            <h2>CADASTRO REALIZADO COM SUCESSO!</h2>
+            <p>
+              Enviamos um e-mail de confirmação para o endereço cadastrado. Por
+              favor, verifique sua caixa de entrada e confirme sua conta para
+              começar.
+            </p>
+            <ModalButtonContainer>
+              <ConfirmButton
+                onClick={() => {
+                  setIsRegistrationConfirmed(false);
+                  navigate("/login");
+                }}
+              >
+                Entendi
+              </ConfirmButton>
+            </ModalButtonContainer>
+          </ModalContent>
+        </Modal>
+      )}
     </Background>
   );
 };

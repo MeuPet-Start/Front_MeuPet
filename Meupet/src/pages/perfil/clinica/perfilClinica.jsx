@@ -34,7 +34,7 @@ import {
   ValorServico,
   Servico,
   InputValor,
-  Inputcheck
+  Inputcheck,
 } from "./perfilClinicaStyle";
 
 import { useUserData } from "../../../hooks/useUserData";
@@ -70,12 +70,10 @@ const PerfilClinica = () => {
       });
 
       if (response.status === 200) {
-        alert("Dados do usuário atualizados com sucesso!");
         fetchUserData();
       }
     } catch (error) {
       console.error("Erro ao atualizar os dados do usuário:", error);
-      alert("Erro ao salvar os dados do usuário.");
     }
   };
 
@@ -89,26 +87,26 @@ const PerfilClinica = () => {
         services: servicesAndValues,
         disponibilidade: {
           openingHour: values.openingHour,
-          closingHour: values.closingHour
+          closingHour: values.closingHour,
+        },
+      };
+      console.log(request);
+      const response = await api.post(
+        `/partner/service/disponibilidade/${userData.id}`,
+        {
+          services: servicesAndValues,
+          disponibilidade: {
+            openingHour: values.openingHour,
+            closingHour: values.closingHour,
+          },
         }
-      }
-      console.log(request)
-      const response = await api.post(`/partner/service/disponibilidade/${userData.id}`, {
-        services: servicesAndValues,
-        disponibilidade: {
-          openingHour: values.openingHour,
-          closingHour: values.closingHour
-        }
-      });
-
+      );
 
       if (response.status === 200) {
-        alert("Dados do usuário atualizados com sucesso!");
         fetchUserData();
       }
     } catch (error) {
       console.error("Erro ao atualizar os dados do usuário:", error);
-      alert("Erro ao salvar os dados do usuário.");
     }
   };
 
@@ -122,7 +120,7 @@ const PerfilClinica = () => {
         servicosPrestados: userData.services || [],
         servicosPrestadosValores: userData.servicosPrestadosValores || {},
         openingHours: "",
-        closingHours: ""
+        closingHours: "",
       });
       console.log(userData);
     }
@@ -133,7 +131,9 @@ const PerfilClinica = () => {
       case "geral":
         return Yup.object({
           name: Yup.string().required("Nome da clínica é obrigatório"),
-          streetAndNumber: Yup.string().required("Rua e complemento são obrigatórios"),
+          streetAndNumber: Yup.string().required(
+            "Rua e complemento são obrigatórios"
+          ),
           neighborhood: Yup.string().required("Bairro é obrigatório"),
           contact: Yup.string().required("Contato é obrigatório"),
         });
@@ -144,11 +144,14 @@ const PerfilClinica = () => {
             1,
             "Selecione pelo menos um serviço."
           ),
-          openingHour: Yup.string().required('Horário de Abertura é obrigatório'),
-          closingHour: Yup.string().required('Horário de Fechamento é obrigatório')
+          openingHour: Yup.string().required(
+            "Horário de Abertura é obrigatório"
+          ),
+          closingHour: Yup.string()
+            .required("Horário de Fechamento é obrigatório")
             .test(
-              'is-before-opening',
-              'Horário de Fechamento não pode ser antes do Horário de Abertura',
+              "is-before-opening",
+              "Horário de Fechamento não pode ser antes do Horário de Abertura",
               function (value) {
                 const { openingHour } = this.parent; // Obtém o valor de openingHour
 
@@ -230,12 +233,10 @@ const PerfilClinica = () => {
     try {
       localStorage.removeItem("jwtToken");
       logout();
-      alert("Você foi desconectado com sucesso!");
       navigate("/login");
       window.location.reload();
     } catch (error) {
       console.error("Erro ao desconectar:", error);
-      alert("Erro ao desconectar.");
     } finally {
       setIsLogoutModalOpen(false);
     }
@@ -255,11 +256,8 @@ const PerfilClinica = () => {
       });
       if (response.status === 204) {
         logout();
-        alert("Conta deletada com sucesso.");
         navigate("/");
         window.location.reload();
-      } else {
-        alert("Erro ao deletar conta. Tente novamente.");
       }
     } catch (error) {
       console.error("Erro ao deletar a conta:", error);
@@ -287,7 +285,6 @@ const PerfilClinica = () => {
       .replace(/(\d{4})(\d)/, "$1-$2")
       .replace(/(-\d{4})\d+?$/, "$1");
   };
-
 
   return (
     <Container>
@@ -376,9 +373,10 @@ const PerfilClinica = () => {
                   placeholder="Ex: Avenida Caxangá, nº 123"
                   {...formik.getFieldProps("streetAndNumber")}
                 />
-                {formik.touched.streetAndNumber && formik.errors.streetAndNumber && (
-                  <ErrorText>{formik.errors.streetAndNumber}</ErrorText>
-                )}
+                {formik.touched.streetAndNumber &&
+                  formik.errors.streetAndNumber && (
+                    <ErrorText>{formik.errors.streetAndNumber}</ErrorText>
+                  )}
               </FormGroup>
 
               <FormGroup>
@@ -437,7 +435,9 @@ const PerfilClinica = () => {
                         id={service.value}
                         name="servicosPrestados"
                         value={service.value}
-                        checked={formik.values.servicosPrestados.includes(service.value)}
+                        checked={formik.values.servicosPrestados.includes(
+                          service.value
+                        )}
                         onChange={formik.handleChange}
                       />
                       <Label htmlFor={service.value}>{service.label}</Label>
@@ -448,7 +448,11 @@ const PerfilClinica = () => {
                           type="text"
                           id={`${service.value}-valor`}
                           name={`servicosPrestadosValores.${service.value}`}
-                          value={formik.values.servicosPrestadosValores[service.label] || ""}
+                          value={
+                            formik.values.servicosPrestadosValores[
+                              service.label
+                            ] || ""
+                          }
                           placeholder="Ex: R$ 100,00"
                           onChange={(e) => {
                             formik.setFieldValue(
