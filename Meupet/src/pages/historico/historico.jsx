@@ -18,6 +18,7 @@ import {
   ModalContent,
   ModalButtonContainer,
   ConfirmButton,
+  ButtonShowMore,
 } from "./historicostyle";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";

@@ -145,6 +145,36 @@ export const AppointmentCard = styled.div`
   }
 `;
 
+export const AppointmentCardModal = styled.div`
+  font-family: "Poppins";
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 1156px;
+  width: 100%;
+  margin-bottom: 20px;
+  transition: transform 0.2s ease;
+
+  cursor: default;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    img {
+      margin-bottom: 20px;
+    }
+  }
+`;
+
 export const StatusBadge = styled.span`
   padding: 4px 8px;
   border-radius: 4px;
@@ -181,12 +211,42 @@ export const AppointmentDetailsInfo = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+export const AppointmentDetailsInfoModal = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
 export const AppointmentCardType = styled.div`
   display: flex;
   gap: 0.25rem;
   margin-bottom: 0.5rem;
   flex-wrap: wrap;
 `;
+export const AppointmentCardTypeModal = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+`;
+
+export const AppointmentCardContent = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const AppointmentCardInfoContent = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  padding: 1rem;
+`;
+
 export const AppointmentType = styled.span`
   font-weight: 600;
   background-color: #36a92e;
@@ -279,6 +339,39 @@ export const ModalContent = styled.div`
   text-align: center;
   animation: fadeIn 0.3s ease-in-out;
 
+  max-height: 40rem; // Limit height
+  overflow-y: auto; // Enable scroll
+  
+  /* Scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #2A4F6A;
+    border-radius: 4px;
+  }
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #2A4F6A #f1f1f1;
+
+  h2 {
+    position: sticky;
+    top: 0;
+    background: white;
+    padding: 2rem 0;
+    margin: 0;
+    z-index: 1;
+  }
+
+  
+
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -289,6 +382,11 @@ export const ModalContent = styled.div`
       transform: translateY(0);
     }
   }
+`;
+
+export const ModalTitle = styled.div`
+  background-color: white;
+  width: 100%;
 `;
 
 export const ModalCloseButton = styled.button`
