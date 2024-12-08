@@ -209,6 +209,26 @@ export const Input = styled.input`
   }
 `;
 
+export const Select = styled.select`
+  display: flex;
+  font-family: "Poppins";
+  font-weight: 100;
+  padding: 0.6875rem;
+  border-radius: 0.5rem;
+  border: 0.0625rem solid #ccc;
+  font-size: 1rem;
+  color: #000;
+  outline: none;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+
+  &:focus {
+    border-color: #2a4f6a;
+    box-shadow: 0 0 0.125rem rgba(42, 79, 106, 0.5);
+  }
+`;
+
 export const Button = styled.button`
   font-family: "Poppins";
   font-weight: 500;

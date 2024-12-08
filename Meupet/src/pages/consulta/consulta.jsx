@@ -6,6 +6,7 @@ import { BsClipboardCheck } from "react-icons/bs";
 import { MdLocalPhone } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router";
 import { useFormik } from "formik";
+import { format, parse, addHours } from "date-fns";
 import * as Yup from "yup";
 import {
   HeaderSection,
@@ -33,6 +34,7 @@ import {
   ModalContent,
   ModalButtonContainer,
   ConfirmButton,
+  Select,
 } from "./consultastyle";
 
 import { api } from "../../services/api";
@@ -60,7 +62,7 @@ const Consulta = () => {
   });
 
   const [isConfirmaModalOpen, setIsConfirmaModalOpen] = useState(false);
-
+  const [timeSlots, setTimeSlots] = useState([]);
   const navigate = useNavigate();
 
   const getData = async (clinicId) => {
@@ -92,6 +94,26 @@ const Consulta = () => {
     }
   }, [state]);
 
+  const generateTimeSlots = (openingHour, closingHour) => {
+    const slots = [];
+    const start = parse(openingHour, "HH:mm", new Date());
+    const end = parse(closingHour, "HH:mm", new Date());
+
+    let current = start;
+    while (current <= end) {
+      slots.push(format(current, "HH:mm"));
+      current = addHours(current, 1);
+    }
+
+    setTimeSlots(slots);
+  };
+
+  useEffect(() => {
+    if (clinicData.openingHour && clinicData.closingHour) {
+      generateTimeSlots(clinicData.openingHour, clinicData.closingHour);
+    }
+  }, [clinicData.openingHour, clinicData.closingHour]);
+
   const genderOptions = [
     { id: "femea", label: "Fêmea", value: "F" },
     { id: "macho", label: "Macho", value: "M" },
@@ -101,10 +123,6 @@ const Consulta = () => {
     { id: "cachorro", label: "Cachorro", value: "Cachorro" },
     { id: "gato", label: "Gato", value: "Gato" },
   ];
-
-  // const handleButtonClick = () => {
-  // navigate("/confirmacao");
-  // };/
 
   const handleRequisicao = async (values) => {
     try {
@@ -341,6 +359,7 @@ const Consulta = () => {
                 type="date"
                 name="dataServico"
                 placeholder="Data :"
+                min={format(new Date(), "yyyy-MM-dd")}
                 onChange={formik.handleChange}
                 value={formik.values.dataServico || ""}
               />
@@ -348,13 +367,25 @@ const Consulta = () => {
                 <ErrorText>{formik.errors.dataServico}</ErrorText>
               )}
               <Label>Horários:</Label>
-              <Input
-                type="time"
+              <Label>Horários:</Label>
+              <Select
                 name="horarios"
-                placeholder="Horários"
+                value={formik.values.horarios}
                 onChange={formik.handleChange}
-                value={formik.values.horarios || ""}
-              />
+                style={{
+                  padding: "8px",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                  width: "100%",
+                }}
+              >
+                <option value="">Selecione um horário</option>
+                {timeSlots.map((slot) => (
+                  <option key={slot} value={slot}>
+                    {slot}
+                  </option>
+                ))}
+              </Select>
               {formik.touched.horarios && formik.errors.horarios && (
                 <ErrorText>{formik.errors.horarios}</ErrorText>
               )}
