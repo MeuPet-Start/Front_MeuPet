@@ -33,7 +33,7 @@ const MinhasConsulta = () => {
   const userId = userData.id;
 
   const [showCancelModal, setShowCancelModal] = useState(false);
-  const [selectedConsultaId, setSelectedConsultaId] = useState(null);
+  const [selectedConsultaId, setSelectedConsultaId] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showAllConsultas, setShowAllConsultas] = useState(false);
 
@@ -41,14 +41,19 @@ const MinhasConsulta = () => {
     setShowAllConsultas(!showAllConsultas);
   };
 
-  const handleCancelAppointment = async (id) => {
+  const handleCancelAppointment = async (request) => {
     setIsLoading(true);
     try {
-      await api.put(`/agendamento/cancel/${id}`, {
-        status: "CANCELED",
-      });
-      setConsultas(consultas.filter((consulta) => consulta.id !== id));
+
+      const response = await api.put(`/agendamento/atendimento/${request.partnerId}/${request.serviceId}`,
+        {
+          status: "cancelado"
+        }
+      );
       setShowCancelModal(false);
+
+      await handleConsulta();
+
     } catch (error) {
       console.error("Erro ao cancelar consulta:", error);
       alert("Erro ao cancelar consulta. Tente novamente.");
@@ -69,16 +74,22 @@ const MinhasConsulta = () => {
     const response = await api.get(`/agendamento/atendimento/user/${userId}`);
 
     console.log(response.data);
-    const filteredData = response.data.map((consulta) => ({
-      id: consulta.id,
-      dataAgendamento: consulta.dataAgendamento,
-      horaInicio: consulta.horaInicio,
-      status: consulta.status,
-      partnerName: consulta.partner.name,
-      servicoName: consulta.servico.name,
-      animalName: consulta.animal.name,
-      animalType: consulta.animal.type,
-    }));
+    const filteredData = response.data
+      .filter(consulta => consulta.status !== "CANCELADO")
+      .map((consulta) => ({
+        id: consulta.id,
+        dataAgendamento: consulta.dataAgendamento,
+        horaInicio: consulta.horaInicio,
+        status: consulta.status,
+        partnerId: consulta.partner.id,
+        partnerName: consulta.partner.name,
+        endereco: consulta.partner.address,
+        servicoName: consulta.servico.name,
+        animalName: consulta.animal.name,
+        animalType: consulta.animal.type,
+      }));
+
+    console.log(filteredData)
 
     if (filteredData.partnerName == "") {
       setConsultas();
@@ -140,7 +151,10 @@ const MinhasConsulta = () => {
                       </MapButton>
                       <CancelButton
                         onClick={() => {
-                          setSelectedConsultaId(consulta.id);
+                          setSelectedConsultaId({
+                            serviceId: consulta.id,
+                            partnerId: consulta.partnerId
+                          });
                           setShowCancelModal(true);
                         }}
                       >

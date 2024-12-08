@@ -17,7 +17,7 @@ export default function Footer() {
   return (
     <FooterContainer>
       <FooterNav>
-        <FooterLinks href="#/">Home</FooterLinks>
+        <FooterLinks onClick={() => navigate("/")}>Home</FooterLinks>
         <FooterLinks
           as="a"
           href="https://adotapet.recife.pe.gov.br/"
@@ -31,12 +31,12 @@ export default function Footer() {
           Serviços
         </FooterLinks>
         {userType === "user" && (
-          <FooterLinks onClick={() => navigate("/consultas")}>
+          <FooterLinks onClick={() => navigate("/historico")}>
             Consultas
           </FooterLinks>
         )}
         {userType === "clinic" && (
-          <FooterLinks onClick={() => navigate("/consultas")}>
+          <FooterLinks onClick={() => navigate("/agenda")}>
             Consultas
           </FooterLinks>
         )}

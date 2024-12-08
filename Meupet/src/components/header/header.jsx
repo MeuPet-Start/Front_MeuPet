@@ -41,7 +41,7 @@ function Header() {
   //   return <p>Carregando informações do usuário...</p>; // Indicador de carregamento
   // }
 
-  
+
 
   // console.log(userType)
 
@@ -87,7 +87,7 @@ function Header() {
             <NavLink onClick={() => navigate("/historico")}>Consultas</NavLink>
           )}
           {userType === "clinic" && (
-            <NavLink onClick={() => navigate("/consultas")}>Consultas</NavLink>
+            <NavLink onClick={() => navigate("/agenda")}>Consultas</NavLink>
           )}
         </Links>
       )}
@@ -110,12 +110,12 @@ function Header() {
             Serviços
           </MobileNavLink>
           {userType === "user" && (
-            <MobileNavLink onClick={() => navigate("/consultas")}>
+            <MobileNavLink onClick={() => navigate("/historico")}>
               Consultas
             </MobileNavLink>
           )}
           {userType === "clinic" && (
-            <MobileNavLink onClick={() => navigate("/consultas")}>
+            <MobileNavLink onClick={() => navigate("/agenda")}>
               Consultas
             </MobileNavLink>
           )}

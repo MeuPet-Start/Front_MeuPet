@@ -130,8 +130,7 @@ const Consulta = () => {
           sexo: values.generoPet,
         },
         appointmentDate: values.dataServico,
-        startTime: values.openingHour,
-        endTime: values.closingHour,
+        startTime: values.horarios,
       });
       setIsConfirmaModalOpen(true);
     } catch (error) {

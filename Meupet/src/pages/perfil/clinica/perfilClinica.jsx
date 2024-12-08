@@ -450,7 +450,7 @@ const PerfilClinica = () => {
                           name={`servicosPrestadosValores.${service.value}`}
                           value={
                             formik.values.servicosPrestadosValores[
-                              service.label
+                            service.label
                             ] || ""
                           }
                           placeholder="Ex: R$ 100,00"
