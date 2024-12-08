@@ -23,8 +23,8 @@ export const ServiceCardContainer = styled.div`
 `;
 
 export const ServiceCardImage = styled.img`
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
   border-radius: 10px;
   margin-right: 1rem;
@@ -43,7 +43,7 @@ export const ServiceCardtags = styled.div`
   display: flex;
   gap: 0.25rem;
   margin-bottom: 0.5rem;
-  flex-wrap: wrap; /* Permite que as tags quebrem para a linha seguinte */
+  flex-wrap: wrap;
   
   span {
     background-color: #36a92e;
@@ -60,12 +60,13 @@ export const ServiceCardTitle = styled.h3`
   margin-bottom: 0.5rem;
 `;
 
-export const ServiceCardDescription = styled.p`
+
+export const ServiceCardstreetLocation = styled.p`
   font-size: 1rem;
   color: #5a5a5a;
-  margin-bottom: 1rem;
-  flex-grow: 1;
   font-family: "Poppins", sans-serif;
+  display: flex;
+  align-items: center;
 `;
 
 export const ServiceCardButton = styled.button`
@@ -82,4 +83,12 @@ export const ServiceCardButton = styled.button`
   &:hover {
     background-color: #36a92e;
   }
+`;
+
+export const ServiceCardNeighborhoodLocaltion = styled.p`
+  font-size: 1rem;
+  color: #5a5a5a;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+  font-family: "Poppins", sans-serif;
 `;

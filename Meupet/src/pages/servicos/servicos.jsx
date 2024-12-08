@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import ServiceCard from "../../components/serviceCard/serviceCard";
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
@@ -12,32 +11,92 @@ import {
   ButtonService,
   ServicesSection,
   ServicesInfo,
-  SearchBarSection,
-  SearchBarContainer,
   SearchBar,
   SearchInput,
   SearchIconLeft,
   ContainerHeader,
 } from "./servicosStyle";
 
+import { useLocation } from "react-router-dom";
+import { api } from "../../services/api";
+import clinicImg from "../../assets/hovet.png";
+
 const Servicos = () => {
-  const [services, setServices] = useState([]);
+  const { state } = useLocation();
+  const [clinic, setClinic] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
-  const [filterTag, setFilterTag] = useState("");
+  const [filterTag, setFilterTag] = useState(state?.filterTag || "");
   const [showAllServices, setShowAllServices] = useState(false);
 
   useEffect(() => {
     if (location.state?.filterTag) {
-      setFilterTag(location.state.filterTag);  
+      setFilterTag(location.state.filterTag);
     }
   }, [location.state]);
+
+  // useEffect(() => {
+  //   const fetchServices = async () => {
+  //     try {
+  //       const response = [
+  //         {
+  //           id: "c9070a0c-d48a-4045-87b2-0edfa407990b",
+  //           name: "Clinica Veterinaria Balestre",
+  //           email: "isabella-bolzan@tuamaeaquelaursa.com",
+  //           phoneNumber: "(81) 99999-9999",
+  //           streetAndNumber: "Rua Avenida 2",
+  //           neighborhood: "Feijão",
+  //           servicoPrestados: [
+  //             {
+  //               name: "Castração",
+  //               price: "",
+  //             },
+  //           ],
+  //         },
+  //         {
+  //           id: "c9070a0c-d48a-4045-87b2-0edfa407990b",
+  //           name: "Clinica Veterinaria Balestre",
+  //           email: "isabella-bolzan@tuamaeaquelaursa.com",
+  //           phoneNumber: "(81) 99999-9999",
+  //           streetAndNumber: "Rua Avenida 2",
+  //           neighborhood: "Feijão",
+  //           servicoPrestados: [
+  //             {
+  //               name: "Castração",
+  //               price: "",
+  //             },
+  //           ],
+  //         },
+  //         {
+  //           id: "c9070a0c-d48a-4045-87b2-0edfa407990b",
+  //           name: "Clinica Veterinaria Balestre",
+  //           email: "isabella-bolzan@tuamaeaquelaursa.com",
+  //           phoneNumber: "(81) 99999-9999",
+  //           streetAndNumber: "Rua Avenida 2",
+  //           neighborhood: "Feijão",
+  //           servicoPrestados: [
+  //             {
+  //               name: "Castração",
+  //               price: "",
+  //             },
+  //           ],
+  //         },
+  //       ];
+  //       setClinic(response);
+  //       setFilteredServices(response);
+  //     } catch (error) {
+  //       console.error("Erro ao buscar os serviços:", error);
+  //     }
+  //   };
+
+  //   fetchServices();
+  // }, []);
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/services"); // Ajuste a URL conforme o seu backend
-
-        setServices(response.data);
+        const response = await api.get("/agendamento/partner/servico"); // Ajuste a URL conforme o seu backend
+        console.log(response.data);
+        setClinic(response.data);
         setFilteredServices(response.data);
       } catch (error) {
         console.error("Erro ao buscar os serviços:", error);
@@ -47,16 +106,18 @@ const Servicos = () => {
     fetchServices();
   }, []);
 
-  const handleFilterChange = (event) => {
-    const { value } = event.target;
-    setFilterTag(value);
-
-    const filtered = services.filter((service) =>
-      service.tags.some((tag) =>
-        tag.toLowerCase().includes(value.toLowerCase())
+  useEffect(() => {
+    const filtered = clinic.filter((clinic) =>
+      clinic.servicoPrestados.some((tag) =>
+        tag.name.toLowerCase().includes(filterTag.toLowerCase())
       )
     );
     setFilteredServices(filtered);
+  }, [filterTag, clinic]);
+
+  const handleFilterChange = (event) => {
+    const { value } = event.target;
+    setFilterTag(value);
   };
 
   const handleShowAllServices = () => {
@@ -74,33 +135,34 @@ const Servicos = () => {
           <ServicesDescription>
             Clínicas parceiras e prestadores de serviços mais próximos de você!
           </ServicesDescription>
-          <SearchBarSection>
-            <SearchBarContainer>
-              <SearchBar>
-                <SearchInput
-                  type="text"
-                  placeholder="Buscar Especialidades"
-                  value={filterTag}
-                  onChange={handleFilterChange}
-                />
-                <SearchIconLeft>
-                  <FaSearch />
-                </SearchIconLeft>
-              </SearchBar>
-            </SearchBarContainer>
-          </SearchBarSection>
+          <SearchBar>
+            <SearchInput
+              type="text"
+              placeholder="Buscar Especialidades"
+              value={filterTag}
+              onChange={handleFilterChange}
+            />
+            <SearchIconLeft>
+              <FaSearch />
+            </SearchIconLeft>
+          </SearchBar>
+
           <ServicesContainer>
-            {filteredServices
+            {clinic
               .slice(0, showAllServices ? filteredServices.length : 4)
-              .map((service) => (
+              .map((clinic) => (
                 <ServiceCard
-                  key={service.id}
-                  img={service.img}
-                  tags={service.tags}
-                  title={service.title}
-                  description={service.description}
+                  id={clinic.id}
+                  key={clinic.name}
+                  img={clinicImg}
+                  clinicName={clinic.name}
+                  tags={clinic.servicoPrestados}
+                  address={
+                    clinic.streetAndNumber + ", " + clinic.neighborhood ||
+                    "Endereço clínica"
+                  }
                   buttonLabel="Marcar Serviço"
-                  onClick={() => alert("Navegar para detalhes do serviço")}
+                  onClick={() => alert("Navegar para detalhes do serviço")} // Exemplo de ação
                 />
               ))}
           </ServicesContainer>

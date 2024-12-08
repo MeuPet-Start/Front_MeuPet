@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import {
   LoginContainer,
   LoginCard,
@@ -22,9 +21,12 @@ import {
 } from "./loginStyle";
 import logoImage from "../../assets/logo.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useUserData } from "../../hooks/useUserData";
+import { api } from "../../services/api";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useUserData();
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -46,15 +48,17 @@ const Login = () => {
     }),
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(
-          "http://localhost:8080/api/v1/auth/login",
+        const response = await api.post(
+          "/auth/login",
           values
         );
 
         if (response.status === 200) {
           localStorage.setItem("jwtToken", response.data.token);
-          alert("Login bem-sucedido!");
-          navigate("/");
+          login();
+          setTimeout(() => {
+            navigate("/");
+          }, "1000")
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {

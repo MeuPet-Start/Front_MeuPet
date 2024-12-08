@@ -22,49 +22,42 @@ export const ProfileSection = styled.div`
   border-radius: 0.625rem;
   box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
   margin: 2rem auto;
-  width: 60%; 
-  max-width: 72.375rem;
-  padding:
-`;
 
+  @media (max-width: 750px) {
+    flex-direction: column;
+    margin: 1rem;
+  }
+`;
 export const ProfileTitle = styled.h1`
-  margin-top: 0.5rem;
-  margin-left: 2rem;
+  display: flex;
   font-weight: 300;
-  background-color: #4CAF50; 
-  color: #ffffff; 
-  padding: 0.3rem 0.7rem; 
+  background-color: #4caf50;
+  color: #ffffff;
+  padding: 0.3rem 0.7rem;
   border-radius: 0.625rem;
   font-size: 1.8rem;
-  text-align: center; 
-  display: inline-block; 
+  justify-content: center;
   margin-bottom: 0.6rem;
 `;
-
 export const ProfileSubTitle = styled.h1`
-  margin-left: 2rem;
   font-family: "Poppins";
   font-weight: 400;
-  color: 1C2B38; 
-  padding: 0.3rem 0.4rem; 
-  border-radius: 0.625rem;
+  color: #1c2b38;
+  padding: 0.3rem 0.4rem;
   font-size: 1rem;
-  text-align: center; 
-
   margin-bottom: 1rem;
 `;
 
 export const ProfileForm = styled.form`
-  margin-left: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
+  gap: 1rem;
   background-color: #fff;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 0.5rem;
   box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
 `;
+
 
 export const FormGroup = styled.div`
   display: flex;
@@ -72,66 +65,57 @@ export const FormGroup = styled.div`
 `;
 
 export const Label = styled.label`
-    font-family: "poppins";
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #454545;
-    margin-bottom: 0.2rem;
-  }
+  font-family: "Poppins";
+  font-size: 1rem;
+  font-weight: 600;
+  color: #454545;
+  margin-bottom: 0.2rem;
+  margin-right: 0.5rem;
 `;
 
 export const Input = styled.input`
-  && {
-    font-family: "poppins";
-    font-weight: 100;
-    padding: 0.6875rem;
-    border-radius: 0.5rem;
-    border: 0.0625rem solid #ccc;
-    font-size: 1rem;
-    color: #727171;
-    outline: none;
-    
-
-    &:focus {
-  border-color: #2A4F6A; 
-  box-shadow: 0 0 0.125rem rgba(42, 79, 106, 0.5); 
-}
-
-  }
-`;
-
-export const Textarea = styled.textarea`
-  font-family: "poppins";
-  padding: 0.8rem;
+  display: flex;
+  font-family: "Poppins";
+  font-weight: 100;
+  padding: 0.6875rem;
   border-radius: 0.5rem;
   border: 0.0625rem solid #ccc;
   font-size: 1rem;
-  color: #333;
-  min-height: 9.375rem;
-`;
+  color: #000;
+  outline: none;
+  width: 100%;
 
-export const Button = styled.button`
-  font-family: "poppins";
-  font-weight: 500;
-  background-color: #2A4F6A; 
-  color: white; 
-  padding: 0.625rem 1.25rem; 
-  border: none; 
-  border-radius: 0.3125rem; 
-  cursor: pointer; 
-  font-size: 1rem;
-  transition: background-color 0.3s; 
-  max-width: 11.875rem;
-  margin: 0 auto;
-
-  &:hover {
-    background-color: #45a049;
+  &:focus {
+    border-color: #2a4f6a;
+    box-shadow: 0 0 0.125rem rgba(42, 79, 106, 0.5);
   }
 `;
 
+export const Button = styled.button`
+  font-family: "Poppins";
+  font-weight: 500;
+  background-color: #2a4f6a;
+  color: white;
+  padding: 0.7rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  margin-top: 0.625rem;
+  margin: 0 auto;
+  width: 100%;
+
+  &:hover {
+    background-color: #4caf50;
+  }
+`;
 
 export const ProfileSidebar = styled.div`
-  padding: rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  align-items: left;
 `;
 
 export const SidebarUsarnameTitle = styled.h2`
@@ -139,23 +123,26 @@ export const SidebarUsarnameTitle = styled.h2`
   font-size: 1.2rem;
   margin-bottom: 1rem;
   color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const SidebarItem = styled.div`
-  margin-left: 3.75rem;
   font-family: "Poppins";
   font-weight: 600;
   font-size: 1rem;
-  color: ${(props) => (props.isSelected ? "#ffff" : "#2A4F6A")};
+  color: ${(props) => (props.isSelected ? "#fff" : "#2a4f6a")};
   cursor: pointer;
   margin-bottom: 1rem;
   transition: color 0.3s ease;
   padding: 0.625rem;
   border-radius: 0.3125rem;
-  background-color: ${(props) => (props.isSelected ? "#2A4F6A" : "transparent")};
+  background-color: ${(props) =>
+    props.isSelected ? "#2a4f6a" : "transparent"};
 
   &:hover {
-    background-color: ${(props) => (props.isSelected ? "#2A4F6A" : "#f1f1f1")}
+    background-color: ${(props) => (props.isSelected ? "#2a4f6a" : "#f1f1f1")};
   }
 `;
 
@@ -207,6 +194,8 @@ export const HiddenFileInput = styled.input`
 `;
 
 export const ProfileTabContent = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 2rem;
 `;
 
@@ -373,6 +362,7 @@ export const ConfirmButton = styled.button`
   }
 `;
 
+
 export const ErrorMessage = styled.div`
   font-family: "poppins";
   color: red;
@@ -397,19 +387,14 @@ export const BalanceContainer = styled.div`
   margin-top: 1rem;
   padding: 1rem;
   background-color: #f8f8f8;
-  border-radius: 0.rem;
-  0rem 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
 `;
 
 export const BalanceText = styled.p`
-  margin-left: 1.5rem;
   font-size: 1.2rem;
   color: #454545;
-  margin: ;
 `;
 
 export const BalanceAmount = styled.span`
-  margin-left: 1.5rem;
   font-family: "poppins";
   font-size: 1.5rem; 
   color: green; 
@@ -418,7 +403,6 @@ export const BalanceAmount = styled.span`
 `;
 
 export const ProductsGrid = styled.div`
-  margin-left: 2.5rem;
   align-items: center;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(9.56rem, 3fr));

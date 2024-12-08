@@ -13,7 +13,7 @@ export const Container = styled.div`
 `;
 
 export const ContainerHeader = styled.div`
-    background-color: #fff;
+  background-color: #fff;
 `;
 
 export const ProfileSection = styled.div`
@@ -22,45 +22,40 @@ export const ProfileSection = styled.div`
   border-radius: 0.625rem;
   box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
   margin: 2rem auto;
-  width: 60%; 
-  max-width: 72.375rem; 
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+    margin: 1rem;
+  }
 `;
 
 export const ProfileTitle = styled.h1`
-  margin-top: 0.5rem;
-  margin-left: 2rem;
+  display: flex;
   font-weight: 300;
-  background-color: #4caf50; 
-  color: #ffffff; 
+  background-color: #4caf50;
+  color: #ffffff;
   padding: 0.3rem 0.7rem;
   border-radius: 0.625rem;
   font-size: 1.8rem;
-  text-align: center; 
-  display: inline-block;
+  justify-content: center;
   margin-bottom: 0.6rem;
 `;
 
 export const ProfileSubTitle = styled.h1`
-  margin-left: 2rem;
   font-family: "Poppins";
   font-weight: 400;
-  color: #1c2b38; 
+  color: #1c2b38;
   padding: 0.3rem 0.4rem;
-  border-radius: 0.625rem;
   font-size: 1rem;
-  text-align: center;
   margin-bottom: 1rem;
 `;
 
-
 export const ProfileForm = styled.form`
-  margin-left: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
+  gap: 1rem;
   background-color: #fff;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 0.5rem;
   box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
 `;
@@ -72,21 +67,41 @@ export const FormGroup = styled.div`
 
 export const Label = styled.label`
   font-family: "Poppins";
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #454545;
   margin-bottom: 0.2rem;
+  margin-right: 0.5rem;
+`;
+
+export const Servico = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem; 
+  justify-content: space-between;
+
+  @media (max-width: 750px) {
+    flex-direction: column;
+  }
+`;
+
+export const ValorServico = styled.div`
+  display: flex;
+  flex-direction: column;   
 `;
 
 export const Input = styled.input`
+  display: flex;
   font-family: "Poppins";
   font-weight: 100;
-  padding: 0.6875rem; 
-  border-radius: 0.5rem; 
+  padding: 0.6875rem;
+  border-radius: 0.5rem;
   border: 0.0625rem solid #ccc;
   font-size: 1rem;
-  color: #727171;
+  color: #000;
   outline: none;
+  width: 100%;
 
   &:focus {
     border-color: #2a4f6a;
@@ -94,17 +109,49 @@ export const Input = styled.input`
   }
 `;
 
+export const Inputcheck = styled.input`
+  display: flex;
+  margin-right: 0.5rem;
+`;
 
-export const Textarea = styled.textarea`
+export const InputValor = styled.input`
+  display: flex;
   font-family: "Poppins";
-  padding: 0.5rem; 
+  font-weight: 100;
+  padding: 0.6875rem;
   border-radius: 0.5rem;
   border: 0.0625rem solid #ccc;
   font-size: 1rem;
-  color: #333;
-  min-height: 4rem; 
+  color: #000;
+  outline: none;
+
+  &:focus {
+    border-color: #2a4f6a;
+    box-shadow: 0 0 0.125rem rgba(42, 79, 106, 0.5);
+  }
+
+  @media (max-width: 750px) {
+    width: 100%;
+  }
 `;
 
+export const Select = styled.select`
+  font-family: "Poppins";
+  font-weight: 100;
+  padding: 0.6875rem;
+  border-radius: 0.5rem;
+  border: 0.0625rem solid #ccc;
+  font-size: 1rem;
+  color: #000;
+  outline: none;
+  background-color: #fff;
+
+  
+  &:focus {
+    border-color: #2a4f6a;
+    box-shadow: 0 0 0.125rem rgba(42, 79, 106, 0.5);
+  }
+`;
 
 export const Button = styled.button`
   font-family: "Poppins";
@@ -113,22 +160,24 @@ export const Button = styled.button`
   color: white;
   padding: 0.7rem;
   border: none;
-  border-radius: 0.5rem; 
+  border-radius: 0.5rem;
   cursor: pointer;
   font-size: 1rem;
   transition: background-color 0.3s ease;
   margin-top: 0.625rem;
-  max-width: 11.875rem;
   margin: 0 auto;
+  width: 100%;
 
   &:hover {
     background-color: #4caf50;
   }
 `;
 
-
 export const ProfileSidebar = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 1rem;
+  align-items: left;
 `;
 
 export const SidebarUsernameTitle = styled.h2`
@@ -136,10 +185,12 @@ export const SidebarUsernameTitle = styled.h2`
   font-size: 1.2rem;
   margin-bottom: 1rem;
   color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const SidebarItem = styled.div`
-  margin-left: 3.75rem;
   font-family: "Poppins";
   font-weight: 600;
   font-size: 1rem;
@@ -147,9 +198,10 @@ export const SidebarItem = styled.div`
   cursor: pointer;
   margin-bottom: 1rem;
   transition: color 0.3s ease;
-  padding: 0.625rem; 
-  border-radius: 0.3125rem; 
-  background-color: ${(props) => (props.isSelected ? "#2a4f6a" : "transparent")};
+  padding: 0.625rem;
+  border-radius: 0.3125rem;
+  background-color: ${(props) =>
+    props.isSelected ? "#2a4f6a" : "transparent"};
 
   &:hover {
     background-color: ${(props) => (props.isSelected ? "#2a4f6a" : "#f1f1f1")};
@@ -166,7 +218,7 @@ export const ProfileImageWrapper = styled.div`
   position: relative;
   display: inline-block;
   width: 7.5rem;
-  height: 7.5rem; 
+  height: 7.5rem;
   margin-bottom: 1rem;
 `;
 
@@ -175,8 +227,8 @@ export const ProfileImage = styled.img`
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 0.25rem solid #fff; 
-  box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1); 
+  border: 0.25rem solid #fff;
+  box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
 `;
 
 export const ProfileImageChangeButton = styled.label`
@@ -188,8 +240,8 @@ export const ProfileImageChangeButton = styled.label`
   transform: translateX(-50%);
   background-color: rgba(0, 0, 0, 0.6);
   color: white;
-  padding: 0.3125rem 0.9375rem; 
-  border-radius: 0.9375rem; 
+  padding: 0.3125rem 0.9375rem;
+  border-radius: 0.9375rem;
   cursor: pointer;
   font-size: 0.9rem;
   transition: background-color 0.3s ease;
@@ -199,12 +251,13 @@ export const ProfileImageChangeButton = styled.label`
   }
 `;
 
-
 export const HiddenFileInput = styled.input`
   display: none;
 `;
 
 export const ProfileTabContent = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 2rem;
 `;
 
@@ -215,7 +268,8 @@ export const ProfileTabButton = styled.button`
   font-size: 1rem;
   color: ${(props) => (props.isActive ? "#007bff" : "#333")};
   cursor: pointer;
-  border-bottom: ${(props) => (props.isActive ? "0.125rem solid #007bff" : "none")};
+  border-bottom: ${(props) =>
+    props.isActive ? "0.125rem solid #007bff" : "none"};
   margin-right: 1rem;
 
   &:hover {
@@ -252,7 +306,7 @@ export const ProfileTabContentButton = styled.button`
   cursor: pointer;
   border-radius: 0.5rem;
   background-color: ${(props) => (props.isCancel ? "#d9534f" : "#5bc0de")};
-  
+
   &:hover {
     background-color: ${(props) => (props.isCancel ? "#c9302c" : "#31b0d5")};
   }
@@ -277,7 +331,7 @@ export const ProfileTabContentButtonCancel = styled(ProfileTabContentButton)`
 export const OperatingHoursInput = styled.input`
   font-family: "Poppins";
   font-weight: 100;
-  padding: 0.6875rem; 
+  padding: 0.6875rem;
   border-radius: 0.5rem;
   border: 0.0625rem solid #ccc;
   font-size: 1rem;
@@ -294,10 +348,9 @@ export const ModalButtonContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  margin-top: 1.25rem; 
-  gap: 0.9375rem; 
+  margin-top: 1.25rem;
+  gap: 0.9375rem;
 `;
-
 
 export const Modal = styled.div`
   position: fixed;
@@ -313,11 +366,11 @@ export const Modal = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  font-family: "Poppins";  
+  font-family: "Poppins";
   background: white;
-  padding: 1.25rem; 
-  border-radius: 0.9375rem; 
-  max-width: 31.25rem; 
+  padding: 1.25rem;
+  border-radius: 0.9375rem;
+  max-width: 31.25rem;
   width: 90%;
   box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -326,7 +379,7 @@ export const ModalContent = styled.div`
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(-1.25rem); 
+      transform: translateY(-1.25rem);
     }
     to {
       opacity: 1;
@@ -335,24 +388,22 @@ export const ModalContent = styled.div`
   }
 `;
 
-
 export const CancelButton = styled.button`
   font-family: "Poppins";
   font-weight: 600;
   background-color: #2a4f6a;
   color: white;
   border: none;
-  border-radius: 0.3125rem; 
-  padding: 0.625rem 1.25rem; 
-  font-size: 1rem; 
-  min-width: 7.5rem; 
+  border-radius: 0.3125rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 1rem;
+  min-width: 7.5rem;
   cursor: pointer;
 
   &:hover {
     background-color: #d32f2f;
   }
 `;
-
 
 export const ConfirmButton = styled.button`
   font-family: "Poppins";
@@ -362,7 +413,7 @@ export const ConfirmButton = styled.button`
   border: none;
   border-radius: 0.3125rem;
   padding: 0.625rem 1.25rem;
-  font-size: 1rem; 
+  font-size: 1rem;
   min-width: 7.5rem;
   cursor: pointer;
 
@@ -370,7 +421,6 @@ export const ConfirmButton = styled.button`
     background-color: #388e3c;
   }
 `;
-
 
 export const ErrorText = styled.div`
   color: red;

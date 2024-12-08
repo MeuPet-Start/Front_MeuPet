@@ -4,32 +4,46 @@ import {
   ServiceCardtags,
   ServiceCardImage,
   ServiceCardTitle,
-  ServiceCardDescription,
+  ServiceCardstreetLocation,
   ServiceCardButton,
   ServiceInfo,
 } from "./serviceCardStyle";
+import { useNavigate } from "react-router-dom";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 const ServiceCard = ({
+  id,
   img,
   tags,
-  title,
-  description,
+  clinicName,
+  address,
   buttonLabel,
   onClick,
 }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = (id) => {
+    navigate("/consulta", { state: { id } });
+  };
+
   return (
     <ServiceCardContainer>
-      <ServiceCardImage src={img} alt={`${title} Imagem`} />
+      <ServiceCardImage src={img} alt={`${clinicName} Imagem`} />
       <ServiceInfo>
+        <ServiceCardTitle>{clinicName}</ServiceCardTitle>
         <ServiceCardtags>
           {tags.map((tag, index) => (
-            <span key={index}>{tag}</span>
+            <span key={index}>{tag.name}</span>
           ))}
         </ServiceCardtags>
-        <ServiceCardTitle>{title}</ServiceCardTitle>
-        <ServiceCardDescription>{description}</ServiceCardDescription>
+        <ServiceCardstreetLocation>
+          <FaMapMarkerAlt style={{ marginRight: "8px", color: "#2a4f6a" }} />
+          {address}
+        </ServiceCardstreetLocation>
       </ServiceInfo>
-      <ServiceCardButton onClick={onClick}>{buttonLabel}</ServiceCardButton>
+      <ServiceCardButton onClick={() => handleCardClick(id)}>
+        {buttonLabel}
+      </ServiceCardButton>
     </ServiceCardContainer>
   );
 };

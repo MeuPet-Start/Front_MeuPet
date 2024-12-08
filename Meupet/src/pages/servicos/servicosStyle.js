@@ -18,6 +18,10 @@ export const ServicesSection = styled.section`
   padding: 2rem;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 425px) {
+    padding: 1rem;
+  }
 `;
 
 export const ServicesInfo = styled.div`
@@ -46,26 +50,6 @@ export const ServicesDescription = styled.p`
 
 `;
 
-export const SearchBarSection = styled.section`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 1158px;
-  margin: 2rem auto;
-`;
-
-export const SearchBarContainer = styled.div`
-  display: flex;
-  align-items: center;
-  background-color: #2a4f6a;
-  width:90%;
-  border-radius: 10px;
-  padding: 1rem;
-  @media (max-width: 425px) {
-    padding:  1rem 0.5rem;
-  }
-`;
-
 export const SearchIconLeft = styled.div`
   display: flex;
   align-items: center;
@@ -79,13 +63,14 @@ export const SearchIconLeft = styled.div`
 `;
 
 export const SearchBar = styled.div`
-  flex: 1;
   display: flex;
   align-items: center;
   background-color: #f4f4f5;
   border-radius: 10px;
   padding: 0.5rem;
   justify-content: space-between;
+  margin:  2rem auto;
+  max-width: 1158px;
 `;
 
 export const SearchInput = styled.input`
@@ -95,6 +80,10 @@ export const SearchInput = styled.input`
   font-size: 1rem;
   color: #6c757d;
   background-color: transparent;
+
+  @media (max-width: 425px) {
+    font-size: 0.8rem;
+  }
 `;
 
 

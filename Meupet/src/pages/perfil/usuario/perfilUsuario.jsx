@@ -6,7 +6,6 @@ import UserImage from "../../../assets/logo.png";
 import exmedImage from "../../../assets/exmed.png";
 import novacImage from "../../../assets/99pop.png";
 import ladydriverImage from "../../../assets/ladydriver.png";
-import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -48,86 +47,62 @@ import {
   RedeemButton,
 } from "./perfilUsuarioStyle";
 
-import { useUserType } from "../../../hooks/useUserType";
 import { useUserData } from "../../../hooks/useUserData";
+import { api } from "../../../services/api";
 
 const PerfilUsuario = () => {
   const navigate = useNavigate();
   const [image, setImage] = useState(UserImage);
   const [selectedTab, setSelectedTab] = useState("geral");
-  const { userType, userEmail } = useUserType();
-  const { userName } = useUserData(userEmail);
+  const { userData, logout, fetchUserData } = useUserData();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [userData, setUserData] = useState({
-    name: "",
-    address: "",
-    phone: "",
-    email: "",
-    birthDate: "", 
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [dataState, setDataState] = useState({
+    name: userData.name || "",
+    socialName: userData.socialName || "",
+    phoneNumber: userData.phoneNumber || "",
+    dateOfBirth: userData.dateOfBirth || "",
+    moedaCapiba: userData.moedaCapiba,
   });
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get("/api/userProfile");
-        setUserData(response.data);
-        if (response.data.image) {
-          setImage(response.data.image);
-        }
-      } catch (error) {
-        console.error("Erro ao carregar os dados do usuário:", error);
-        alert("Não foi possível carregar os dados do usuário.");
+  const handleUserUpdate = async (values) => {
+    try {
+      const response = await api.patch(`/user/${userData.id}`, {
+        name: values.name,
+        socialName: values.socialName,
+        phoneNumber: values.phoneNumber,
+        dateOfBirth: values.dateOfBirth,
+      });
+
+      if (response.status === 200) {
+        fetchUserData();
+        setIsSuccessModalOpen(true);
       }
-    };
-
-    // useEffect(() => {
-  //   if (!userType || userType !== "clinica") { 
-  //     alert("Você não tem permissão para acessar esta página.");
-  //     navigate("/login");
-  //   }
-  // }, [userType, navigate]);
-
-    fetchUserData();
-  }, []);
+    } catch (error) {
+      console.error("Erro ao atualizar os dados do usuário:", error);
+    }
+  };
 
   const formik = useFormik({
-    initialValues: {
-      name: "",
-      address: "",
-      phone: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      birthDate: "",
-    },
+    enableReinitialize: true,
+    initialValues: dataState,
     validationSchema: Yup.object({
       name: Yup.string().required("Nome é obrigatório"),
-      address: Yup.string().required("Endereço é obrigatório"),
-      phone: Yup.string().required("Telefone é obrigatório"),
-      email: Yup.string().email("E-mail inválido").required("E-mail é obrigatório"),
-      birthDate: Yup.date().nullable().required("Data de nascimento é obrigatória"), 
-      password: Yup.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], "As senhas não combinam")
-        .when('password', {
-          is: val => (val && val.length > 0),
-          then: Yup.string().required('Confirme sua senha')
-        }),
+      socialName: Yup.string().required("Nome social é obrigatório"),
+      phoneNumber: Yup.string().required("Telefone é obrigatório"),
+      dateOfBirth: Yup.date()
+        .nullable()
+        .required("Data de nascimento é obrigatória"),
     }),
     onSubmit: async (values) => {
-      setIsSubmitting(true); 
+      setIsSubmitting(true);
       try {
-        const response = await axios.put("/api/userProfile", values);
-        if (response.status === 200) {
-          alert("Dados salvos com sucesso!");
-          setUserData(values);
-        }
-      } catch (error) {
-        console.error("Erro ao salvar os dados:", error);
-        alert("Ocorreu um erro ao salvar os dados do usuário.");
+        await handleUserUpdate(values);
       } finally {
-        setIsSubmitting(false); // Finaliza o processo de envio
+        setIsSubmitting(false);
       }
     },
   });
@@ -140,9 +115,13 @@ const PerfilUsuario = () => {
         const base64Image = reader.result;
         setImage(base64Image);
         try {
-          const response = await axios.put("/api/userProfile/image", { image: base64Image });
+          const response = await axios.put("/api/userProfile/image", {
+            image: base64Image,
+          });
           if (response.status === 200) {
             alert("Imagem alterada com sucesso!");
+          } else {
+            alert("Erro ao alterar a imagem. Tente novamente.");
           }
         } catch (error) {
           console.error("Erro ao salvar a imagem:", error);
@@ -157,10 +136,20 @@ const PerfilUsuario = () => {
     setSelectedTab(tab);
   };
 
-  const handleLogoff = () => {
-    localStorage.removeItem("jwtToken");
-    alert("Você foi desconectado com sucesso!");
-    navigate("/login");
+  const openLogoutModal = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const confirmLogoutAccount = () => {
+    try {
+      logout();
+      navigate("/login");
+      window.location.reload();
+    } catch (error) {
+      console.error("Erro ao desconectar:", error);
+    } finally {
+      setIsLogoutModalOpen(false);
+    }
   };
 
   const openDeleteModal = () => {
@@ -169,25 +158,26 @@ const PerfilUsuario = () => {
 
   const confirmDeleteAccount = async () => {
     try {
-      const response = await axios.delete("/api/deleteAccount", {
-        data: {
-          userId: userData.id,
+      const response = await api.delete("/user", {
+        params: {
+          id: userData.id,
         },
       });
-      if (response.status === 200) {
-        localStorage.removeItem("userProfile");
-        alert("Conta deletada com sucesso.");
+      if (response.status === 204) {
+        logout();
         navigate("/");
+        window.location.reload();
       }
     } catch (error) {
       console.error("Erro ao deletar a conta:", error);
-      alert("Houve um erro ao tentar deletar a conta. Tente novamente mais tarde.");
+      alert(
+        "Houve um erro ao tentar deletar a conta. Tente novamente mais tarde."
+      );
     } finally {
       setIsDeleteModalOpen(false);
     }
   };
 
-  const saldoAtual = "500 Capibas";
   const produtos = [
     {
       id: 1,
@@ -214,20 +204,34 @@ const PerfilUsuario = () => {
       image: ladydriverImage,
     },
   ];
- 
+
   useEffect(() => {
     if (userData) {
-      formik.setValues({
+      setDataState({
         name: userData.name,
-        address: userData.address,
-        phone: userData.phone,
-        email: userData.email,
-        birthDate: userData.birthDate || "",
-        password: "",
-        confirmPassword: "",
+        socialName: userData.socialName,
+        phoneNumber: userData.phoneNumber,
+        dateOfBirth: userData.dateOfBirth || "",
+        moedaCapiba: userData.moedaCapiba,
       });
     }
   }, [userData]);
+
+  const maskPhone = (value) => {
+    const cleanValue = value.replace(/\D/g, "");
+
+    if (cleanValue.length >= 11) {
+      return cleanValue
+        .replace(/(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d{5})(\d)/, "$1-$2")
+        .replace(/(-\d{4})\d+?$/, "$1");
+    }
+
+    return cleanValue
+      .replace(/(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{4})(\d)/, "$1-$2")
+      .replace(/(-\d{4})\d+?$/, "$1");
+  };
 
   return (
     <Container>
@@ -239,7 +243,9 @@ const PerfilUsuario = () => {
           <ProfileImageContainer>
             <ProfileImageWrapper>
               <ProfileImage src={image} alt="Foto de Perfil" />
-              <ProfileImageChangeButton htmlFor="fileInput">Alterar</ProfileImageChangeButton>
+              <ProfileImageChangeButton htmlFor="fileInput">
+                Alterar
+              </ProfileImageChangeButton>
             </ProfileImageWrapper>
             <input
               id="fileInput"
@@ -249,11 +255,14 @@ const PerfilUsuario = () => {
               style={{ display: "none" }}
             />
           </ProfileImageContainer>
-          <SidebarUsarnameTitle>{userName}</SidebarUsarnameTitle>
-          <SidebarItem isSelected={selectedTab === "geral"} onClick={() => handleTabClick("geral")}>
+          <SidebarUsarnameTitle>{userData.name}</SidebarUsarnameTitle>
+          <SidebarItem
+            isSelected={selectedTab === "geral"}
+            onClick={() => handleTabClick("geral")}
+          >
             Informações Gerais
           </SidebarItem>
-  
+
           <SidebarItem
             isSelected={selectedTab === "seguranca"}
             onClick={() => handleTabClick("seguranca")}
@@ -266,7 +275,10 @@ const PerfilUsuario = () => {
           >
             Moeda Capiba
           </SidebarItem>
-          <SidebarItem isSelected={selectedTab === "sair"} onClick={handleLogoff}>
+          <SidebarItem
+            isSelected={selectedTab === "sair"}
+            onClick={openLogoutModal}
+          >
             Sair
           </SidebarItem>
           <SidebarItem
@@ -280,7 +292,8 @@ const PerfilUsuario = () => {
         <ProfileTabContent>
           <ProfileTitle>Dados do Usuário</ProfileTitle>
           <ProfileSubTitle>
-            Preencha os campos abaixo para <strong>atualizar</strong> seus dados.
+            Preencha os campos abaixo para <strong>atualizar</strong> seus
+            dados.
           </ProfileSubTitle>
 
           {selectedTab === "geral" && (
@@ -300,105 +313,71 @@ const PerfilUsuario = () => {
                 )}
               </FormGroup>
               <FormGroup>
-                <Label htmlFor="address">Endereço</Label>
+                <Label htmlFor="socialName">Nome social</Label>
                 <Input
                   type="text"
-                  id="address"
-                  name="address"
-                  value={formik.values.address}
-                  placeholder="Seu Endereço"
-                  {...formik.getFieldProps("address")}
+                  id="socialName"
+                  name="socialName"
+                  value={formik.values.socialName}
+                  placeholder="Seu nome social"
+                  {...formik.getFieldProps("socialName")}
                 />
-                {formik.touched.address && formik.errors.address && (
-                  <ErrorText>{formik.errors.address}</ErrorText>
+                {formik.touched.socialName && formik.errors.socialName && (
+                  <ErrorText>{formik.errors.socialName}</ErrorText>
                 )}
               </FormGroup>
               <FormGroup>
-                <Label htmlFor="phone">Telefone</Label>
+                <Label htmlFor="phoneNumber">Telefone</Label>
                 <Input
                   type="text"
-                  id="phone"
-                  name="phone"
-                  value={formik.values.phone}
+                  id="phophoneNumber"
+                  name="phoneNumber"
+                  value={formik.values.phoneNumber}
                   placeholder="Seu Telefone"
-                  {...formik.getFieldProps("phone")}
+                  {...formik.getFieldProps("phoneNumber")}
+                  onChange={(e) => {
+                    const formattedPhone = maskPhone(e.target.value);
+                    formik.setFieldValue("phoneNumber", formattedPhone);
+                  }}
                 />
-                {formik.touched.phone && formik.errors.phone && (
-                  <ErrorText>{formik.errors.phone}</ErrorText>
+                {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+                  <ErrorText>{formik.errors.phoneNumber}</ErrorText>
                 )}
               </FormGroup>
               <FormGroup>
-                <Label htmlFor="email">E-mail</Label>
-                <Input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formik.values.email}
-                  placeholder="Seu E-mail"
-                  {...formik.getFieldProps("email")}
-                />
-                {formik.touched.email && formik.errors.email && (
-                  <ErrorText>{formik.errors.email}</ErrorText>
-                )}
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="birthDate">Data de Nascimento</Label>
+                <Label htmlFor="dateOfBirth">Data de Nascimento</Label>
                 <Input
                   type="date"
-                  id="birthDate"
-                  name="birthDate"
-                  value={formik.values.birthDate}
-                  {...formik.getFieldProps("birthDate")}
+                  id="dateOfBirth"
+                  name="dateOfBirth"
+                  value={formik.values.dateOfBirth}
+                  {...formik.getFieldProps("dateOfBirth")}
                 />
-                {formik.touched.birthDate && formik.errors.birthDate && (
-                  <ErrorText>{formik.errors.birthDate}</ErrorText>
+                {formik.touched.dateOfBirth && formik.errors.dateOfBirth && (
+                  <ErrorText>{formik.errors.dateOfBirth}</ErrorText>
                 )}
               </FormGroup>
               <Button type="submit">Salvar</Button>
             </ProfileForm>
           )}
-          
+
           {selectedTab === "seguranca" && (
-            <ProfileForm onSubmit={formik.handleSubmit}>
-              <FormGroup>
-                <Label htmlFor="password">Nova Senha</Label>
-                <Input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.password && formik.errors.password && (
-                  <ErrorText>{formik.errors.password}</ErrorText>
-                )}
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="confirmPassword">Confirmação de Senha</Label>
-                <Input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formik.values.confirmPassword}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                  <ErrorText>{formik.errors.confirmPassword}</ErrorText>
-                )}
-              </FormGroup>
-              <Button type="submit" disabled={formik.isSubmitting}>
-                {formik.isSubmitting ? "Salvando..." : "Salvar"}
-              </Button>
-            </ProfileForm>
+            <Button
+              onClick={() => {
+                logout();
+                navigate("/recuperar-senha");
+                window.location.reload();
+              }}
+            >
+              Alterar Senha
+            </Button>
           )}
-          
+
           {selectedTab === "moedaCapiba" && (
             <div>
               <BalanceContainer>
                 <BalanceText>Saldo Atual:</BalanceText>
-                <BalanceAmount>{saldoAtual}</BalanceAmount>
+                <BalanceAmount>{userData.moedaCapiba} Capibas</BalanceAmount>
               </BalanceContainer>
               <ProductsGrid>
                 {produtos.map((produto) => (
@@ -406,9 +385,13 @@ const PerfilUsuario = () => {
                     <ProductImage src={produto.image} alt={produto.title} />
                     <ProductDetails>
                       <ProductTitle>{produto.title}</ProductTitle>
-                      <ProductDescription>{produto.description}</ProductDescription>
+                      <ProductDescription>
+                        {produto.description}
+                      </ProductDescription>
                       <ProductPrice>{produto.price} Capibas</ProductPrice>
-                      <ProductUnits>{produto.units} unidades disponíveis</ProductUnits>
+                      <ProductUnits>
+                        {produto.units} unidades disponíveis
+                      </ProductUnits>
                       <RedeemButton>Trocar</RedeemButton>
                     </ProductDetails>
                   </ProductCard>
@@ -418,20 +401,58 @@ const PerfilUsuario = () => {
           )}
         </ProfileTabContent>
       </ProfileSection>
-      
+
       {isDeleteModalOpen && (
         <Modal isOpen={isDeleteModalOpen}>
           <ModalContent>
             <h2>Você está prestes a deletar sua conta.</h2>
-            <p>Tem certeza de que deseja deletar sua conta? Esta ação é irreversível.</p>
+            <p>
+              Tem certeza de que deseja deletar sua conta? Esta ação é
+              irreversível.
+            </p>
             <ModalButtonContainer>
-              <CancelButton onClick={() => setIsDeleteModalOpen(false)}>Cancelar</CancelButton>
-              <ConfirmButton onClick={confirmDeleteAccount}>Confirmar</ConfirmButton>
+              <CancelButton onClick={() => setIsDeleteModalOpen(false)}>
+                Cancelar
+              </CancelButton>
+              <ConfirmButton onClick={confirmDeleteAccount}>
+                Confirmar
+              </ConfirmButton>
+            </ModalButtonContainer>
+          </ModalContent>
+        </Modal>
+      )}
+      {isLogoutModalOpen && (
+        <Modal isOpen={isLogoutModalOpen}>
+          <ModalContent>
+            <h2>Você está prestes a sair sua conta.</h2>
+            <p>Tem certeza de que deseja sair sua conta?</p>
+            <ModalButtonContainer>
+              <CancelButton onClick={() => setIsLogoutModalOpen(false)}>
+                Cancelar
+              </CancelButton>
+              <ConfirmButton onClick={confirmLogoutAccount}>
+                Confirmar
+              </ConfirmButton>
             </ModalButtonContainer>
           </ModalContent>
         </Modal>
       )}
       <Footer />
+      {
+        isSuccessModalOpen && (
+          <Modal>
+            <ModalContent>
+              <h2>Alteração Realizada</h2>
+              <p>Seus dados foram atualizados com sucesso!</p>
+              <ModalButtonContainer>
+                <ConfirmButton onClick={() => setIsSuccessModalOpen(false)}>
+                  Fechar
+                </ConfirmButton>
+              </ModalButtonContainer>
+            </ModalContent>
+          </Modal>
+        )
+      }
     </Container>
   );
 };

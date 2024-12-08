@@ -12,12 +12,12 @@ import { useUserType } from "../../hooks/useUserType";
 import { useNavigate } from "react-router-dom";
 
 export default function Footer() {
-  const userType = useUserType();
+  const { userType } = useUserType();
   const navigate = useNavigate();
   return (
     <FooterContainer>
       <FooterNav>
-        <FooterLinks href="#/">Home</FooterLinks>
+        <FooterLinks onClick={() => navigate("/")}>Home</FooterLinks>
         <FooterLinks
           as="a"
           href="https://adotapet.recife.pe.gov.br/"
@@ -31,12 +31,12 @@ export default function Footer() {
           Serviços
         </FooterLinks>
         {userType === "user" && (
-          <FooterLinks onClick={() => navigate("/consultas")}>
+          <FooterLinks onClick={() => navigate("/historico")}>
             Consultas
           </FooterLinks>
         )}
         {userType === "clinic" && (
-          <FooterLinks onClick={() => navigate("/consultas")}>
+          <FooterLinks onClick={() => navigate("/agenda")}>
             Consultas
           </FooterLinks>
         )}
