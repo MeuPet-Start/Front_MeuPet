@@ -52,7 +52,7 @@ export function UserDataContextProvider({ children }) {
           acc[item.name] = item.price;
           return acc;
         }, {});
-      
+
         return {
           servicosPrestados,
           servicosPrestadosValores,

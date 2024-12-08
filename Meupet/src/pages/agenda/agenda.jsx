@@ -28,6 +28,8 @@ import {
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import axios from 'axios';
+import { useUserData } from "../../hooks/useUserData";
+import { api } from "../../services/api";
 
 export function Agenda() {
   const navigate = useNavigate();
@@ -37,6 +39,7 @@ export function Agenda() {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isCancelledNotificationOpen, setIsCancelledNotificationOpen] = useState(false);
   const [appointmentToCancel, setAppointmentToCancel] = useState(null);
+  const { userData } = useUserData();
 
   // Verificar permissões de usuário
   // useEffect(() => {
@@ -48,31 +51,49 @@ export function Agenda() {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get('/api/appointments');
-      if (Array.isArray(response.data)) {
-        setAppointments(response.data);
-      } else {
-        console.error("A resposta da API não é um array:", response.data);
-        setAppointments([]);
-      }
+      const response = await api.get(`/agendamento/atendimento/partner/${userData.id}`);
+      console.log(userData.id)
+
+      const formattedAppointments = response.data.map((appointment) => ({
+        id: appointment.id,
+        dataAgendamento: appointment.dataAgendamento,
+        horaInicio: appointment.horaInicio.slice(0, 5), // Format time to HH:mm
+        horaFim: appointment.horaFim,
+        status: appointment.status.toUpperCase(),
+        partnerId: appointment.partner.id,
+        partnerName: appointment.partner.name,
+        endereco: appointment.partner.address,
+        servicoName: appointment.servico.name,
+        animalName: appointment.animal.name,
+        animalType: appointment.animal.type,
+        phone: appointment.partner.phone
+      }));
+
+      // Optional: Filter out canceled appointments
+      const activeAppointments = formattedAppointments.filter(
+        appointment => appointment.status !== "CANCELADO"
+      );
+
+      setAppointments(activeAppointments);
     } catch (error) {
       console.error("Erro ao buscar agendamentos:", error);
-      setAppointments([]);
     }
   };
 
 
   useEffect(() => {
-    fetchAppointments();
-  }, []);
+    if (userData && userData.id) {
+      fetchAppointments();
+    }
+  }, [userData]);
 
   const calendarEvents = appointments.map((appointment) => ({
-    title: appointment.type,
+    title: `${appointment.type} - ${appointment.petName}`,
     date: appointment.date,
     extendedProps: {
       appointment,
     },
-    backgroundColor: appointment.status === "confirmado" ? "#4caf50" : "#b90000",
+    backgroundColor: appointment.status === "CONFIRMADO" ? "#4caf50" : "#b90000",
   }));
 
   const handleEventClick = (eventInfo) => {
@@ -91,7 +112,7 @@ export function Agenda() {
       await axios.delete(`/api/appointments/${appointmentToCancel.id}`);
       setAppointments((prevAppointments) =>
         prevAppointments.map((app) =>
-          app.id === appointmentToCancel.id ? { ...app, status: "cancelado" } : app
+          app.id === appointmentToCancel.id ? { ...app, status: "CANCELADO" } : app
         )
       );
       setIsCancelModalOpen(false);
@@ -138,9 +159,9 @@ export function Agenda() {
 
       <AppointmentInfoContainer>
         <AppointmentSubtitle>Acompanhe aqui as consultas agendadas da sua clínica.</AppointmentSubtitle>
-        {appointments.filter((appointment) => appointment.status === "confirmado").length > 0 ? (
+        {appointments.filter((appointment) => appointment.status === "PENDENTE").length > 0 ? (
           appointments
-            .filter((appointment) => appointment.status === "confirmado")
+            .filter((appointment) => appointment.status === "PENDENTE")
             .map((appointment, index) => (
               <AppointmentCard key={index}>
                 <img
