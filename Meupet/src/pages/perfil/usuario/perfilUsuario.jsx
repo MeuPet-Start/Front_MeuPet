@@ -59,6 +59,7 @@ const PerfilUsuario = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [dataState, setDataState] = useState({
     name: userData.name || "",
     socialName: userData.socialName || "",
@@ -78,6 +79,7 @@ const PerfilUsuario = () => {
 
       if (response.status === 200) {
         fetchUserData();
+        setIsSuccessModalOpen(true);
       }
     } catch (error) {
       console.error("Erro ao atualizar os dados do usuário:", error);
@@ -118,7 +120,7 @@ const PerfilUsuario = () => {
           });
           if (response.status === 200) {
             alert("Imagem alterada com sucesso!");
-          }else {
+          } else {
             alert("Erro ao alterar a imagem. Tente novamente.");
           }
         } catch (error) {
@@ -436,6 +438,21 @@ const PerfilUsuario = () => {
         </Modal>
       )}
       <Footer />
+      {
+        isSuccessModalOpen && (
+          <Modal>
+            <ModalContent>
+              <h2>Alteração Realizada</h2>
+              <p>Seus dados foram atualizados com sucesso!</p>
+              <ModalButtonContainer>
+                <ConfirmButton onClick={() => setIsSuccessModalOpen(false)}>
+                  Fechar
+                </ConfirmButton>
+              </ModalButtonContainer>
+            </ModalContent>
+          </Modal>
+        )
+      }
     </Container>
   );
 };

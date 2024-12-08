@@ -48,7 +48,7 @@ const PerfilClinica = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const { userData, logout, fetchUserData } = useUserData();
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [dataState, setDataState] = useState({
     name: userData.name || "",
     streetAndNumber: userData.streetAndNumber || "",
@@ -71,6 +71,7 @@ const PerfilClinica = () => {
 
       if (response.status === 200) {
         fetchUserData();
+        setIsSuccessModalOpen(true);
       }
     } catch (error) {
       console.error("Erro ao atualizar os dados do usuário:", error);
@@ -104,6 +105,7 @@ const PerfilClinica = () => {
 
       if (response.status === 200) {
         fetchUserData();
+        setIsSuccessModalOpen(true);
       }
     } catch (error) {
       console.error("Erro ao atualizar os dados do usuário:", error);
@@ -552,6 +554,21 @@ const PerfilClinica = () => {
         </Modal>
       )}
       <Footer />
+      {
+        isSuccessModalOpen && (
+          <Modal>
+            <ModalContent>
+              <h2>Alteração Realizada</h2>
+              <p>Seus dados foram atualizados com sucesso!</p>
+              <ModalButtonContainer>
+                <ConfirmButton onClick={() => setIsSuccessModalOpen(false)}>
+                  Fechar
+                </ConfirmButton>
+              </ModalButtonContainer>
+            </ModalContent>
+          </Modal>
+        )
+      }
     </Container>
   );
 };

@@ -135,11 +135,14 @@ export const FormGroup = styled.div`
   align-items: center;
   @media (max-width: 425px) {
     align-items: flex-start;
-  }
-
-  @media (max-width: 375px) {
     flex-direction: column;
   }
+  
+`;
+
+export const LabelContent = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export const FormGroupInfoInput = styled.div`

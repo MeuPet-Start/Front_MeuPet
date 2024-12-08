@@ -19,6 +19,8 @@ import {
   ModalButtonContainer,
   ConfirmButton,
   ButtonShowMore,
+  ServiceCardType,
+  StatusBadge,
 } from "./historicostyle";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
@@ -127,9 +129,14 @@ const MinhasConsulta = () => {
                   <Info>
                     <div className="container_categoria">
                       <h2>{consulta.partnerName}</h2>
-                      <ServiceCardtags>
-                        <span>{consulta.servicoName}</span>
-                      </ServiceCardtags>
+                      <ServiceCardType>
+                        <ServiceCardtags>
+                          <span>{consulta.servicoName}</span>
+                        </ServiceCardtags>
+                        <StatusBadge status={consulta.status}>
+                          {consulta.status}
+                        </StatusBadge>
+                      </ServiceCardType>
                       <div className="detalhes">
                         <p>
                           <FaRegClock />

@@ -35,6 +35,7 @@ import {
   ModalButtonContainer,
   ConfirmButton,
   Select,
+  LabelContent,
 } from "./consultastyle";
 
 import { api } from "../../services/api";
@@ -342,7 +343,10 @@ const Consulta = () => {
                   value={servico.name}
                   onChange={formik.handleChange}
                 />
-                <Label htmlFor={servico.name}>{servico.name}</Label>
+                <LabelContent>
+                  <Label htmlFor={servico.name}>{servico.name}</Label>
+                  <Label htmlFor={servico.price}>{servico.price}</Label>
+                </LabelContent>
               </FormGroup>
             ))}
             {formik.touched.tipoServico && formik.errors.tipoServico && (

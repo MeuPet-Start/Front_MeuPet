@@ -70,7 +70,6 @@ export const Card = styled.div`
 export const ServiceCardtags = styled.div`
   display: flex;
   gap: 0.25rem;
-  margin-bottom: 0.5rem;
 
   span {
     background-color: #36a92e;
@@ -135,6 +134,34 @@ export const Info = styled.div`
       gap: 0.625rem;
     }
   }
+`;
+
+export const ServiceCardType = styled.div`
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+`;
+
+export const StatusBadge = styled.span`
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  background-color: ${({ status }) => {
+    switch (status?.toUpperCase()) {
+      case 'PENDENTE':
+        return '#FFA500';
+      case 'CONFIRMADO':
+        return '#4CAF50';
+      case 'CANCELADO':
+        return '#DC3545';
+      default:
+        return '#6c757d';
+    }
+  }};
 `;
 
 export const Image = styled.img`
