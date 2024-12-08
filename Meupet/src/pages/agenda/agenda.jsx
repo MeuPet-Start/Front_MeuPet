@@ -61,12 +61,12 @@ export function Agenda() {
         horaFim: appointment.horaFim,
         status: appointment.status.toUpperCase(),
         partnerId: appointment.partner.id,
-        partnerName: appointment.partner.name,
+        userName: appointment.user.name,
         endereco: appointment.partner.address,
         servicoName: appointment.servico.name,
         animalName: appointment.animal.name,
         animalType: appointment.animal.type,
-        phone: appointment.partner.phone
+        phone: appointment.user.phone
       }));
 
       // Optional: Filter out canceled appointments
@@ -170,15 +170,30 @@ export function Agenda() {
                   style={{ borderRadius: "10px", marginRight: "20px" }}
                 />
                 <AppointmentDetails>
-                  <AppointmentType>{appointment.type}</AppointmentType>
+                  <AppointmentType>{appointment.servicoName}</AppointmentType>
                   <p>
-                    <strong>Nome:</strong> {appointment.name}
+                    <strong>Nome:</strong> {appointment.userName}
                   </p>
                   <p>
-                    <strong>Data:</strong> {new Date(appointment.date).toLocaleDateString("pt-BR")}
+                    <strong>Data:</strong> {new Date(appointment.dataAgendamento).toLocaleDateString("pt-BR")}
                   </p>
                   <p>
-                    <strong>Horário:</strong> {appointment.time}
+                    <strong>Horário:</strong> {appointment.horaInicio}
+                  </p>
+                  <p>
+                    <strong>Telefone:</strong> {appointment.phone}
+                  </p>
+                </AppointmentDetails>
+                <AppointmentDetails>
+                  {/* <AppointmentType>{appointment.servicoName}</AppointmentType> */}
+                  <p>
+                    <strong>Nome:</strong> {appointment.userName}
+                  </p>
+                  <p>
+                    <strong>Data:</strong> {new Date(appointment.dataAgendamento).toLocaleDateString("pt-BR")}
+                  </p>
+                  <p>
+                    <strong>Horário:</strong> {appointment.horaInicio}
                   </p>
                   <p>
                     <strong>Telefone:</strong> {appointment.phone}
