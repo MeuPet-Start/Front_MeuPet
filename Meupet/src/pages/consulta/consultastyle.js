@@ -210,7 +210,7 @@ export const Input = styled.input`
 `;
 
 export const Select = styled.select`
-  display: flex;
+  /* display: flex; */
   font-family: "Poppins";
   font-weight: 100;
   padding: 0.6875rem;
@@ -223,10 +223,45 @@ export const Select = styled.select`
   margin-bottom: 0.5rem;
   width: 100%;
 
+  & option {
+    padding: 8px;
+    height: 35px;
+  }
+
+  &[size] {
+    height: 150px !important;
+  }
+
   &:focus {
     border-color: #2a4f6a;
     box-shadow: 0 0 0.125rem rgba(42, 79, 106, 0.5);
   }
+
+  /* Styling for dropdown */
+  &::-webkit-listbox {
+    max-height: 10px !important; /* Shows ~5 items */
+  }
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #2a4f6a #f0f0f0;
+
+  /* Webkit browsers */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #2a4f6a;
+    border-radius: 4px;
+  }
+
+
 `;
 
 export const Button = styled.button`

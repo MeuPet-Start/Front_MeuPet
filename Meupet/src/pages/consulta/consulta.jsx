@@ -96,9 +96,8 @@ const Consulta = () => {
 
   const generateTimeSlots = (openingHour, closingHour) => {
     const slots = [];
-    const start = parse(openingHour, "HH:mm", new Date());
-    const end = parse(closingHour, "HH:mm", new Date());
-
+    const start = parse(openingHour.slice(0, 5), "HH:mm", new Date());
+    const end = parse(closingHour.slice(0, 5), "HH:mm", new Date());
     let current = start;
     while (current <= end) {
       slots.push(format(current, "HH:mm"));
@@ -367,8 +366,8 @@ const Consulta = () => {
                 <ErrorText>{formik.errors.dataServico}</ErrorText>
               )}
               <Label>Horários:</Label>
-              <Label>Horários:</Label>
               <Select
+                size={5}
                 name="horarios"
                 value={formik.values.horarios}
                 onChange={formik.handleChange}
@@ -394,7 +393,7 @@ const Consulta = () => {
         </InputGrid>
 
         <Button type="submit">Efetuar Marcação</Button>
-      </Form>
+      </Form >
       {isConfirmaModalOpen && (
         <Modal isOpen={isConfirmaModalOpen}>
           <ModalContent>
@@ -415,7 +414,8 @@ const Consulta = () => {
             </ModalButtonContainer>
           </ModalContent>
         </Modal>
-      )}
+      )
+      }
 
       <Footer />
     </>
