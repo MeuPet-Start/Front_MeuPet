@@ -53,14 +53,14 @@ export function Agenda() {
         setAppointments(response.data);
       } else {
         console.error("A resposta da API não é um array:", response.data);
-        setAppointments([]); 
+        setAppointments([]);
       }
     } catch (error) {
       console.error("Erro ao buscar agendamentos:", error);
-      setAppointments([]); 
+      setAppointments([]);
     }
   };
-  
+
 
   useEffect(() => {
     fetchAppointments();
@@ -72,7 +72,7 @@ export function Agenda() {
     extendedProps: {
       appointment,
     },
-    backgroundColor: appointment.status === "confirmado" ? "#4caf50" : "#b90000", 
+    backgroundColor: appointment.status === "confirmado" ? "#4caf50" : "#b90000",
   }));
 
   const handleEventClick = (eventInfo) => {
@@ -88,7 +88,7 @@ export function Agenda() {
 
   const confirmCancel = async () => {
     try {
-      await axios.delete(`/api/appointments/${appointmentToCancel.id}`); 
+      await axios.delete(`/api/appointments/${appointmentToCancel.id}`);
       setAppointments((prevAppointments) =>
         prevAppointments.map((app) =>
           app.id === appointmentToCancel.id ? { ...app, status: "cancelado" } : app
@@ -103,7 +103,7 @@ export function Agenda() {
 
   return (
     <Container>
-       <ContainerHeader>
+      <ContainerHeader>
         <Header />
       </ContainerHeader>
       <SectionHero>
@@ -127,8 +127,8 @@ export function Agenda() {
             eventDidMount={(info) => {
               info.el.classList.add("pointer-cursor");
               info.el.style.cursor = "pointer";
-              info.el.style.backgroundColor = info.event.backgroundColor; 
-              info.el.style.border = "none"; 
+              info.el.style.backgroundColor = info.event.backgroundColor;
+              info.el.style.border = "none";
               info.el.style.fontWeight = "600";
               info.el.style.fontSize = "15px";
             }}
