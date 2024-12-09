@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../../components/header/header";
 import Footer from "../../../components/footer/footer";
-import UserImage from "../../../assets/logo.png";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -43,7 +42,6 @@ import { api } from "../../../services/api";
 
 const PerfilClinica = () => {
   const navigate = useNavigate();
-  const [image, setImage] = useState(UserImage);
   const [selectedTab, setSelectedTab] = useState("geral");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -164,13 +162,11 @@ const PerfilClinica = () => {
               "is-before-opening",
               "Horário de Fechamento não pode ser antes do Horário de Abertura",
               function (value) {
-                const { openingHour } = this.parent; // Obtém o valor de openingHour
-
-                // Se ambos os horários estiverem definidos, realiza a comparação
+                const { openingHour } = this.parent; 
                 if (openingHour && value) {
-                  return value >= openingHour; // Verifica se o horário de fechamento é depois ou igual ao de abertura
+                  return value >= openingHour;
                 }
-                return true; // Se não tiver ambos os horários, a validação passa
+                return true;
               }
             ),
         });
@@ -201,36 +197,6 @@ const PerfilClinica = () => {
     formik.setValues(dataState);
   }, []);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64Image = reader.result;
-        setImage(base64Image);
-        try {
-          const response = await axios.put(
-            "/api/clinicProfile/image",
-            { image: base64Image },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-              },
-            }
-          );
-          if (response.status === 200) {
-            alert("Imagem alterada com sucesso!");
-          } else {
-            alert("Erro ao alterar a imagem. Tente novamente.");
-          }
-        } catch (error) {
-          console.error("Erro ao salvar a imagem:", error);
-          alert("Ocorreu um erro ao salvar a imagem.");
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
@@ -304,21 +270,6 @@ const PerfilClinica = () => {
       </ContainerHeader>
       <ProfileSection>
         <ProfileSidebar>
-          <ProfileImageContainer>
-            <ProfileImageWrapper>
-              <ProfileImage src={image} alt="Foto de Perfil" />
-              <ProfileImageChangeButton htmlFor="fileInput">
-                Alterar
-              </ProfileImageChangeButton>
-            </ProfileImageWrapper>
-            <input
-              id="fileInput"
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              style={{ display: "none" }}
-            />
-          </ProfileImageContainer>
           <SidebarUsernameTitle>{userData.name}</SidebarUsernameTitle>
           <SidebarItem
             isSelected={selectedTab === "geral"}

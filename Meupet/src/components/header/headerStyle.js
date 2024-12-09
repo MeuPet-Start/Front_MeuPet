@@ -167,11 +167,6 @@ export const UserContainer = styled.div`
 
 export const ClinicContainer = styled(UserContainer)``;
 
-export const ProfileImage = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-`;
 
 export const UserName = styled.button`
   background: none;

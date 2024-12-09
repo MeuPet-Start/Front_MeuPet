@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../../components/header/header";
 import Footer from "../../../components/footer/footer";
-import UserImage from "../../../assets/logo.png";
 import exmedImage from "../../../assets/exmed.png";
 import novacImage from "../../../assets/99pop.png";
 import ladydriverImage from "../../../assets/ladydriver.png";
@@ -53,7 +52,6 @@ import { useUserType } from "../../../hooks/useUserType";
 
 const PerfilUsuario = () => {
   const navigate = useNavigate();
-  const [image, setImage] = useState(UserImage);
   const [selectedTab, setSelectedTab] = useState("geral");
   const { userData, logout, fetchUserData } = useUserData();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -115,31 +113,6 @@ const PerfilUsuario = () => {
       }
     },
   });
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64Image = reader.result;
-        setImage(base64Image);
-        try {
-          const response = await axios.put("/api/userProfile/image", {
-            image: base64Image,
-          });
-          if (response.status === 200) {
-            alert("Imagem alterada com sucesso!");
-          } else {
-            alert("Erro ao alterar a imagem. Tente novamente.");
-          }
-        } catch (error) {
-          console.error("Erro ao salvar a imagem:", error);
-          alert("Ocorreu um erro ao salvar a imagem.");
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
@@ -249,21 +222,6 @@ const PerfilUsuario = () => {
       </ContainerHeader>
       <ProfileSection>
         <ProfileSidebar>
-          <ProfileImageContainer>
-            <ProfileImageWrapper>
-              <ProfileImage src={image} alt="Foto de Perfil" />
-              <ProfileImageChangeButton htmlFor="fileInput">
-                Alterar
-              </ProfileImageChangeButton>
-            </ProfileImageWrapper>
-            <input
-              id="fileInput"
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              style={{ display: "none" }}
-            />
-          </ProfileImageContainer>
           <SidebarUsarnameTitle>{userData.name}</SidebarUsarnameTitle>
           <SidebarItem
             isSelected={selectedTab === "geral"}
@@ -447,21 +405,19 @@ const PerfilUsuario = () => {
         </Modal>
       )}
       <Footer />
-      {
-        isSuccessModalOpen && (
-          <Modal>
-            <ModalContent>
-              <h2>Alteração Realizada</h2>
-              <p>Seus dados foram atualizados com sucesso!</p>
-              <ModalButtonContainer>
-                <ConfirmButton onClick={() => setIsSuccessModalOpen(false)}>
-                  Fechar
-                </ConfirmButton>
-              </ModalButtonContainer>
-            </ModalContent>
-          </Modal>
-        )
-      }
+      {isSuccessModalOpen && (
+        <Modal>
+          <ModalContent>
+            <h2>Alteração Realizada</h2>
+            <p>Seus dados foram atualizados com sucesso!</p>
+            <ModalButtonContainer>
+              <ConfirmButton onClick={() => setIsSuccessModalOpen(false)}>
+                Fechar
+              </ConfirmButton>
+            </ModalButtonContainer>
+          </ModalContent>
+        </Modal>
+      )}
     </Container>
   );
 };

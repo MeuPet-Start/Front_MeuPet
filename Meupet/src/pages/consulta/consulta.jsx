@@ -1,6 +1,5 @@
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-import Cemevet from "../../assets/Cemevet.png";
 import { PiStethoscopeDuotone } from "react-icons/pi";
 import { BsClipboardCheck } from "react-icons/bs";
 import { MdLocalPhone } from "react-icons/md";
@@ -80,7 +79,6 @@ const Consulta = () => {
       navigate("/");
     }
   }, [userType, navigate]);
-
 
   let clinicId = state.id;
   console.log(clinicId);
@@ -209,17 +207,10 @@ const Consulta = () => {
     },
   });
 
-  // useEffect(() => {
-  //   if (userData) {
-  //   }
-  // }, [userData])
-
   return (
     <>
       <Header />
-
       <HeaderSection>
-        <HeaderImage src={Cemevet} alt="Clínica" />
         <Headerinfo>
           <Headertitle>{clinicData.name}</Headertitle>
           <HeaderSubTitle>
@@ -408,14 +399,18 @@ const Consulta = () => {
         </InputGrid>
 
         <Button type="submit">Efetuar Marcação</Button>
-      </Form >
+      </Form>
       {isConfirmaModalOpen && (
         <Modal isOpen={isConfirmaModalOpen}>
           <ModalContent>
             <h2>SEU AGENDAMENTO FOI CONFIRMADO!</h2>
             <p>
-              Prepare o seu pet e chegue com 10 minutos de antecedência para um
+              Prepare o seu pet e chegue com 15 minutos de antecedência para um
               atendimento tranquilo.
+            </p>
+            <p>
+              Fique de olho, quando sua consulta for confirmada, você receberá
+              suas 10 moedas Capibas.
             </p>
             <ModalButtonContainer>
               <ConfirmButton
@@ -429,8 +424,7 @@ const Consulta = () => {
             </ModalButtonContainer>
           </ModalContent>
         </Modal>
-      )
-      }
+      )}
 
       <Footer />
     </>

@@ -43,20 +43,6 @@ export const HeaderSubTitle = styled.h2`
   }
 `;
 
-export const HeaderImage = styled.img`
-  width: 20rem;
-  height: 20rem;
-  border-radius: 50%;
-  @media (max-width: 768px) {
-    width: 15rem;
-    height: 15rem;
-  }
-
-  @media (max-width: 425px) {
-    width: 10rem;
-    height: 10rem;
-  }
-`;
 
 export const Headerinfo = styled.div`
   display: flex;

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logoImage from "../../assets/logo.png";
-import userImage from "../../assets/logo.png";
-import clinicImage from "../../assets/logo.png";
 import coin from "../../assets/capiba.png";
 
 import {
@@ -18,7 +16,6 @@ import {
   CoinCount,
   UserContainer,
   ClinicContainer,
-  ProfileImage,
   UserName,
   MenuIcon,
   MobileMenu,
@@ -31,20 +28,7 @@ import { useUserData } from "../../hooks/useUserData";
 function Header() {
   const navigate = useNavigate();
   const { userData } = useUserData();
-
-
   const userType = userData.userType;
-
-  // console.log(userData);
-
-  // if (!userData || !userData.name) {
-  //   return <p>Carregando informações do usuário...</p>; // Indicador de carregamento
-  // }
-
-
-
-  // console.log(userType)
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -124,7 +108,6 @@ function Header() {
             <>
               {userType === "user" && (
                 <UserContainer>
-                  <ProfileImage src={userImage} alt="Usuário" />
                   <UserName onClick={() => navigate("/perfil-usuario")}>
                     {userData.name}
                   </UserName>
@@ -132,7 +115,6 @@ function Header() {
               )}
               {userType === "clinic" && (
                 <ClinicContainer>
-                  <ProfileImage src={clinicImage} alt="Clínica" />
                   <UserName onClick={() => navigate("/perfil-clinica")}>
                     {userData.name}
                   </UserName>
@@ -155,7 +137,6 @@ function Header() {
         <UserSection>
           {userType === "user" && (
             <UserContainer>
-              <ProfileImage src={userImage} alt="Usuário" />
               <UserName onClick={() => navigate("/perfil-usuario")}>
                 {userData.name}
               </UserName>
@@ -163,7 +144,6 @@ function Header() {
           )}
           {userType === "clinic" && (
             <ClinicContainer>
-              <ProfileImage src={clinicImage} alt="Clínica" />
               <UserName onClick={() => navigate("/perfil-clinica")}>
                 {userData.name}
               </UserName>
@@ -181,6 +161,6 @@ function Header() {
       )}
     </Nav>
   );
-};
+}
 
 export default Header;
