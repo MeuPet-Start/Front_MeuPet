@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import {
   RegisterContainer,
   RegisterCard,
@@ -25,6 +24,7 @@ import {
 } from "./registerStyle";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import logoImage from "../../assets/logo.png";
+import { api } from "../../services/api";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -121,8 +121,8 @@ const Register = () => {
         try {
           const endpoint =
             formik.values.userType === "clinic"
-              ? "http://localhost:8080/api/v1/partner"
-              : "http://localhost:8080/api/v1/user";
+              ? "/partner"
+              : "/user";
 
           const requestData =
             values.userType === "clinic"
@@ -147,7 +147,7 @@ const Register = () => {
 
 
 
-          const response = await axios.post(endpoint, requestData);
+          const response = await api.post(endpoint, requestData);
           if (response.status === 201) {
             setIsRegistrationConfirmed(true);
           }
