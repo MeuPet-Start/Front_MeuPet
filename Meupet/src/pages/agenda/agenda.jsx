@@ -39,6 +39,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
 import { useUserData } from "../../hooks/useUserData";
+import { useUserType } from "../../hooks/useUserType";
 import { api } from "../../services/api";
 
 export function Agenda() {
@@ -53,14 +54,15 @@ export function Agenda() {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [appointmentToConfirm, setAppointmentToConfirm] = useState({});
   const { userData } = useUserData();
-
-  // Verificar permissões de usuário
-  // useEffect(() => {
-  //   if (!userType || userType !== "clinica") {
-  //     alert("Você não tem permissão para acessar esta página.");
-  //     navigate("/login");
-  //   }
-  // }, [userType, navigate]);
+  const { userType } = useUserType();
+  
+  // // Verificar permissões de usuário
+  useEffect(() => {
+    if (!userType && userType !== "clinic") {
+      alert("Você não tem permissão para acessar esta página.");
+      navigate("/login");
+    }
+  }, [userType, navigate]);
 
   const fetchAppointments = async () => {
     try {
