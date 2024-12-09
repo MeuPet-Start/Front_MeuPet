@@ -81,7 +81,7 @@ const MinhasConsulta = () => {
   };
 
   async function handleConsulta() {
-    const response = await api.get(`/agendamento/atendimento/user/${userId}`);
+    const response = await api.get(`/agendamento/atendimento/user/${userData.id}`);
 
     console.log(response.data);
     const filteredData = response.data

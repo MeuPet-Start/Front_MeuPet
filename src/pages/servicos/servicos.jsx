@@ -37,7 +37,7 @@ const Servicos = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await api.get("/agendamento/partner/servico"); 
+        const response = await api.get("/agendamento/partner/servico");
         console.log(response.data);
         setClinic(response.data);
         setFilteredServices(response.data);
