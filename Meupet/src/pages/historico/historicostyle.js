@@ -164,19 +164,6 @@ export const StatusBadge = styled.span`
   }};
 `;
 
-export const Image = styled.img`
-  width: 9.375rem;
-  height: auto;
-  border-radius: 8px;
-  margin-right: 1.25rem;
-
-  @media (max-width: 48em) {
-    width: 7.5rem;
-    margin-right: 0;
-    margin-bottom: 0.9375rem;
-  }
-`;
-
 export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;

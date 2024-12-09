@@ -2,7 +2,6 @@ import React from "react";
 import {
   ServiceCardContainer,
   ServiceCardtags,
-  ServiceCardImage,
   ServiceCardTitle,
   ServiceCardstreetLocation,
   ServiceCardButton,
@@ -28,7 +27,6 @@ const ServiceCard = ({
 
   return (
     <ServiceCardContainer>
-      <ServiceCardImage src={img} alt={`${clinicName} Imagem`} />
       <ServiceInfo>
         <ServiceCardTitle>{clinicName}</ServiceCardTitle>
         <ServiceCardtags>

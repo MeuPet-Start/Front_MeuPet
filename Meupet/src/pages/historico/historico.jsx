@@ -1,6 +1,5 @@
 import Header from "../../components/header/header";
 import Footer from "../../components/footer/footer";
-import hospital from "../../assets/hospital.png";
 import { FaRegClock, FaMapMarkerAlt, FaRegCalendarAlt } from "react-icons/fa";
 import {
   Main,
@@ -10,7 +9,6 @@ import {
   Card,
   ServiceCardtags,
   Info,
-  Image,
   ButtonContainer,
   MapButton,
   CancelButton,
@@ -42,13 +40,13 @@ const MinhasConsulta = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showAllConsultas, setShowAllConsultas] = useState(false);
   const { userType } = useUserType();
-    useEffect(() => {
-      if (userType && userType !== "user") {
-        alert("Você não tem permissão para acessar esta página.");
-        navigate("/");
-      }
-    }, [userType, navigate]);
-    
+  useEffect(() => {
+    if (userType && userType !== "user") {
+      alert("Você não tem permissão para acessar esta página.");
+      navigate("/");
+    }
+  }, [userType, navigate]);
+
   const handleShowMore = () => {
     setShowAllConsultas(!showAllConsultas);
   };
@@ -134,7 +132,6 @@ const MinhasConsulta = () => {
               .slice(0, showAllConsultas ? consultas.length : 5)
               .map((consulta) => (
                 <Card key={consulta.id}>
-                  <Image src={hospital} alt="Clínica" />
                   <Info>
                     <div className="container_categoria">
                       <h2>{consulta.partnerName}</h2>

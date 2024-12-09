@@ -8,6 +8,7 @@ export const HeaderSection = styled.div`
   padding: 1.25rem;
   margin: 1.5rem auto;
   display: flex;
+  justify-content: center;
 
   @media (max-width: 1024px) {
     margin: 1rem;

@@ -127,30 +127,29 @@ const Register = () => {
           const requestData =
             values.userType === "clinic"
               ? {
-                  name: values.name,
-                  email: values.email,
-                  phoneNumber: values.phone,
-                  password: values.password,
-                  document: values.cpfCnpj,
-                  documentType: values.cpfCnpj.length === 11 ? "CPF" : "CNPJ",
-                }
+                name: values.name,
+                email: values.email,
+                phoneNumber: values.phone,
+                password: values.password,
+                document: values.cpfCnpj,
+                documentType: values.cpfCnpj.length === 11 ? "CPF" : "CNPJ",
+              }
               : {
-                  name: values.name,
-                  socialName: values.socialName,
-                  email: values.email,
-                  phoneNumber: values.phone,
-                  password: values.password,
-                  document: values.cpfCnpj,
-                  documentType: "CPF",
-                  birthDate: values.birthDate,
-                };
+                name: values.name,
+                socialName: values.socialName,
+                email: values.email,
+                phoneNumber: values.phone,
+                password: values.password,
+                document: values.cpfCnpj,
+                documentType: "CPF",
+                birthDate: values.birthDate,
+              };
 
-          
+
 
           const response = await axios.post(endpoint, requestData);
           if (response.status === 201) {
             setIsRegistrationConfirmed(true);
-            navigate("/login");
           }
         } catch (error) {
           console.error("Erro no cadastro:", error);
@@ -213,8 +212,8 @@ const Register = () => {
             {currentStep === 0
               ? "Como deseja se cadastrar?"
               : formik.values.userType === "clinic"
-              ? "Cadastre aqui sua Clínica ou Serviços"
-              : "Cadastre-se"}
+                ? "Cadastre aqui sua Clínica ou Serviços"
+                : "Cadastre-se"}
           </Title>
 
           {currentStep === 0 && (

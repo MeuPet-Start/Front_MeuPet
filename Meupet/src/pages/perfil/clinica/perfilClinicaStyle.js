@@ -175,6 +175,7 @@ export const Button = styled.button`
 
 export const ProfileSidebar = styled.div`
   display: flex;
+  margin-top: 2rem;
   flex-direction: column;
   padding: 1rem;
   align-items: left;
