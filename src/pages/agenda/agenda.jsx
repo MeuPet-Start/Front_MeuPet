@@ -37,7 +37,6 @@ import {
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import axios from "axios";
 import { useUserData } from "../../hooks/useUserData";
 import { useUserType } from "../../hooks/useUserType";
 import { api } from "../../services/api";
@@ -55,7 +54,29 @@ export function Agenda() {
   const [appointmentToConfirm, setAppointmentToConfirm] = useState({});
   const { userData } = useUserData();
   const { userType } = useUserType();
-  
+  const [concludedAppointments, setConcludedAppointments] = useState([]);
+
+  const handleConcludeAppointment = async (appointment) => {
+    try {
+      const response = await api.put(
+        `/agendamento/atendimento/${appointment.partnerId}/${appointment.id}`,
+        {
+          status: "CONCLUIDO"
+        }
+      );
+      if (response.status === 200) {
+        setAppointments(appointments.map(app =>
+          app.id === appointment.id
+            ? { ...app, status: "CONCLUIDO" }
+            : app
+        ));
+      }
+    } catch (error) {
+      console.error("Erro ao concluir consulta:", error);
+      alert("Erro ao concluir consulta. Tente novamente."); x
+    }
+  };
+
   useEffect(() => {
     if (userType && userType !== "clinic") {
       alert("Você não tem permissão para acessar esta página.");
@@ -250,11 +271,6 @@ export function Agenda() {
         {appointments.filter((appointment) => appointment).length > 0 ? (
           appointments.map((appointment, index) => (
             <AppointmentCard key={index}>
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Clínica"
-                style={{ borderRadius: "10px", marginRight: "20px" }}
-              />
               <AppointmentDetails>
                 <AppointmentCardType>
                   <AppointmentType>{appointment.servicoName}</AppointmentType>
@@ -295,35 +311,48 @@ export function Agenda() {
               </AppointmentDetails>
 
               <ButtonContainer>
-                <ConfirmButton
-                  onClick={() => {
-                    setAppointmentToConfirm({
-                      id: appointment.id,
-                      dataAgendamento: appointment.dataAgendamento,
-                      horaInicio: appointment.horaInicio.slice(0, 5), // Format time to HH:mm
-                      horaFim: appointment.horaFim,
-                      status: appointment.status.toUpperCase(),
-                      partnerId: appointment.partnerId,
-                      userName: appointment.userName,
-                      endereco: appointment.endereco,
-                      servicoName: appointment.servicoName,
-                      animalName: appointment.animalName,
-                      animalAge: appointment.animalAge,
-                      animalType: appointment.animalType,
-                      animalGender: appointment.animalGender,
-                      phone: appointment.phone
-                    });
-                    setIsConfirmModalOpen(true);
-                  }}
-                >
-                  Confirmar Agendamento
-                </ConfirmButton>
+                {appointment.status === "CONFIRMADO" ? (
+                  <ConfirmButton
+                    onClick={() => {
+                      setAppointmentToConfirm(appointment);
+                      handleConcludeAppointment(appointment);
+                    }}
+                  >
+                    Concluir Consulta
+                  </ConfirmButton>
+                ) : (
+                  <>
+                    <ConfirmButton
+                      onClick={() => {
+                        setAppointmentToConfirm({
+                          id: appointment.id,
+                          dataAgendamento: appointment.dataAgendamento,
+                          horaInicio: appointment.horaInicio.slice(0, 5),
+                          horaFim: appointment.horaFim,
+                          status: appointment.status.toUpperCase(),
+                          partnerId: appointment.partnerId,
+                          userName: appointment.userName,
+                          endereco: appointment.endereco,
+                          servicoName: appointment.servicoName,
+                          animalName: appointment.animalName,
+                          animalAge: appointment.animalAge,
+                          animalType: appointment.animalType,
+                          animalGender: appointment.animalGender,
+                          phone: appointment.phone
+                        });
+                        setIsConfirmModalOpen(true);
+                      }}
+                    >
+                      Confirmar Agendamento
+                    </ConfirmButton>
+                  </>
+                )}
                 <CancelButton
                   onClick={() => {
-                    setAppointmentToConfirm({
+                    setAppointmentToCancel({
                       id: appointment.id,
                       dataAgendamento: appointment.dataAgendamento,
-                      horaInicio: appointment.horaInicio.slice(0, 5), // Format time to HH:mm
+                      horaInicio: appointment.horaInicio.slice(0, 5),
                       horaFim: appointment.horaFim,
                       status: appointment.status.toUpperCase(),
                       partnerId: appointment.partnerId,
@@ -354,173 +383,181 @@ export function Agenda() {
 
 
       {/* Modal visualizar consultas dia */}
-      {isModalOpen && selectedAppointment && (
-        <Modal>
-          <ModalContent>
-            <ModalTitle>
-              <h2>
-                Consultas do dia{" "}
-                {new Date(
-                  selectedAppointment[0].dataAgendamento
-                ).toLocaleDateString("pt-BR")}
-              </h2>
-            </ModalTitle>
-            {selectedAppointment.map((appointment) => (
-              <AppointmentCardModal key={appointment.id}>
-                <AppointmentCardContent>
-                  <AppointmentCardInfoContent>
-                    <AppointmentCardTypeModal>
-                      <AppointmentType>{appointment.servicoName}</AppointmentType>
-                      <StatusBadge status={appointment.status}>
-                        {appointment.status}
-                      </StatusBadge>
-                    </AppointmentCardTypeModal>
-                    <AppointmentDetailsInfoCard>
-                      <AppointmentDetailsInfoModal>
-                        <p>
-                          <strong>Horário:</strong> {appointment.horaInicio}
-                        </p>
-                        <p>
-                          <strong>Pet:</strong> {appointment.animalName}
-                        </p>
-                        <p>
-                          <strong>Tutor:</strong> {appointment.userName}
-                        </p>
-                        <p>
-                          <strong>Telefone:</strong> {appointment.phone}
-                        </p>
-                      </AppointmentDetailsInfoModal>
-                    </AppointmentDetailsInfoCard>
-                  </AppointmentCardInfoContent>
-                  <ModalButtonContainer>
-                    <ConfirmButton
-                      onClick={() => {
-                        setAppointmentToConfirm({
-                          id: appointment.id,
-                          dataAgendamento: appointment.dataAgendamento,
-                          horaInicio: appointment.horaInicio.slice(0, 5), // Format time to HH:mm
-                          horaFim: appointment.horaFim,
-                          status: appointment.status.toUpperCase(),
-                          partnerId: appointment.partnerId,
-                          userName: appointment.userName,
-                          endereco: appointment.endereco,
-                          servicoName: appointment.servicoName,
-                          animalName: appointment.animalName,
-                          animalAge: appointment.animalAge,
-                          animalType: appointment.animalType,
-                          animalGender: appointment.animalGender,
-                          phone: appointment.phone
-                        });
-                        setIsConfirmModalOpen(true);
-                      }}
-                    >
-                      Confirmar
-                    </ConfirmButton>
-                    <CancelButton
-                      onClick={() => {
-                        setAppointmentToConfirm({
-                          id: appointment.id,
-                          dataAgendamento: appointment.dataAgendamento,
-                          horaInicio: appointment.horaInicio.slice(0, 5), // Format time to HH:mm
-                          horaFim: appointment.horaFim,
-                          status: appointment.status.toUpperCase(),
-                          partnerId: appointment.partnerId,
-                          userName: appointment.userName,
-                          endereco: appointment.endereco,
-                          servicoName: appointment.servicoName,
-                          animalName: appointment.animalName,
-                          animalAge: appointment.animalAge,
-                          animalType: appointment.animalType,
-                          animalGender: appointment.animalGender,
-                          phone: appointment.phone
-                        });
-                        setIsCancelModalOpen(true);
-                      }}
-                    >
-                      Cancelar
-                    </CancelButton>
-                  </ModalButtonContainer>
-                </AppointmentCardContent>
-              </AppointmentCardModal>
-            ))}
-            <ModalButtonContainer>
-              <ConfirmButton onClick={() => setIsModalOpen(false)}>
-                Fechar
-              </ConfirmButton>
-            </ModalButtonContainer>
-          </ModalContent>
-        </Modal>
-      )}
+      {
+        isModalOpen && selectedAppointment && (
+          <Modal>
+            <ModalContent>
+              <ModalTitle>
+                <h2>
+                  Consultas do dia{" "}
+                  {new Date(
+                    selectedAppointment[0].dataAgendamento
+                  ).toLocaleDateString("pt-BR")}
+                </h2>
+              </ModalTitle>
+              {selectedAppointment.map((appointment) => (
+                <AppointmentCardModal key={appointment.id}>
+                  <AppointmentCardContent>
+                    <AppointmentCardInfoContent>
+                      <AppointmentCardTypeModal>
+                        <AppointmentType>{appointment.servicoName}</AppointmentType>
+                        <StatusBadge status={appointment.status}>
+                          {appointment.status}
+                        </StatusBadge>
+                      </AppointmentCardTypeModal>
+                      <AppointmentDetailsInfoCard>
+                        <AppointmentDetailsInfoModal>
+                          <p>
+                            <strong>Horário:</strong> {appointment.horaInicio}
+                          </p>
+                          <p>
+                            <strong>Pet:</strong> {appointment.animalName}
+                          </p>
+                          <p>
+                            <strong>Tutor:</strong> {appointment.userName}
+                          </p>
+                          <p>
+                            <strong>Telefone:</strong> {appointment.phone}
+                          </p>
+                        </AppointmentDetailsInfoModal>
+                      </AppointmentDetailsInfoCard>
+                    </AppointmentCardInfoContent>
+                    <ModalButtonContainer>
+                      <ConfirmButton
+                        onClick={() => {
+                          setAppointmentToConfirm({
+                            id: appointment.id,
+                            dataAgendamento: appointment.dataAgendamento,
+                            horaInicio: appointment.horaInicio.slice(0, 5), // Format time to HH:mm
+                            horaFim: appointment.horaFim,
+                            status: appointment.status.toUpperCase(),
+                            partnerId: appointment.partnerId,
+                            userName: appointment.userName,
+                            endereco: appointment.endereco,
+                            servicoName: appointment.servicoName,
+                            animalName: appointment.animalName,
+                            animalAge: appointment.animalAge,
+                            animalType: appointment.animalType,
+                            animalGender: appointment.animalGender,
+                            phone: appointment.phone
+                          });
+                          setIsConfirmModalOpen(true);
+                        }}
+                      >
+                        Confirmar
+                      </ConfirmButton>
+                      <CancelButton
+                        onClick={() => {
+                          setAppointmentToConfirm({
+                            id: appointment.id,
+                            dataAgendamento: appointment.dataAgendamento,
+                            horaInicio: appointment.horaInicio.slice(0, 5), // Format time to HH:mm
+                            horaFim: appointment.horaFim,
+                            status: appointment.status.toUpperCase(),
+                            partnerId: appointment.partnerId,
+                            userName: appointment.userName,
+                            endereco: appointment.endereco,
+                            servicoName: appointment.servicoName,
+                            animalName: appointment.animalName,
+                            animalAge: appointment.animalAge,
+                            animalType: appointment.animalType,
+                            animalGender: appointment.animalGender,
+                            phone: appointment.phone
+                          });
+                          setIsCancelModalOpen(true);
+                        }}
+                      >
+                        Cancelar
+                      </CancelButton>
+                    </ModalButtonContainer>
+                  </AppointmentCardContent>
+                </AppointmentCardModal>
+              ))}
+              <ModalButtonContainer>
+                <ConfirmButton onClick={() => setIsModalOpen(false)}>
+                  Fechar
+                </ConfirmButton>
+              </ModalButtonContainer>
+            </ModalContent>
+          </Modal>
+        )
+      }
 
       {/* Modal cancela */}
 
-      {isCancelModalOpen && (
-        <Modal>
-          <ModalContent>
-            <h2>Confirmação de Cancelamento</h2>
-            <p>
-              Deseja cancelar o agendamento de{" "}
-              {appointmentToConfirm.servicoName}?
-            </p>
-            <p>Pet: {appointmentToConfirm.animalName}</p>
-            <p>Data: {appointmentToConfirm.dataAgendamento}</p>
-            <p>Horário: {appointmentToConfirm.horaInicio}</p>
-            <ModalButtonContainer>
-              <CancelButton onClick={() => setIsCancelModalOpen(false)}>
-                Não
-              </CancelButton>
-              <ConfirmButton onClick={() => {
-                handleCancelClick(appointmentToConfirm)
-                confirmCancel()
-              }}>Sim</ConfirmButton>
-            </ModalButtonContainer>
-          </ModalContent>
-        </Modal>
-      )}
+      {
+        isCancelModalOpen && (
+          <Modal>
+            <ModalContent>
+              <h2>Confirmação de Cancelamento</h2>
+              <p>
+                Deseja cancelar o agendamento de{" "}
+                {appointmentToConfirm.servicoName}?
+              </p>
+              <p>Pet: {appointmentToConfirm.animalName}</p>
+              <p>Data: {appointmentToConfirm.dataAgendamento}</p>
+              <p>Horário: {appointmentToConfirm.horaInicio}</p>
+              <ModalButtonContainer>
+                <CancelButton onClick={() => setIsCancelModalOpen(false)}>
+                  Não
+                </CancelButton>
+                <ConfirmButton onClick={() => {
+                  handleCancelClick(appointmentToConfirm)
+                  confirmCancel()
+                }}>Sim</ConfirmButton>
+              </ModalButtonContainer>
+            </ModalContent>
+          </Modal>
+        )
+      }
 
       {/* Modal confirmacao cancelamento */}
 
-      {isCancelledNotificationOpen && (
-        <Modal>
-          <ModalContent>
-            <h2>Consulta Cancelada</h2>
-            <p>A consulta foi cancelada com sucesso!</p>
-            <ModalCloseButton
-              onClick={() => setIsCancelledNotificationOpen(false)}
-            >
-              Fechar
-            </ModalCloseButton>
-          </ModalContent>
-        </Modal>
-      )}
+      {
+        isCancelledNotificationOpen && (
+          <Modal>
+            <ModalContent>
+              <h2>Consulta Cancelada</h2>
+              <p>A consulta foi cancelada com sucesso!</p>
+              <ModalCloseButton
+                onClick={() => setIsCancelledNotificationOpen(false)}
+              >
+                Fechar
+              </ModalCloseButton>
+            </ModalContent>
+          </Modal>
+        )
+      }
 
       {/* modal Confirma agendamento */}
 
-      {isConfirmModalOpen && appointmentToConfirm && (
-        <Modal>
-          <ModalContent>
-            <h2>Confirmar Agendamento</h2>
-            <p>
-              Deseja confirmar o agendamento de{" "}
-              {appointmentToConfirm.servicoName}?
-            </p>
-            <p>Pet: {appointmentToConfirm.animalName}</p>
-            <p>Data: {appointmentToConfirm.dataAgendamento}</p>
-            <p>Horário: {appointmentToConfirm.horaInicio}</p>
+      {
+        isConfirmModalOpen && appointmentToConfirm && (
+          <Modal>
+            <ModalContent>
+              <h2>Confirmar Agendamento</h2>
+              <p>
+                Deseja confirmar o agendamento de{" "}
+                {appointmentToConfirm.servicoName}?
+              </p>
+              <p>Pet: {appointmentToConfirm.animalName}</p>
+              <p>Data: {appointmentToConfirm.dataAgendamento}</p>
+              <p>Horário: {appointmentToConfirm.horaInicio}</p>
 
-            <ModalButtonContainer>
-              <CancelButton onClick={() => setIsConfirmModalOpen(false)}>
-                Cancelar
-              </CancelButton>
-              <ConfirmButton
-                onClick={() => handleConfirmAppointment(appointmentToConfirm)}
-              >
-                Confirmar
-              </ConfirmButton>
-            </ModalButtonContainer>
-          </ModalContent>
-        </Modal>
-      )}
-    </Container>
+              <ModalButtonContainer>
+                <CancelButton onClick={() => setIsConfirmModalOpen(false)}>
+                  Cancelar
+                </CancelButton>
+                <ConfirmButton
+                  onClick={() => handleConfirmAppointment(appointmentToConfirm)}
+                >
+                  Confirmar
+                </ConfirmButton>
+              </ModalButtonContainer>
+            </ModalContent>
+          </Modal>
+        )
+      }
+    </Container >
   );
 }

@@ -138,10 +138,6 @@ export const AppointmentCard = styled.div`
 
   @media (max-width: 768px) {
     flex-direction: column;
-
-    img {
-      margin-bottom: 20px;
-    }
   }
 `;
 
@@ -168,10 +164,6 @@ export const AppointmentCardModal = styled.div`
 
   @media (max-width: 768px) {
     flex-direction: column;
-
-    img {
-      margin-bottom: 20px;
-    }
   }
 `;
 
