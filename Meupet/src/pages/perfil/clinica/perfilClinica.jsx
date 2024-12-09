@@ -38,6 +38,7 @@ import {
 } from "./perfilClinicaStyle";
 
 import { useUserData } from "../../../hooks/useUserData";
+import { useUserType } from "../../../hooks/useUserType";
 import { api } from "../../../services/api";
 
 const PerfilClinica = () => {
@@ -59,6 +60,14 @@ const PerfilClinica = () => {
     openingHour: "",
     closingHour: "",
   });
+  const { userType } = useUserType();
+  
+  useEffect(() => {
+    if (userType && userType !== "clinic") {
+      alert("Você não tem permissão para acessar esta página.");
+      navigate("/");
+    }
+  }, [userType, navigate]);
 
   const handleClinicUpdateGeral = async (values) => {
     try {
