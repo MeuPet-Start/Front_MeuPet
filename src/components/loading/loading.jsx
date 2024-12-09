@@ -6,7 +6,7 @@ import {
     LogoImage,
     LogoText
 } from "./loadingStyles";
-import logoImage from "../../assets/logo.png"; // Ajuste o caminho da logo
+import logoImage from "../../assets/logo.png"; 
 
 const Loading = () => {
   return (
