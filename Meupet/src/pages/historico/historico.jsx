@@ -28,13 +28,7 @@ import { useUserType } from "../../hooks/useUserType";
 import { useUserData } from "../../hooks/useUserData";
 import { useNavigate } from "react-router-dom";
 
-const { userType } = useUserType();
-  useEffect(() => {
-    if (!userType && userType !== "user") {
-      alert("Você não tem permissão para acessar esta página.");
-      navigate("/");
-    }
-  }, [userType, navigate]);
+
 
 const MinhasConsulta = () => {
   const [consultas, setConsultas] = useState([]);
@@ -47,7 +41,14 @@ const MinhasConsulta = () => {
   const [selectedConsultaId, setSelectedConsultaId] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showAllConsultas, setShowAllConsultas] = useState(false);
-
+  const { userType } = useUserType();
+    useEffect(() => {
+      if (userType && userType !== "user") {
+        alert("Você não tem permissão para acessar esta página.");
+        navigate("/");
+      }
+    }, [userType, navigate]);
+    
   const handleShowMore = () => {
     setShowAllConsultas(!showAllConsultas);
   };

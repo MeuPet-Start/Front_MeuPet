@@ -60,9 +60,9 @@ const PerfilUsuario = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { userType } = useUserType();
-  
+
   useEffect(() => {
-    if (!userType && userType !== "user") {
+    if (userType && userType !== "user") {
       alert("Você não tem permissão para acessar esta página.");
       navigate("/");
     }
