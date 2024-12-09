@@ -19,10 +19,6 @@ export const route = createBrowserRouter([
     element: <Home />,
   },
   {
-    path: "/appointments/:id",
-    element: <AppointmentDetails />,
-  },
-  {
     path: "/login",
     element: <Login />,
   },

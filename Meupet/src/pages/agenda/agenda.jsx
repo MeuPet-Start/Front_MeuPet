@@ -56,11 +56,10 @@ export function Agenda() {
   const { userData } = useUserData();
   const { userType } = useUserType();
   
-  // // Verificar permissões de usuário
   useEffect(() => {
     if (!userType && userType !== "clinic") {
       alert("Você não tem permissão para acessar esta página.");
-      navigate("/login");
+      navigate("/");
     }
   }, [userType, navigate]);
 

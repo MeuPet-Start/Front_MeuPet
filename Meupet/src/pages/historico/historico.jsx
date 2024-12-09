@@ -28,6 +28,14 @@ import { useUserType } from "../../hooks/useUserType";
 import { useUserData } from "../../hooks/useUserData";
 import { useNavigate } from "react-router-dom";
 
+const { userType } = useUserType();
+  useEffect(() => {
+    if (!userType && userType !== "user") {
+      alert("Você não tem permissão para acessar esta página.");
+      navigate("/");
+    }
+  }, [userType, navigate]);
+
 const MinhasConsulta = () => {
   const [consultas, setConsultas] = useState([]);
   const { userEmail } = useUserType();

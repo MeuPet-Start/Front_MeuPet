@@ -49,6 +49,7 @@ import {
 
 import { useUserData } from "../../../hooks/useUserData";
 import { api } from "../../../services/api";
+import { useUserType } from "../../../hooks/useUserType";
 
 const PerfilUsuario = () => {
   const navigate = useNavigate();
@@ -58,6 +59,14 @@ const PerfilUsuario = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { userType } = useUserType();
+  
+  useEffect(() => {
+    if (!userType && userType !== "user") {
+      alert("Você não tem permissão para acessar esta página.");
+      navigate("/");
+    }
+  }, [userType, navigate]);
 
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [dataState, setDataState] = useState({

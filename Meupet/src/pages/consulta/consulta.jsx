@@ -41,6 +41,7 @@ import {
 import { api } from "../../services/api";
 import { useEffect, useState } from "react";
 import { useUserData } from "../../hooks/useUserData";
+import { useUserType } from "../../hooks/useUserType";
 
 const Consulta = () => {
   const { state } = useLocation();
@@ -70,6 +71,16 @@ const Consulta = () => {
     const response = await api.get(`/partner/agendamento/${clinicId}`);
     return response.data;
   };
+
+  const { userType } = useUserType();
+
+  useEffect(() => {
+    if (!userType && userType !== "user") {
+      alert("Você não tem permissão para acessar esta página.");
+      navigate("/");
+    }
+  }, [userType, navigate]);
+
 
   let clinicId = state.id;
   console.log(clinicId);

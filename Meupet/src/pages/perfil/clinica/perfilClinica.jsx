@@ -62,11 +62,10 @@ const PerfilClinica = () => {
   });
   const { userType } = useUserType();
   
-  // // Verificar permissões de usuário
   useEffect(() => {
     if (!userType && userType !== "clinic") {
       alert("Você não tem permissão para acessar esta página.");
-      navigate("/login");
+      navigate("/");
     }
   }, [userType, navigate]);
 
