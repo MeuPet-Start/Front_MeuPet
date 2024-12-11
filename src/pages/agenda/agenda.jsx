@@ -78,7 +78,7 @@ export function Agenda() {
   };
 
   useEffect(() => {
-    if (userType && userType !== "clinic") {
+    if (userType !== "clinic") {
       alert("Você não tem permissão para acessar esta página.");
       navigate("/");
     }

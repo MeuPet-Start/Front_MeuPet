@@ -84,10 +84,9 @@ export function Home() {
               Visite o <span>AdotaPET</span> e encontre seu parceiro
             </AdotaPetTitle>
             <AdotaPetDescription>
-              Encontre seu novo melhor amigo de forma 
-              prática e emocionante! Escolha e conheça seu 
-              pet sem sair de casa. Transforme vidas e crie
-              histórias de amor e carinho.
+              Encontre seu novo melhor amigo de forma prática e emocionante!
+              Escolha e conheça seu pet sem sair de casa. Transforme vidas e
+              crie histórias de amor e carinho.
             </AdotaPetDescription>
             <AdotaPetButton
               as="a"
@@ -110,11 +109,19 @@ export function Home() {
               vacinação e castração. Acumule moedas e troque por descontos em
               serviços, produtos ou benefícios exclusivos!
             </CapibaDescription>
-            <CapibaButton onClick={() => navigate("/perfil-usuario?tab=recompensas")}>
+            <CapibaButton
+              onClick={() => {
+                if (userData.userType === "user") {
+                  navigate("/perfil-usuario?tab=recompensas");
+                } else {
+                  navigate("/login");
+                }
+              }}
+            >
               Veja as Recompensas
             </CapibaButton>
           </CapibaInfo>
-          <CapibaImage/>
+          <CapibaImage />
         </CapibaContent>
       </CapibaSection>
 
