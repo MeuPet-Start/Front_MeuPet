@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import {
   Background,
   ResetPasswordContainer,
@@ -22,6 +21,7 @@ import {
 
 import logoImage from "../../assets/logo.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { api } from "../../services/api";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
