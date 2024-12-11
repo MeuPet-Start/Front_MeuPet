@@ -73,7 +73,7 @@ const Consulta = () => {
   const { userType } = useUserType();
 
   useEffect(() => {
-    if (userType !== "user") {
+    if (userType && userType !== "user") {
       alert("Você não tem permissão para acessar esta página.");
       navigate("/");
     }

@@ -60,15 +60,9 @@ const PerfilUsuario = () => {
   const { userType } = useUserType();
 
   useEffect(() => {
-    if (!userType) {
-      navigate("/login");
-      return;
-    }
-    
-    if (userType !== "user") {
+    if (userType && userType !== "user") {
       alert("Você não tem permissão para acessar esta página.");
       navigate("/");
-      return;
     }
   }, [userType, navigate]);
 
