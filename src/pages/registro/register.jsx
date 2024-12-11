@@ -146,7 +146,7 @@ const Register = () => {
               };
 
 
-
+          console.log(requestData);
           const response = await api.post(endpoint, requestData);
           if (response.status === 201) {
             setIsRegistrationConfirmed(true);
